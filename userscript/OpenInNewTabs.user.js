@@ -5,8 +5,8 @@
 // @description  Force all links to open in new tabs using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
-// @updateUrl    https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/OpenInNewTabs.user.js
-// @downloadURL  https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/OpenInNewTabs.user.js
+// @updateUrl    https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js
+// @downloadURL  https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js
 // @license      MIT
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -84,44 +84,30 @@
      */
     const languageResources = {
         en: {
-            // Modal UI
             modalTitle: "Whitelist Management",
             inputPlaceholder: "Enter domain, e.g., example.com",
             addButton: "Add",
             removeButton: "Remove",
             closeButton: "×",
-
-            // Notifications
             addedToWhitelist: "Added to whitelist!",
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
-
-            // Menu commands
+            noDomains: "No domains in whitelist",
             addToWhitelist: "Add to Whitelist",
             manageWhitelist: "Manage Whitelist",
-
-            // Domain display
-            noDomains: "No domains in whitelist",
         },
         zh: {
-            // Modal UI
             modalTitle: "白名单管理",
             inputPlaceholder: "输入域名，如：example.com",
             addButton: "添加",
             removeButton: "移除",
             closeButton: "×",
-
-            // Notifications
             addedToWhitelist: "已添加到白名单！",
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
-
-            // Menu commands
+            noDomains: "白名单中没有域名",
             addToWhitelist: "添加白名单",
             manageWhitelist: "管理白名单",
-
-            // Domain display
-            noDomains: "白名单中没有域名",
         },
     }
 
@@ -215,7 +201,8 @@
             height: 100%;
             background: rgba(0,0,0,0.6);
             z-index: 10000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+                sans-serif;
         `
 
         const modalContent = modal.querySelector(".openinnewtabs-modal-content")
@@ -298,7 +285,7 @@
         const addBtn = modal.querySelector("#openinnewtabs-add-domain")
         addBtn.style.cssText = `
             padding: 12px 24px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #4caf50, #45a049);
             color: white;
             border: none;
             border-radius: 8px;
@@ -331,7 +318,7 @@
         })
 
         input.addEventListener("focus", () => {
-            input.style.borderColor = "#4CAF50"
+            input.style.borderColor = "#4caf50"
         })
 
         input.addEventListener("blur", () => {

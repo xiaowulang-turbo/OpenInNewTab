@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open In New Tabs - Whitelist Manager</title>
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header class="header">
+                <h1 id="modalTitle">Whitelist Management</h1>
+                <button id="closeButton" class="close-btn" title="Close">
+                    &times;
+                </button>
+            </header>
+
+            <main class="main-content">
+                <div class="input-section">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="newDomainInput"
+                            placeholder="Enter domain, e.g., example.com"
+                        />
+                        <button id="addDomainBtn" class="add-btn">Add</button>
+                    </div>
+                </div>
+
+                <div class="domains-section">
+                    <div id="domainsList" class="domains-list">
+                        <!-- Domains will be added here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="popup.js"></script>
+    </body>
+</html>
