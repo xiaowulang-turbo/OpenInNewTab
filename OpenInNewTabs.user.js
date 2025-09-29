@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Open In New Tabs
 // @namespace    https://github.com/xiaowulang-turbo/OpenInNewTabs
-// @version      1.1.0
+// @version      1.1.1
 // @description  Force all links to open in new tabs using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
@@ -21,17 +21,7 @@
      * Default whitelisted domains
      * These are the initial domains that will be included
      */
-    const DEFAULT_DOMAINS = [
-        "github.com",
-        "stackoverflow.com",
-        "wikipedia.org",
-        "baidu.com",
-        "google.com",
-        "twitter.com",
-        "facebook.com",
-        "instagram.com",
-        "youtube.com",
-    ]
+    const DEFAULT_DOMAINS = []
 
     /**
      * Get user whitelist from storage
@@ -73,97 +63,10 @@
         if (!userWhitelist.includes(currentDomain)) {
             userWhitelist.push(currentDomain)
             saveUserWhitelist(userWhitelist)
-            showNotification(`${currentDomain} 已添加到白名单！`)
+            alert(`${currentDomain} 已添加到白名单！`)
         } else {
-            showNotification(`${currentDomain} 已在白名单中`)
+            alert(`${currentDomain} 已在白名单中`)
         }
-    }
-
-    /**
-     * Show notification to user
-     * @param {string} message Message to display
-     */
-    function showNotification(message) {
-        // Remove existing notification
-        const existingNotification = document.querySelector(
-            ".openinnewtabs-notification"
-        )
-        if (existingNotification) {
-            existingNotification.remove()
-        }
-
-        // Create notification element
-        const notification = document.createElement("div")
-        notification.className = "openinnewtabs-notification"
-        notification.textContent = message
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 10000;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            max-width: 300px;
-            word-wrap: break-word;
-        `
-
-        document.body.appendChild(notification)
-
-        // Auto remove after 3 seconds
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.remove()
-            }
-        }, 3000)
-    }
-
-    /**
-     * Create floating button for adding current domain to whitelist
-     */
-    function createAddButton() {
-        if (document.querySelector(".openinnewtabs-add-button")) {
-            return // Button already exists
-        }
-
-        const button = document.createElement("button")
-        button.className = "openinnewtabs-add-button"
-        button.innerHTML = "➕"
-        button.title = "添加当前页面到白名单"
-        button.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #2196F3;
-            color: white;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 9999;
-            transition: all 0.3s ease;
-        `
-
-        button.addEventListener("mouseover", () => {
-            button.style.background = "#1976D2"
-            button.style.transform = "scale(1.1)"
-        })
-
-        button.addEventListener("mouseout", () => {
-            button.style.background = "#2196F3"
-            button.style.transform = "scale(1)"
-        })
-
-        button.addEventListener("click", addCurrentDomainToWhitelist)
-
-        document.body.appendChild(button)
     }
 
     /**
@@ -308,9 +211,9 @@
         if (!userWhitelist.includes(domain)) {
             userWhitelist.push(domain)
             saveUserWhitelist(userWhitelist)
-            showNotification(`${domain} 已添加到白名单！`)
+            alert(`${domain} 已添加到白名单！`)
         } else {
-            showNotification(`${domain} 已在白名单中`)
+            alert(`${domain} 已在白名单中`)
         }
     }
 
@@ -324,7 +227,7 @@
         if (index > -1) {
             userWhitelist.splice(index, 1)
             saveUserWhitelist(userWhitelist)
-            showNotification(`${domain} 已从白名单移除`)
+            alert(`${domain} 已从白名单移除`)
             updateWhitelistDisplay()
         }
     }
@@ -438,8 +341,8 @@
         // Register menu command for whitelist management
         GM_registerMenuCommand("管理白名单", openWhitelistManager)
 
-        // Create floating button for adding current domain
-        createAddButton()
+        // Register menu command for adding current domain to whitelist
+        GM_registerMenuCommand("添加白名单", addCurrentDomainToWhitelist)
 
         // Start forcing new tabs
         forceNewTabs()

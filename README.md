@@ -8,7 +8,7 @@ A Tampermonkey userscript that forces all links to open in new tabs using a whit
 -   **Dynamic Content Support**: Handles both existing and dynamically added links
 -   **Security**: Adds `rel="noopener noreferrer"` for security
 -   **Lightweight**: Minimal performance impact with efficient DOM monitoring
--   **User-Friendly Management**: Floating button to add current domain to whitelist
+-   **User-Friendly Management**: Menu-based whitelist management
 -   **Whitelist Manager**: Complete interface to view, add, modify, and remove domains
 -   **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to store user preferences
 
@@ -40,9 +40,10 @@ The script comes with a set of default whitelisted domains:
 
 #### Adding Current Domain
 
--   Look for the blue floating button (➕) in the bottom-right corner of any webpage
--   Click it to instantly add the current domain to your whitelist
--   You'll see a green notification confirming the addition
+-   In any webpage, right-click the Tampermonkey icon in your browser toolbar
+-   Select "添加白名单" from the menu
+-   The current domain will be instantly added to your whitelist
+-   You'll see an alert confirming the addition
 
 #### Managing Your Whitelist
 
@@ -71,13 +72,6 @@ The script supports both exact domain matching and subdomain matching:
 7. **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to save your whitelist preferences
 
 ## User Interface
-
-### Floating Add Button
-
--   **Appearance**: Blue circular button with ➕ icon in the bottom-right corner
--   **Function**: Click to instantly add the current domain to your whitelist
--   **Feedback**: Shows green notification when domain is added
--   **Hover Effects**: Button scales up and changes color on hover
 
 ### Whitelist Management Modal
 
