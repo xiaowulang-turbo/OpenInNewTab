@@ -13,6 +13,7 @@ A Tampermonkey userscript that forces all links to open in new tabs using a whit
 -   **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to store user preferences
 -   **Dark Mode Support**: Automatically adapts to system dark/light mode preferences
 -   **Modern UI**: Clean, responsive design with smooth animations and hover effects
+-   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
 
 ## Installation
 
@@ -72,6 +73,23 @@ The script supports both exact domain matching and subdomain matching:
 5. **Dynamic Monitoring**: Sets up a MutationObserver to handle dynamically added content
 6. **Security Enhancement**: Adds security attributes (`rel="noopener noreferrer"`) to prevent security issues
 7. **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to save your whitelist preferences
+
+## Language Support
+
+The script automatically detects your browser's language setting and displays the interface in the appropriate language:
+
+-   **English** (Default): Used when browser language is not Chinese
+-   **Chinese (中文)**: Used when browser language starts with 'zh' (e.g., zh-CN, zh-TW, zh-HK)
+
+### Supported Interface Elements
+
+All user interface elements are internationalized:
+
+-   Menu commands
+-   Modal dialog titles and buttons
+-   Input field placeholders
+-   Notification messages
+-   Domain list display
 
 ## User Interface
 

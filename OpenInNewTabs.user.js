@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Open In New Tabs
 // @namespace    https://github.com/xiaowulang-turbo/OpenInNewTabs
-// @version      1.1.2
+// @version      1.1.3
 // @description  Force all links to open in new tabs using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
@@ -59,14 +59,85 @@
     function addCurrentDomainToWhitelist() {
         const currentDomain = window.location.hostname
         const userWhitelist = getUserWhitelist()
+        const lang = detectLanguage()
 
         if (!userWhitelist.includes(currentDomain)) {
             userWhitelist.push(currentDomain)
             saveUserWhitelist(userWhitelist)
-            alert(`${currentDomain} 已添加到白名单！`)
+            alert(`${currentDomain} ${getText("addedToWhitelist", lang)}`)
         } else {
-            alert(`${currentDomain} 已在白名单中`)
+            alert(`${currentDomain} ${getText("alreadyInWhitelist", lang)}`)
         }
+    }
+
+    /**
+     * Detect browser language setting
+     * @returns {string} Language code ('en' or 'zh')
+     */
+    function detectLanguage() {
+        const userLang = navigator.language || navigator.userLanguage || "en"
+        return userLang.startsWith("zh") ? "zh" : "en"
+    }
+
+    /**
+     * Language resources for internationalization
+     */
+    const languageResources = {
+        en: {
+            // Modal UI
+            modalTitle: "Whitelist Management",
+            inputPlaceholder: "Enter domain, e.g., example.com",
+            addButton: "Add",
+            removeButton: "Remove",
+            closeButton: "×",
+
+            // Notifications
+            addedToWhitelist: "Added to whitelist!",
+            alreadyInWhitelist: "Already in whitelist",
+            removedFromWhitelist: "Removed from whitelist",
+
+            // Menu commands
+            addToWhitelist: "Add to Whitelist",
+            manageWhitelist: "Manage Whitelist",
+
+            // Domain display
+            noDomains: "No domains in whitelist",
+        },
+        zh: {
+            // Modal UI
+            modalTitle: "白名单管理",
+            inputPlaceholder: "输入域名，如：example.com",
+            addButton: "添加",
+            removeButton: "移除",
+            closeButton: "×",
+
+            // Notifications
+            addedToWhitelist: "已添加到白名单！",
+            alreadyInWhitelist: "已在白名单中",
+            removedFromWhitelist: "已从白名单移除",
+
+            // Menu commands
+            addToWhitelist: "添加白名单",
+            manageWhitelist: "管理白名单",
+
+            // Domain display
+            noDomains: "白名单中没有域名",
+        },
+    }
+
+    /**
+     * Get text by language
+     * @param {string} key Text key
+     * @param {string} lang Language code
+     * @returns {string} Localized text
+     */
+    function getText(key, lang = null) {
+        const language = lang || detectLanguage()
+        return (
+            languageResources[language]?.[key] ||
+            languageResources.en[key] ||
+            key
+        )
     }
 
     /**
@@ -103,18 +174,28 @@
      * Create whitelist management modal
      */
     function createWhitelistModal() {
+        const lang = detectLanguage()
         const modal = document.createElement("div")
         modal.className = "openinnewtabs-modal"
         modal.innerHTML = `
             <div class="openinnewtabs-modal-content">
                 <div class="openinnewtabs-modal-header">
-                    <h3>白名单管理</h3>
-                    <button class="openinnewtabs-close">&times;</button>
+                    <h3>${getText("modalTitle", lang)}</h3>
+                    <button class="openinnewtabs-close">${getText(
+                        "closeButton",
+                        lang
+                    )}</button>
                 </div>
                 <div class="openinnewtabs-modal-body">
                     <div class="openinnewtabs-input-group">
-                        <input type="text" id="openinnewtabs-new-domain" placeholder="输入域名，如：example.com">
-                        <button id="openinnewtabs-add-domain">添加</button>
+                        <input type="text" id="openinnewtabs-new-domain" placeholder="${getText(
+                            "inputPlaceholder",
+                            lang
+                        )}">
+                        <button id="openinnewtabs-add-domain">${getText(
+                            "addButton",
+                            lang
+                        )}</button>
                     </div>
                     <div class="openinnewtabs-domains-list" id="openinnewtabs-domains-list">
                         <!-- Domains will be added here -->
@@ -295,12 +376,14 @@
      */
     function addDomainToWhitelist(domain) {
         const userWhitelist = getUserWhitelist()
+        const lang = detectLanguage()
+
         if (!userWhitelist.includes(domain)) {
             userWhitelist.push(domain)
             saveUserWhitelist(userWhitelist)
-            alert(`${domain} 已添加到白名单！`)
+            alert(`${domain} ${getText("addedToWhitelist", lang)}`)
         } else {
-            alert(`${domain} 已在白名单中`)
+            alert(`${domain} ${getText("alreadyInWhitelist", lang)}`)
         }
     }
 
@@ -310,11 +393,13 @@
      */
     function removeDomainFromWhitelist(domain) {
         const userWhitelist = getUserWhitelist()
+        const lang = detectLanguage()
         const index = userWhitelist.indexOf(domain)
+
         if (index > -1) {
             userWhitelist.splice(index, 1)
             saveUserWhitelist(userWhitelist)
-            alert(`${domain} 已从白名单移除`)
+            alert(`${domain} ${getText("removedFromWhitelist", lang)}`)
             updateWhitelistDisplay()
         }
     }
@@ -329,6 +414,21 @@
         const domainsList = modal.querySelector("#openinnewtabs-domains-list")
         const userWhitelist = getUserWhitelist()
         const colors = getThemeColors()
+        const lang = detectLanguage()
+
+        if (userWhitelist.length === 0) {
+            domainsList.innerHTML = `
+                <div style="
+                    text-align: center;
+                    color: ${colors.textSecondary};
+                    font-size: 14px;
+                    padding: 32px 16px;
+                ">
+                    ${getText("noDomains", lang)}
+                </div>
+            `
+            return
+        }
 
         domainsList.innerHTML = userWhitelist
             .map(
@@ -361,7 +461,7 @@
                     font-weight: 500;
                     transition: all 0.2s ease;
                     box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
-                ">移除</button>
+                ">${getText("removeButton", lang)}</button>
             </div>
         `
             )
@@ -460,11 +560,19 @@
 
     // Initialize when DOM is ready
     function initialize() {
-        // Register menu command for whitelist management
-        GM_registerMenuCommand("管理白名单", openWhitelistManager)
+        const lang = detectLanguage()
 
         // Register menu command for adding current domain to whitelist
-        GM_registerMenuCommand("添加白名单", addCurrentDomainToWhitelist)
+        GM_registerMenuCommand(
+            getText("addToWhitelist", lang),
+            addCurrentDomainToWhitelist
+        )
+
+        // Register menu command for whitelist management
+        GM_registerMenuCommand(
+            getText("manageWhitelist", lang),
+            openWhitelistManager
+        )
 
         // Start forcing new tabs
         forceNewTabs()
