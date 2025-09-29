@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Open In New Tabs
 // @namespace    https://github.com/xiaowulang-turbo/OpenInNewTabs
-// @version      1.1.1
+// @version      1.1.2
 // @description  Force all links to open in new tabs using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
@@ -70,6 +70,36 @@
     }
 
     /**
+     * Detect if the browser is in dark mode
+     * @returns {boolean} True if in dark mode
+     */
+    function isDarkMode() {
+        return (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+        )
+    }
+
+    /**
+     * Get CSS variables based on theme
+     * @returns {Object} CSS color variables
+     */
+    function getThemeColors() {
+        const isDark = isDarkMode()
+        return {
+            bgPrimary: isDark ? "#1a1a1a" : "#ffffff",
+            bgSecondary: isDark ? "#2d2d2d" : "#f8f9fa",
+            textPrimary: isDark ? "#ffffff" : "#333333",
+            textSecondary: isDark ? "#cccccc" : "#666666",
+            borderColor: isDark ? "#404040" : "#dddddd",
+            shadowColor: isDark ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.3)",
+            inputBg: isDark ? "#333333" : "#ffffff",
+            inputBorder: isDark ? "#555555" : "#dddddd",
+            inputText: isDark ? "#ffffff" : "#333333",
+        }
+    }
+
+    /**
      * Create whitelist management modal
      */
     function createWhitelistModal() {
@@ -92,6 +122,9 @@
                 </div>
             </div>
         `
+
+        const colors = getThemeColors()
+
         modal.style.cssText = `
             display: none;
             position: fixed;
@@ -99,8 +132,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             z-index: 10000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         `
 
         const modalContent = modal.querySelector(".openinnewtabs-modal-content")
@@ -109,66 +143,119 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: ${colors.bgPrimary};
             width: 90%;
             max-width: 500px;
             max-height: 80vh;
             overflow-y: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px ${colors.shadowColor};
+            border: 1px solid ${colors.borderColor};
         `
 
         const header = modal.querySelector(".openinnewtabs-modal-header")
         header.style.cssText = `
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
+            padding: 20px 24px;
+            border-bottom: 1px solid ${colors.borderColor};
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f8f9fa;
-            border-radius: 8px 8px 0 0;
+            background: ${colors.bgSecondary};
+            border-radius: 12px 12px 0 0;
+        `
+
+        const headerTitle = header.querySelector("h3")
+        headerTitle.style.cssText = `
+            margin: 0;
+            color: ${colors.textPrimary};
+            font-size: 18px;
+            font-weight: 600;
         `
 
         const closeBtn = modal.querySelector(".openinnewtabs-close")
         closeBtn.style.cssText = `
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            color: #666;
+            color: ${colors.textSecondary};
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
         `
 
         const body = modal.querySelector(".openinnewtabs-modal-body")
         body.style.cssText = `
-            padding: 20px;
+            padding: 24px;
+            color: ${colors.textPrimary};
         `
 
         const inputGroup = modal.querySelector(".openinnewtabs-input-group")
         inputGroup.style.cssText = `
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
         `
 
         const input = modal.querySelector("#openinnewtabs-new-domain")
         input.style.cssText = `
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 2px solid ${colors.inputBorder};
+            border-radius: 8px;
             font-size: 14px;
+            background: ${colors.inputBg};
+            color: ${colors.inputText};
+            outline: none;
+            transition: border-color 0.2s ease;
         `
 
         const addBtn = modal.querySelector("#openinnewtabs-add-domain")
         addBtn.style.cssText = `
-            padding: 10px 20px;
-            background: #4CAF50;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
         `
+
+        // Add hover effects
+        closeBtn.addEventListener("mouseover", () => {
+            closeBtn.style.background = isDarkMode() ? "#404040" : "#e9ecef"
+            closeBtn.style.color = colors.textPrimary
+        })
+
+        closeBtn.addEventListener("mouseout", () => {
+            closeBtn.style.background = "none"
+            closeBtn.style.color = colors.textSecondary
+        })
+
+        addBtn.addEventListener("mouseover", () => {
+            addBtn.style.transform = "translateY(-1px)"
+            addBtn.style.boxShadow = "0 4px 12px rgba(76, 175, 80, 0.4)"
+        })
+
+        addBtn.addEventListener("mouseout", () => {
+            addBtn.style.transform = "translateY(0)"
+            addBtn.style.boxShadow = "0 2px 8px rgba(76, 175, 80, 0.3)"
+        })
+
+        input.addEventListener("focus", () => {
+            input.style.borderColor = "#4CAF50"
+        })
+
+        input.addEventListener("blur", () => {
+            input.style.borderColor = colors.inputBorder
+        })
 
         document.body.appendChild(modal)
 
@@ -241,6 +328,7 @@
 
         const domainsList = modal.querySelector("#openinnewtabs-domains-list")
         const userWhitelist = getUserWhitelist()
+        const colors = getThemeColors()
 
         domainsList.innerHTML = userWhitelist
             .map(
@@ -249,34 +337,68 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 10px;
-                border: 1px solid #eee;
-                margin-bottom: 5px;
-                border-radius: 4px;
-                background: #f9f9f9;
+                padding: 16px;
+                border: 1px solid ${colors.borderColor};
+                margin-bottom: 8px;
+                border-radius: 8px;
+                background: ${colors.bgSecondary};
+                transition: all 0.2s ease;
             ">
-                <span>${domain}</span>
+                <span style="
+                    color: ${colors.textPrimary};
+                    font-size: 14px;
+                    font-weight: 500;
+                    flex: 1;
+                ">${domain}</span>
                 <button class="openinnewtabs-remove-domain" data-domain="${domain}" style="
-                    background: #f44336;
+                    background: linear-gradient(135deg, #f44336, #d32f2f);
                     color: white;
                     border: none;
-                    border-radius: 4px;
-                    padding: 5px 10px;
+                    border-radius: 6px;
+                    padding: 8px 16px;
                     cursor: pointer;
                     font-size: 12px;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
                 ">移除</button>
             </div>
         `
             )
             .join("")
 
-        // Add event listeners for remove buttons
+        // Add event listeners and hover effects for remove buttons
         domainsList
             .querySelectorAll(".openinnewtabs-remove-domain")
             .forEach((btn) => {
                 btn.addEventListener("click", (e) => {
                     const domain = e.target.getAttribute("data-domain")
                     removeDomainFromWhitelist(domain)
+                })
+
+                btn.addEventListener("mouseover", () => {
+                    btn.style.transform = "translateY(-1px)"
+                    btn.style.boxShadow = "0 4px 12px rgba(244, 67, 54, 0.4)"
+                })
+
+                btn.addEventListener("mouseout", () => {
+                    btn.style.transform = "translateY(0)"
+                    btn.style.boxShadow = "0 2px 8px rgba(244, 67, 54, 0.3)"
+                })
+            })
+
+        // Add hover effects for domain items
+        domainsList
+            .querySelectorAll(".openinnewtabs-domain-item")
+            .forEach((item) => {
+                item.addEventListener("mouseover", () => {
+                    item.style.transform = "translateY(-1px)"
+                    item.style.boxShadow = `0 4px 12px ${colors.shadowColor}`
+                })
+
+                item.addEventListener("mouseout", () => {
+                    item.style.transform = "translateY(0)"
+                    item.style.boxShadow = "none"
                 })
             })
     }

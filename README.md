@@ -11,6 +11,8 @@ A Tampermonkey userscript that forces all links to open in new tabs using a whit
 -   **User-Friendly Management**: Menu-based whitelist management
 -   **Whitelist Manager**: Complete interface to view, add, modify, and remove domains
 -   **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to store user preferences
+-   **Dark Mode Support**: Automatically adapts to system dark/light mode preferences
+-   **Modern UI**: Clean, responsive design with smooth animations and hover effects
 
 ## Installation
 
@@ -77,12 +79,14 @@ The script supports both exact domain matching and subdomain matching:
 
 -   **Access**: Via Tampermonkey menu → "管理白名单"
 -   **Features**:
-    -   View all whitelisted domains in a clean list
-    -   Add new domains with a simple input field
-    -   Remove domains with individual "移除" buttons
+    -   View all whitelisted domains in a clean, organized list
+    -   Add new domains with a simple input field and gradient button
+    -   Remove domains with individual styled "移除" buttons
     -   Real-time updates when making changes
     -   Keyboard support (Enter key to add domains)
--   **Design**: Clean, modern interface with intuitive controls
+    -   Smooth hover animations and transitions
+-   **Design**: Modern, responsive interface with dark mode support
+-   **Theme**: Automatically adapts to system dark/light mode preferences
 
 ## Security Considerations
 
