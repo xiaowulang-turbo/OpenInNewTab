@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         Open In New Tabs
-// @namespace    https://github.com/yourusername/OpenInNewTabs
-// @version      1.0.0
+// @namespace    https://github.com/xiaowulang-turbo/OpenInNewTabs
+// @version      1.0.1
 // @description  Force all links to open in new tabs using whitelist mode
-// @author       Your Name
+// @author       Xiaowu
 // @match        *://*/*
-// @exclude      https://www.google.com/*
-// @exclude      https://www.baidu.com/*
-// @exclude      https://github.com/*
-// @grant        none
+// @updateUrl https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/OpenInNewTabs.user.js
+// @downloadURL https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/OpenInNewTabs.user.js
+// @grant        MIT
 // @run-at       document-start
 // ==/UserScript==
 
@@ -20,10 +19,15 @@
      * Only domains in this list will have the new tab behavior applied
      */
     const WHITELIST_DOMAINS = [
-        "example.com",
+        "github.com",
         "stackoverflow.com",
         "wikipedia.org",
-        // Add more domains as needed
+        "baidu.com",
+        "google.com",
+        "twitter.com",
+        "facebook.com",
+        "instagram.com",
+        "youtube.com",
     ]
 
     /**
