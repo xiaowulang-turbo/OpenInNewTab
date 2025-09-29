@@ -96,10 +96,11 @@ The extension supports both exact domain matching and subdomain matching:
 ├── popup.html             # Popup interface
 ├── popup.js               # Popup functionality
 ├── popup.css              # Popup styling with dark mode support
-└── icons/                 # Extension icons (16x16, 32x32, 48x48, 128x128)
+└── icons/                 # Extension icons (16x16, 24x24, 32x32, 64x64, 128x128)
     ├── icon16.png
+    ├── icon24.png
     ├── icon32.png
-    ├── icon48.png
+    ├── icon64.png
     └── icon128.png
 ```
 
