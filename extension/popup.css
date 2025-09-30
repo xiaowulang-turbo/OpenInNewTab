@@ -39,7 +39,7 @@
 
 body {
     width: 400px;
-    min-height: 500px;
+    min-height: 550px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         sans-serif;
     background: var(--bg-primary);
@@ -49,7 +49,7 @@ body {
 
 .container {
     padding: 0;
-    min-height: 500px;
+    min-height: 550px;
 }
 
 /* Header */
@@ -95,6 +95,115 @@ body {
 /* Main Content */
 .main-content {
     padding: 24px;
+}
+
+/* Quick Add Section */
+.quick-add-section {
+    margin-bottom: 20px;
+}
+
+.current-domain-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: linear-gradient(
+        135deg,
+        var(--bg-secondary) 0%,
+        var(--bg-primary) 100%
+    );
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.current-domain-card:hover {
+    border-color: #4caf50;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.domain-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.domain-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.domain-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quick-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.quick-add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.4);
+}
+
+.quick-add-btn:active {
+    transform: translateY(0);
+}
+
+.quick-add-btn.added {
+    background: linear-gradient(135deg, #66bb6a, #4caf50);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.btn-text {
+    font-size: 13px;
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 20px 0;
+}
+
+/* Section Title */
+.section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
 }
 
 /* Input Section */
@@ -152,7 +261,7 @@ body {
 
 /* Domains Section */
 .domains-section {
-    max-height: 350px;
+    max-height: 300px;
     overflow-y: auto;
 }
 

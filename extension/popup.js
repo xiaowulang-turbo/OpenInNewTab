@@ -12,6 +12,11 @@
     const languageResources = {
         en: {
             modalTitle: "Whitelist Management",
+            currentDomainLabel: "Current Domain:",
+            quickAddBtnText: "Add",
+            quickAddBtnAdded: "Added",
+            manualAddTitle: "Manual Add",
+            whitelistTitle: "Whitelist",
             inputPlaceholder: "Enter domain, e.g., example.com",
             addButton: "Add",
             removeButton: "Remove",
@@ -23,6 +28,11 @@
         },
         zh: {
             modalTitle: "白名单管理",
+            currentDomainLabel: "当前域名：",
+            quickAddBtnText: "添加",
+            quickAddBtnAdded: "已添加",
+            manualAddTitle: "手动添加",
+            whitelistTitle: "白名单",
             inputPlaceholder: "输入域名，如：example.com",
             addButton: "添加",
             removeButton: "移除",
@@ -33,6 +43,8 @@
             noDomains: "白名单中没有域名",
         },
     }
+
+    let currentDomain = ""
 
     let currentLanguage = "en"
 
@@ -67,12 +79,21 @@
         // Update UI elements
         document.getElementById("modalTitle").textContent =
             getText("modalTitle")
+        document.getElementById("currentDomainLabel").textContent =
+            getText("currentDomainLabel")
+        document.getElementById("manualAddTitle").textContent =
+            getText("manualAddTitle")
+        document.getElementById("whitelistTitle").textContent =
+            getText("whitelistTitle")
         document.getElementById("newDomainInput").placeholder =
             getText("inputPlaceholder")
         document.getElementById("addDomainBtn").textContent =
             getText("addButton")
         document.getElementById("closeButton").textContent =
             getText("closeButton")
+
+        // Update quick add button
+        updateQuickAddButton()
 
         // Update existing remove buttons
         document.querySelectorAll(".remove-btn").forEach((btn) => {
@@ -81,6 +102,72 @@
 
         // Refresh domains list to update language
         loadWhitelist()
+    }
+
+    /**
+     * Get current active tab domain
+     * @returns {Promise<string>} Current domain
+     */
+    async function getCurrentDomain() {
+        try {
+            const [tab] = await chrome.tabs.query({
+                active: true,
+                currentWindow: true,
+            })
+            if (tab && tab.url) {
+                const url = new URL(tab.url)
+                return url.hostname
+            }
+            return ""
+        } catch (error) {
+            console.error("Error getting current domain:", error)
+            return ""
+        }
+    }
+
+    /**
+     * Update quick add button state
+     */
+    async function updateQuickAddButton() {
+        const quickAddBtn = document.getElementById("quickAddBtn")
+        const quickAddBtnText = document.getElementById("quickAddBtnText")
+        const userWhitelist = await getUserWhitelist()
+
+        if (currentDomain && userWhitelist.includes(currentDomain)) {
+            quickAddBtn.classList.add("added")
+            quickAddBtn.disabled = true
+            quickAddBtnText.textContent = getText("quickAddBtnAdded")
+            quickAddBtn.title = getText("alreadyInWhitelist")
+        } else {
+            quickAddBtn.classList.remove("added")
+            quickAddBtn.disabled = false
+            quickAddBtnText.textContent = getText("quickAddBtnText")
+            quickAddBtn.title = "Add current domain to whitelist"
+        }
+    }
+
+    /**
+     * Handle quick add button click
+     */
+    async function handleQuickAdd() {
+        if (!currentDomain) {
+            showNotification("Cannot detect current domain")
+            return
+        }
+
+        const userWhitelist = await getUserWhitelist()
+
+        if (!userWhitelist.includes(currentDomain)) {
+            userWhitelist.push(currentDomain)
+            await saveUserWhitelist(userWhitelist)
+            showNotification(`${currentDomain} ${getText("addedToWhitelist")}`)
+            await updateQuickAddButton()
+            loadWhitelist()
+        } else {
+            showNotification(
+                `${currentDomain} ${getText("alreadyInWhitelist")}`
+            )
+        }
     }
 
     /**
@@ -177,6 +264,10 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("addedToWhitelist")}`)
                 loadWhitelist()
+                // Update quick add button if the added domain is current domain
+                if (domain === currentDomain) {
+                    await updateQuickAddButton()
+                }
             } else {
                 showNotification(`${domain} ${getText("alreadyInWhitelist")}`)
             }
@@ -200,6 +291,10 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("removedFromWhitelist")}`)
                 loadWhitelist()
+                // Update quick add button if the removed domain is current domain
+                if (domain === currentDomain) {
+                    await updateQuickAddButton()
+                }
             }
         } catch (error) {
             console.error("Error removing domain:", error)
@@ -254,13 +349,21 @@
      */
     async function initialize() {
         try {
+            // Get current domain
+            currentDomain = await getCurrentDomain()
+            document.getElementById("currentDomainValue").textContent =
+                currentDomain || "N/A"
+
             // Set up language
             updateLanguage()
 
             // Set up event listeners
+            const quickAddBtn = document.getElementById("quickAddBtn")
             const addBtn = document.getElementById("addDomainBtn")
             const input = document.getElementById("newDomainInput")
             const closeBtn = document.getElementById("closeButton")
+
+            quickAddBtn.addEventListener("click", handleQuickAdd)
 
             addBtn.addEventListener("click", () => {
                 const domain = input.value.trim()
@@ -282,6 +385,9 @@
 
             // Load initial whitelist
             await loadWhitelist()
+
+            // Update quick add button state
+            await updateQuickAddButton()
 
             // Focus input for better UX
             input.focus()
