@@ -166,9 +166,84 @@
     }
 
     /**
+     * Theme Management System
+     */
+    function initThemeSystem() {
+        const STORAGE_KEY = "user-theme"
+        const themeToggle = document.getElementById("themeToggle")
+
+        /**
+         * Get user's theme preference
+         * Priority: localStorage > system preference > light (default)
+         */
+        function getUserTheme() {
+            // Check localStorage first
+            const savedTheme = localStorage.getItem(STORAGE_KEY)
+            if (savedTheme) {
+                return savedTheme
+            }
+
+            // Check system preference
+            const prefersDark = window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches
+            return prefersDark ? "dark" : "light"
+        }
+
+        /**
+         * Apply theme to document
+         */
+        function applyTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme)
+
+            // Update checkbox state
+            themeToggle.checked = theme === "dark"
+        }
+
+        /**
+         * Handle theme toggle
+         */
+        function handleThemeChange() {
+            const newTheme = themeToggle.checked ? "dark" : "light"
+
+            // Apply new theme
+            document.documentElement.setAttribute("data-theme", newTheme)
+
+            // Save to localStorage
+            localStorage.setItem(STORAGE_KEY, newTheme)
+
+            console.log(`🎨 Theme switched to: ${newTheme} mode`)
+        }
+
+        // Initialize theme on page load
+        const initialTheme = getUserTheme()
+        applyTheme(initialTheme)
+
+        // Add change event listener for checkbox
+        themeToggle.addEventListener("change", handleThemeChange)
+
+        // Listen for system theme changes (only if user hasn't manually set theme)
+        window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", (e) => {
+                // Only auto-switch if no manual preference saved
+                if (!localStorage.getItem(STORAGE_KEY)) {
+                    const newTheme = e.matches ? "dark" : "light"
+                    applyTheme(newTheme)
+                    console.log(
+                        `🎨 System theme changed to: ${newTheme} mode (auto)`
+                    )
+                }
+            })
+
+        console.log(`🎨 Theme initialized: ${initialTheme} mode`)
+    }
+
+    /**
      * Initialize all functionality when DOM is ready
      */
     function initialize() {
+        initThemeSystem()
         initInstallTabs()
         initCopyButtons()
         initSmoothScroll()

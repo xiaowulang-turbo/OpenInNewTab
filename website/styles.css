@@ -3,9 +3,9 @@
  * Modern, responsive design with smooth animations
  */
 
-/* CSS Variables */
+/* CSS Variables - Light Theme (Default) */
 :root {
-    /* Colors */
+    /* Colors - Light Mode */
     --color-primary: #4caf50;
     --color-primary-dark: #45a049;
     --color-secondary: #2196f3;
@@ -31,6 +31,21 @@
 
     /* Transitions */
     --transition: all 0.3s ease;
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    /* Colors - Dark Mode */
+    --color-primary: #66bb6a;
+    --color-primary-dark: #4caf50;
+    --color-secondary: #42a5f5;
+    --color-accent: #ffa726;
+    --color-bg: #121212;
+    --color-bg-alt: #1e1e1e;
+    --color-text: #e0e0e0;
+    --color-text-light: #b0b0b0;
+    --color-border: #333333;
+    --color-shadow: rgba(0, 0, 0, 0.3);
 }
 
 /* Global Styles */
@@ -155,6 +170,97 @@ code {
 
 .nav-links a:hover {
     color: var(--color-primary);
+}
+
+/* Theme Toggle Switch */
+.theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-border);
+    transition: 0.3s;
+    border-radius: 28px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.theme-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-switch input:checked + .theme-slider {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-primary-dark)
+    );
+}
+
+.theme-switch input:checked + .theme-slider:before {
+    transform: translateX(24px);
+}
+
+.theme-slider:hover {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15),
+        0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+/* Theme icons in slider */
+.theme-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.theme-icon.sun {
+    right: 6px;
+    opacity: 0;
+}
+
+.theme-icon.moon {
+    left: 6px;
+    opacity: 1;
+}
+
+.theme-switch input:checked ~ .theme-icon.sun {
+    opacity: 1;
+}
+
+.theme-switch input:checked ~ .theme-icon.moon {
+    opacity: 0;
 }
 
 /* Buttons */
@@ -807,4 +913,49 @@ code {
 /* Smooth Scrolling */
 html {
     scroll-padding-top: 80px;
+}
+
+/* Dark Mode Specific Adjustments */
+[data-theme="dark"] .nav {
+    background: rgba(18, 18, 18, 0.95);
+}
+
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .version-card,
+[data-theme="dark"] .comparison-table,
+[data-theme="dark"] .step,
+[data-theme="dark"] .code-block {
+    background: var(--color-bg-alt);
+}
+
+[data-theme="dark"] .code-header,
+[data-theme="dark"] .comparison-table th {
+    background: var(--color-bg);
+}
+
+[data-theme="dark"] .install-note {
+    background: #2d2400;
+    border-left-color: #ffa726;
+    color: #ffd54f;
+}
+
+/* Mobile responsive for theme switch */
+@media (max-width: 768px) {
+    .theme-switch {
+        width: 46px;
+        height: 24px;
+    }
+
+    .theme-slider:before {
+        height: 18px;
+        width: 18px;
+    }
+
+    .theme-switch input:checked + .theme-slider:before {
+        transform: translateX(22px);
+    }
+
+    .theme-icon {
+        font-size: 0.75rem;
+    }
 }

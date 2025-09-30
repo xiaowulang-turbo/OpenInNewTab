@@ -5,8 +5,8 @@ This is the official landing page for the Open In New Tabs project, showcasing b
 ## Features
 
 -   **Modern Design**: Clean, responsive layout with smooth animations
--   **Dark Mode Ready**: Beautiful gradients and color schemes
--   **Interactive Elements**: Tab switching, smooth scrolling, copy buttons
+-   **Dark Mode Support**: Auto-detects system theme with manual toggle and persistence
+-   **Interactive Elements**: Tab switching, smooth scrolling, copy buttons, theme switcher
 -   **Fully Responsive**: Works perfectly on desktop, tablet, and mobile
 -   **Performance Optimized**: Lightweight, fast loading, smooth animations
 -   **SEO Friendly**: Proper meta tags and semantic HTML
@@ -98,6 +98,57 @@ website/
     vercel --prod
     ```
 
+## Dark Mode Implementation
+
+The website includes a complete dark mode system:
+
+### Features
+
+1. **Auto-Detection**: Automatically detects system theme preference on first load
+2. **Manual Toggle**: Header button for manual theme switching
+3. **Persistence**: Saves user preference in localStorage
+4. **Priority System**: `localStorage` → System Preference → Light (default)
+5. **Dynamic Updates**: Listens for system theme changes (if no manual preference)
+
+### How It Works
+
+```javascript
+// Priority order
+1. Check localStorage for saved preference
+2. If none, check system preference (prefers-color-scheme)
+3. Default to light theme
+
+// User clicks toggle → Save to localStorage
+// System theme changes → Auto-apply (only if no manual preference)
+```
+
+### Theme Variables
+
+```css
+/* Light Theme (Default) */
+:root {
+    --color-bg: #ffffff;
+    --color-text: #333333;
+    --color-primary: #4caf50;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --color-bg: #121212;
+    --color-text: #e0e0e0;
+    --color-primary: #66bb6a;
+}
+```
+
+### Usage
+
+-   **Toggle Switch**: Click the switch in navigation bar to toggle themes
+    -   **OFF (Left)**: Light mode with 🌙 moon icon
+    -   **ON (Right)**: Dark mode with ☀️ sun icon
+    -   **Visual Feedback**: Smooth sliding animation with gradient background
+-   **Automatic**: Works out of the box with system preferences
+-   **Persistent**: Choice remembered across sessions
+
 ## Customization
 
 ### Colors
@@ -105,11 +156,18 @@ website/
 Edit CSS variables in `styles.css`:
 
 ```css
+/* Light Theme */
 :root {
     --color-primary: #4caf50;
     --color-primary-dark: #45a049;
     --color-secondary: #2196f3;
-    /* ... */
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --color-primary: #66bb6a;
+    --color-bg: #121212;
+    --color-text: #e0e0e0;
 }
 ```
 
