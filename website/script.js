@@ -49,10 +49,16 @@
                         "https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js"
                 }
 
+                // Get current language for button text
+                const currentLang =
+                    localStorage.getItem("user-language") ||
+                    (navigator.language?.startsWith("zh") ? "zh" : "en")
+                const t = translations[currentLang]
+
                 try {
                     await navigator.clipboard.writeText(textToCopy)
                     const originalText = button.textContent
-                    button.textContent = "Copied!"
+                    button.textContent = t.btnCopied
                     button.style.background = "#4caf50"
 
                     setTimeout(() => {
@@ -61,9 +67,9 @@
                     }, 2000)
                 } catch (err) {
                     console.error("Failed to copy:", err)
-                    button.textContent = "Failed"
+                    button.textContent = t.btnCopyFailed
                     setTimeout(() => {
-                        button.textContent = "Copy Link"
+                        button.textContent = t.btnCopyLink
                     }, 2000)
                 }
             })
@@ -166,6 +172,187 @@
     }
 
     /**
+     * Language Management System
+     */
+    function initLanguageSystem() {
+        const LANG_STORAGE_KEY = "user-language"
+        const dropdownBtn = document.getElementById("langDropdownBtn")
+        const dropdownMenu = document.getElementById("langDropdownMenu")
+        const langCurrent = document.getElementById("langCurrent")
+        const langOptions = document.querySelectorAll(".lang-option")
+
+        /**
+         * Get user's language preference
+         * Priority: localStorage > browser language > English (default)
+         */
+        function getUserLanguage() {
+            // Check localStorage first
+            const savedLang = localStorage.getItem(LANG_STORAGE_KEY)
+            if (savedLang && (savedLang === "en" || savedLang === "zh")) {
+                return savedLang
+            }
+
+            // Check browser language
+            const browserLang = navigator.language || navigator.userLanguage
+            if (browserLang.startsWith("zh")) {
+                return "zh"
+            }
+            return "en"
+        }
+
+        /**
+         * Toggle dropdown menu
+         */
+        function toggleDropdown() {
+            dropdownMenu.classList.toggle("show")
+            dropdownBtn.classList.toggle("active")
+        }
+
+        /**
+         * Close dropdown menu
+         */
+        function closeDropdown() {
+            dropdownMenu.classList.remove("show")
+            dropdownBtn.classList.remove("active")
+        }
+
+        /**
+         * Apply language to all elements with data-i18n attribute
+         */
+        function applyLanguage(lang) {
+            if (!translations || !translations[lang]) {
+                console.error(`Language "${lang}" not found in translations`)
+                return
+            }
+
+            // Update all elements with data-i18n attribute
+            const elements = document.querySelectorAll("[data-i18n]")
+            elements.forEach((element) => {
+                const key = element.getAttribute("data-i18n")
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key]
+                }
+            })
+
+            // Handle special cases with complex HTML structures
+            updateComplexElements(lang)
+
+            // Update current language display
+            langCurrent.textContent = lang === "zh" ? "中文" : "EN"
+
+            // Update active state of language options
+            langOptions.forEach((option) => {
+                if (option.getAttribute("data-lang") === lang) {
+                    option.classList.add("active")
+                } else {
+                    option.classList.remove("active")
+                }
+            })
+
+            // Update HTML lang attribute
+            document.documentElement.setAttribute("lang", lang)
+
+            console.log(`🌍 Language switched to: ${lang}`)
+        }
+
+        /**
+         * Update elements with complex HTML structures
+         */
+        function updateComplexElements(lang) {
+            const t = translations[lang]
+
+            // Update copy button text if needed
+            const copyButtons = document.querySelectorAll(".copy-btn")
+            copyButtons.forEach((btn) => {
+                if (
+                    btn.textContent.includes("Copy") ||
+                    btn.textContent.includes("复制")
+                ) {
+                    btn.textContent = t.btnCopyLink
+                }
+            })
+
+            // Update code header
+            const codeHeaders = document.querySelectorAll(".code-header span")
+            codeHeaders.forEach((span) => {
+                if (
+                    span.textContent.includes("Download") ||
+                    span.textContent.includes("下载")
+                ) {
+                    span.textContent = t.installUserscriptDownload
+                }
+            })
+
+            // Update install note
+            const installNotes = document.querySelectorAll(".install-note")
+            installNotes.forEach((note) => {
+                const strong = note.querySelector("strong")
+                if (strong) {
+                    strong.textContent = t.installExtensionNote
+                    const textNode = Array.from(note.childNodes).find(
+                        (node) => node.nodeType === Node.TEXT_NODE
+                    )
+                    if (textNode) {
+                        textNode.textContent = " " + t.installExtensionNoteText
+                    }
+                }
+            })
+        }
+
+        /**
+         * Handle language switch
+         */
+        function handleLanguageSwitch(lang) {
+            // Apply language
+            applyLanguage(lang)
+
+            // Save to localStorage
+            localStorage.setItem(LANG_STORAGE_KEY, lang)
+
+            // Close dropdown
+            closeDropdown()
+        }
+
+        // Initialize language on page load
+        const initialLang = getUserLanguage()
+        applyLanguage(initialLang)
+
+        // Toggle dropdown when button is clicked
+        dropdownBtn.addEventListener("click", (e) => {
+            e.stopPropagation()
+            toggleDropdown()
+        })
+
+        // Add click event listeners to language options
+        langOptions.forEach((option) => {
+            option.addEventListener("click", (e) => {
+                e.stopPropagation()
+                const lang = option.getAttribute("data-lang")
+                handleLanguageSwitch(lang)
+            })
+        })
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (
+                !dropdownBtn.contains(e.target) &&
+                !dropdownMenu.contains(e.target)
+            ) {
+                closeDropdown()
+            }
+        })
+
+        // Close dropdown on escape key
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeDropdown()
+            }
+        })
+
+        console.log(`🌍 Language initialized: ${initialLang}`)
+    }
+
+    /**
      * Theme Management System
      */
     function initThemeSystem() {
@@ -243,6 +430,7 @@
      * Initialize all functionality when DOM is ready
      */
     function initialize() {
+        initLanguageSystem()
         initThemeSystem()
         initInstallTabs()
         initCopyButtons()

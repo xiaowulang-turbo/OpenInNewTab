@@ -9,6 +9,7 @@
         />
         <title>Open In New Tabs - Smart Link Management</title>
         <link rel="stylesheet" href="styles.css" />
+        <script src="i18n.js"></script>
     </head>
     <body>
         <!-- Hero Section -->
@@ -20,9 +21,48 @@
                         <span class="logo-text">Open In New Tabs</span>
                     </div>
                     <ul class="nav-links">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#versions">Versions</a></li>
-                        <li><a href="#install">Installation</a></li>
+                        <li>
+                            <a href="#features" data-i18n="navFeatures"
+                                >Features</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#versions" data-i18n="navVersions"
+                                >Versions</a
+                            >
+                        </li>
+                        <li>
+                            <a href="#install" data-i18n="navInstall"
+                                >Installation</a
+                            >
+                        </li>
+                        <li>
+                            <div class="lang-selector">
+                                <button
+                                    class="lang-dropdown-btn"
+                                    id="langDropdownBtn"
+                                >
+                                    <span class="lang-icon">🌐</span>
+                                    <span class="lang-current" id="langCurrent"
+                                        >EN</span
+                                    >
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                                <div
+                                    class="lang-dropdown-menu"
+                                    id="langDropdownMenu"
+                                >
+                                    <button class="lang-option" data-lang="en">
+                                        <span class="lang-flag">🇺🇸</span>
+                                        <span>English</span>
+                                    </button>
+                                    <button class="lang-option" data-lang="zh">
+                                        <span class="lang-flag">🇨🇳</span>
+                                        <span>中文</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
                         <li>
                             <div class="theme-toggle-wrapper">
                                 <label
@@ -57,19 +97,26 @@
 
             <div class="hero-content">
                 <h1 class="hero-title">
-                    Smart Link Management
+                    <span data-i18n="heroTitle">Smart Link Management</span>
                     <br />
-                    <span class="gradient-text">Your Way</span>
+                    <span class="gradient-text" data-i18n="heroTitleHighlight"
+                        >Your Way</span
+                    >
                 </h1>
                 <p class="hero-subtitle">
-                    Force all links to open in new tabs with intelligent
-                    whitelist control.
+                    <span data-i18n="heroSubtitle"
+                        >Force all links to open in new tabs with intelligent
+                        whitelist control.</span
+                    >
                     <br />
-                    Available as Tampermonkey userscript and Chrome extension.
+                    <span data-i18n="heroSubtitle2"
+                        >Available as Tampermonkey userscript and Chrome
+                        extension.</span
+                    >
                 </p>
                 <div class="hero-buttons">
                     <a href="#install" class="btn btn-primary">
-                        <span>Get Started</span>
+                        <span data-i18n="btnGetStarted">Get Started</span>
                         <span class="btn-arrow">→</span>
                     </a>
                     <a
@@ -78,15 +125,21 @@
                         rel="noopener noreferrer"
                         class="btn btn-secondary"
                     >
-                        <span>View on GitHub</span>
+                        <span data-i18n="btnViewGithub">View on GitHub</span>
                         <span class="github-icon">↗</span>
                     </a>
                 </div>
                 <div class="hero-badges">
-                    <span class="badge">✨ Dark Mode</span>
-                    <span class="badge">🌍 i18n Support</span>
-                    <span class="badge">⚡ Lightweight</span>
-                    <span class="badge">🔒 Secure</span>
+                    <span class="badge" data-i18n="badgeDarkMode"
+                        >✨ Dark Mode</span
+                    >
+                    <span class="badge" data-i18n="badgeI18n"
+                        >🌍 i18n Support</span
+                    >
+                    <span class="badge" data-i18n="badgeLightweight"
+                        >⚡ Lightweight</span
+                    >
+                    <span class="badge" data-i18n="badgeSecure">🔒 Secure</span>
                 </div>
             </div>
         </header>
@@ -94,16 +147,20 @@
         <!-- Features Section -->
         <section id="features" class="section features">
             <div class="container">
-                <h2 class="section-title">Powerful Features</h2>
-                <p class="section-subtitle">
+                <h2 class="section-title" data-i18n="featuresTitle">
+                    Powerful Features
+                </h2>
+                <p class="section-subtitle" data-i18n="featuresSubtitle">
                     Everything you need for smart link management
                 </p>
 
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">📋</div>
-                        <h3>Whitelist Mode</h3>
-                        <p>
+                        <h3 data-i18n="featureWhitelistTitle">
+                            Whitelist Mode
+                        </h3>
+                        <p data-i18n="featureWhitelistDesc">
                             Only applies to specified domains for better control
                             and performance. You decide which sites to enhance.
                         </p>
@@ -111,8 +168,8 @@
 
                     <div class="feature-card">
                         <div class="feature-icon">⚡</div>
-                        <h3>Dynamic Content</h3>
-                        <p>
+                        <h3 data-i18n="featureDynamicTitle">Dynamic Content</h3>
+                        <p data-i18n="featureDynamicDesc">
                             Handles both existing and dynamically added links
                             using MutationObserver for real-time updates.
                         </p>
@@ -120,8 +177,8 @@
 
                     <div class="feature-card">
                         <div class="feature-icon">🔒</div>
-                        <h3>Security First</h3>
-                        <p>
+                        <h3 data-i18n="featureSecurityTitle">Security First</h3>
+                        <p data-i18n="featureSecurityDesc">
                             Adds rel="noopener noreferrer" to prevent security
                             issues. Your browsing stays safe.
                         </p>
@@ -129,8 +186,8 @@
 
                     <div class="feature-card">
                         <div class="feature-icon">🎨</div>
-                        <h3>Dark Mode</h3>
-                        <p>
+                        <h3 data-i18n="featureDarkModeTitle">Dark Mode</h3>
+                        <p data-i18n="featureDarkModeDesc">
                             Automatically adapts to system dark/light mode
                             preferences with smooth transitions.
                         </p>
@@ -138,8 +195,10 @@
 
                     <div class="feature-card">
                         <div class="feature-icon">🌍</div>
-                        <h3>Internationalization</h3>
-                        <p>
+                        <h3 data-i18n="featureI18nTitle">
+                            Internationalization
+                        </h3>
+                        <p data-i18n="featureI18nDesc">
                             Auto language detection (English/Chinese) based on
                             browser settings. More languages coming soon.
                         </p>
@@ -147,8 +206,10 @@
 
                     <div class="feature-card">
                         <div class="feature-icon">💾</div>
-                        <h3>Persistent Storage</h3>
-                        <p>
+                        <h3 data-i18n="featureStorageTitle">
+                            Persistent Storage
+                        </h3>
+                        <p data-i18n="featureStorageDesc">
                             Your whitelist preferences are saved and synced
                             across devices automatically.
                         </p>
@@ -160,8 +221,10 @@
         <!-- Versions Section -->
         <section id="versions" class="section versions">
             <div class="container">
-                <h2 class="section-title">Choose Your Version</h2>
-                <p class="section-subtitle">
+                <h2 class="section-title" data-i18n="versionsTitle">
+                    Choose Your Version
+                </h2>
+                <p class="section-subtitle" data-i18n="versionsSubtitle">
                     Two implementations, same great features
                 </p>
 
@@ -169,16 +232,23 @@
                     <div class="version-card">
                         <div class="version-header">
                             <div class="version-icon">🚀</div>
-                            <h3>Userscript Version</h3>
+                            <h3 data-i18n="versionUserscriptTitle">
+                                Userscript Version
+                            </h3>
                             <span class="version-badge">Tampermonkey</span>
                         </div>
-                        <p class="version-description">
+                        <p
+                            class="version-description"
+                            data-i18n="versionUserscriptDesc"
+                        >
                             Perfect for quick testing, development, or users who
                             prefer Tampermonkey/Greasemonkey.
                         </p>
 
                         <div class="version-features">
-                            <h4>Features:</h4>
+                            <h4 data-i18n="versionUserscriptFeatures">
+                                Features:
+                            </h4>
                             <ul>
                                 <li>✓ Menu-based management</li>
                                 <li>✓ GM_* APIs for storage</li>
@@ -189,31 +259,51 @@
                         </div>
 
                         <div class="version-best-for">
-                            <strong>Best for:</strong> Developers, power users,
-                            quick testing
+                            <strong data-i18n="versionUserscriptBestFor"
+                                >Best for:</strong
+                            >
+                            <span data-i18n="versionUserscriptBestForText"
+                                >Developers, power users, quick testing</span
+                            >
                         </div>
 
-                        <a href="#install-userscript" class="btn btn-outline">
+                        <a
+                            href="#install-userscript"
+                            class="btn btn-outline"
+                            data-i18n="btnInstallUserscript"
+                        >
                             Install Userscript →
                         </a>
                     </div>
 
                     <div class="version-card version-card-featured">
-                        <div class="featured-badge">Recommended</div>
+                        <div
+                            class="featured-badge"
+                            data-i18n="badgeRecommended"
+                        >
+                            Recommended
+                        </div>
                         <div class="version-header">
                             <div class="version-icon">🌐</div>
-                            <h3>Chrome Extension</h3>
+                            <h3 data-i18n="versionExtensionTitle">
+                                Chrome Extension
+                            </h3>
                             <span class="version-badge version-badge-primary"
                                 >Manifest V3</span
                             >
                         </div>
-                        <p class="version-description">
+                        <p
+                            class="version-description"
+                            data-i18n="versionExtensionDesc"
+                        >
                             Native Chrome extension with better performance and
                             seamless browser integration.
                         </p>
 
                         <div class="version-features">
-                            <h4>Features:</h4>
+                            <h4 data-i18n="versionExtensionFeatures">
+                                Features:
+                            </h4>
                             <ul>
                                 <li>✓ Modern popup interface</li>
                                 <li>✓ Quick add current domain</li>
@@ -224,66 +314,105 @@
                         </div>
 
                         <div class="version-best-for">
-                            <strong>Best for:</strong> Production use, end
-                            users, Web Store distribution
+                            <strong data-i18n="versionExtensionBestFor"
+                                >Best for:</strong
+                            >
+                            <span data-i18n="versionExtensionBestForText"
+                                >Production use, end users, Web Store
+                                distribution</span
+                            >
                         </div>
 
-                        <a href="#install-extension" class="btn btn-primary">
+                        <a
+                            href="#install-extension"
+                            class="btn btn-primary"
+                            data-i18n="btnInstallExtension"
+                        >
                             Install Extension →
                         </a>
                     </div>
                 </div>
 
                 <div class="comparison-table">
-                    <h3>Feature Comparison</h3>
+                    <h3 data-i18n="comparisonTitle">Feature Comparison</h3>
                     <table>
                         <thead>
                             <tr>
-                                <th>Feature</th>
-                                <th>Userscript</th>
-                                <th>Extension</th>
+                                <th data-i18n="comparisonFeature">Feature</th>
+                                <th data-i18n="comparisonUserscript">
+                                    Userscript
+                                </th>
+                                <th data-i18n="comparisonExtension">
+                                    Extension
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Link Management</td>
+                                <td data-i18n="comparisonLinkManagement">
+                                    Link Management
+                                </td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td>Whitelist Control</td>
+                                <td data-i18n="comparisonWhitelist">
+                                    Whitelist Control
+                                </td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td>Dark Mode</td>
+                                <td data-i18n="comparisonDarkMode">
+                                    Dark Mode
+                                </td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td>Internationalization</td>
+                                <td data-i18n="comparisonI18n">
+                                    Internationalization
+                                </td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td>Installation</td>
-                                <td>Manual Script</td>
-                                <td>One-Click</td>
+                                <td data-i18n="comparisonInstallation">
+                                    Installation
+                                </td>
+                                <td data-i18n="comparisonInstallManual">
+                                    Manual Script
+                                </td>
+                                <td data-i18n="comparisonInstallOneClick">
+                                    One-Click
+                                </td>
                             </tr>
                             <tr>
-                                <td>Updates</td>
-                                <td>Manual</td>
-                                <td>Automatic</td>
+                                <td data-i18n="comparisonUpdates">Updates</td>
+                                <td data-i18n="comparisonUpdatesManual">
+                                    Manual
+                                </td>
+                                <td data-i18n="comparisonUpdatesAuto">
+                                    Automatic
+                                </td>
                             </tr>
                             <tr>
-                                <td>UI Type</td>
-                                <td>Menu Commands</td>
-                                <td>Popup Interface</td>
+                                <td data-i18n="comparisonUIType">UI Type</td>
+                                <td data-i18n="comparisonUIMenu">
+                                    Menu Commands
+                                </td>
+                                <td data-i18n="comparisonUIPopup">
+                                    Popup Interface
+                                </td>
                             </tr>
                             <tr>
-                                <td>Distribution</td>
-                                <td>GitHub</td>
-                                <td>Chrome Web Store</td>
+                                <td data-i18n="comparisonDistribution">
+                                    Distribution
+                                </td>
+                                <td data-i18n="comparisonDistGithub">GitHub</td>
+                                <td data-i18n="comparisonDistWebStore">
+                                    Chrome Web Store
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -294,13 +423,23 @@
         <!-- Installation Section -->
         <section id="install" class="section installation">
             <div class="container">
-                <h2 class="section-title">Quick Installation</h2>
+                <h2 class="section-title" data-i18n="installTitle">
+                    Quick Installation
+                </h2>
 
                 <div class="install-tabs">
-                    <button class="install-tab active" data-tab="userscript">
+                    <button
+                        class="install-tab active"
+                        data-tab="userscript"
+                        data-i18n="tabUserscript"
+                    >
                         🚀 Userscript
                     </button>
-                    <button class="install-tab" data-tab="extension">
+                    <button
+                        class="install-tab"
+                        data-tab="extension"
+                        data-i18n="tabExtension"
+                    >
                         🌐 Extension
                     </button>
                 </div>
@@ -444,8 +583,12 @@
         <!-- Screenshots Section -->
         <section class="section screenshots">
             <div class="container">
-                <h2 class="section-title">Beautiful Interface</h2>
-                <p class="section-subtitle">Modern UI with dark mode support</p>
+                <h2 class="section-title" data-i18n="screenshotsTitle">
+                    Beautiful Interface
+                </h2>
+                <p class="section-subtitle" data-i18n="screenshotsSubtitle">
+                    Modern UI with dark mode support
+                </p>
 
                 <div class="screenshots-grid">
                     <div class="screenshot-card">
@@ -494,13 +637,17 @@
         <section class="section cta">
             <div class="container">
                 <div class="cta-content">
-                    <h2>Ready to Get Started?</h2>
-                    <p>
+                    <h2 data-i18n="ctaTitle">Ready to Get Started?</h2>
+                    <p data-i18n="ctaDesc">
                         Choose your preferred version and start managing your
                         links smarter today.
                     </p>
                     <div class="cta-buttons">
-                        <a href="#install" class="btn btn-primary btn-large">
+                        <a
+                            href="#install"
+                            class="btn btn-primary btn-large"
+                            data-i18n="btnInstallNow"
+                        >
                             Install Now →
                         </a>
                         <a
@@ -508,6 +655,7 @@
                             target="_blank"
                             rel="noopener noreferrer"
                             class="btn btn-outline btn-large"
+                            data-i18n="btnViewDocs"
                         >
                             View Documentation
                         </a>
@@ -522,30 +670,33 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <h4>Open In New Tabs</h4>
-                        <p>
+                        <p data-i18n="footerDesc">
                             Smart link management with whitelist control.
                             Available as userscript and extension.
                         </p>
                     </div>
 
                     <div class="footer-section">
-                        <h4>Quick Links</h4>
+                        <h4 data-i18n="footerQuickLinks">Quick Links</h4>
                         <ul>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                                    data-i18n="footerGithubRepo"
                                     >GitHub Repository</a
                                 >
                             </li>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs/issues"
+                                    data-i18n="footerReportIssues"
                                     >Report Issues</a
                                 >
                             </li>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/LICENSE"
+                                    data-i18n="footerLicense"
                                     >MIT License</a
                                 >
                             </li>
@@ -553,23 +704,26 @@
                     </div>
 
                     <div class="footer-section">
-                        <h4>Resources</h4>
+                        <h4 data-i18n="footerResources">Resources</h4>
                         <ul>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/README.md"
+                                    data-i18n="footerUserscriptDocs"
                                     >Userscript Docs</a
                                 >
                             </li>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/extension/README.md"
+                                    data-i18n="footerExtensionDocs"
                                     >Extension Docs</a
                                 >
                             </li>
                             <li>
                                 <a
                                     href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/README.md"
+                                    data-i18n="footerMainDocs"
                                     >Main Documentation</a
                                 >
                             </li>
@@ -578,12 +732,12 @@
                 </div>
 
                 <div class="footer-bottom">
-                    <p>
+                    <p data-i18n="footerCopyright">
                         &copy; 2025 Open In New Tabs. Released under MIT
                         License.
                     </p>
                     <p>
-                        Made with ❤️ by
+                        <span data-i18n="footerMadeWith">Made with ❤️ by</span>
                         <a
                             href="https://github.com/xiaowulang-turbo"
                             target="_blank"
