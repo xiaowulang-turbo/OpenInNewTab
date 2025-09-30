@@ -1,0 +1,8 @@
+{
+    "version": 2,
+    "name": "OpenInNewTabs",
+    "buildCommand": null,
+    "outputDirectory": "website",
+    "cleanUrls": true,
+    "trailingSlash": false
+}
