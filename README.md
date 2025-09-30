@@ -7,6 +7,8 @@ A monorepo project providing two implementations to force all links to open in n
 
 Both versions feature dark mode support, internationalization, and modern UI design.
 
+📖 **[Visit Official Website](website/)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTabs)**
+
 ## Project Structure
 
 ```
@@ -23,6 +25,11 @@ Both versions feature dark mode support, internationalization, and modern UI des
 │   ├── popup.js
 │   ├── popup.css
 │   ├── icons/
+│   └── README.md
+├── website/                 # Official landing page
+│   ├── index.html
+│   ├── styles.css
+│   ├── script.js
 │   └── README.md
 ├── README.md                # This file
 └── LICENSE                  # MIT License

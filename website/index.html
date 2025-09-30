@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Open In New Tabs - Force all links to open in new tabs with whitelist control. Available as Tampermonkey userscript and Chrome extension."
+        />
+        <title>Open In New Tabs - Smart Link Management</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <!-- Hero Section -->
+        <header class="hero">
+            <nav class="nav">
+                <div class="nav-container">
+                    <div class="logo">
+                        <span class="logo-icon">🔗</span>
+                        <span class="logo-text">Open In New Tabs</span>
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#versions">Versions</a></li>
+                        <li><a href="#install">Installation</a></li>
+                        <li>
+                            <a
+                                href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn-github"
+                            >
+                                <span class="github-icon">⭐</span>
+                                GitHub
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Smart Link Management
+                    <br />
+                    <span class="gradient-text">Your Way</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Force all links to open in new tabs with intelligent
+                    whitelist control.
+                    <br />
+                    Available as Tampermonkey userscript and Chrome extension.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#install" class="btn btn-primary">
+                        <span>Get Started</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                    <a
+                        href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-secondary"
+                    >
+                        <span>View on GitHub</span>
+                        <span class="github-icon">↗</span>
+                    </a>
+                </div>
+                <div class="hero-badges">
+                    <span class="badge">✨ Dark Mode</span>
+                    <span class="badge">🌍 i18n Support</span>
+                    <span class="badge">⚡ Lightweight</span>
+                    <span class="badge">🔒 Secure</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Features Section -->
+        <section id="features" class="section features">
+            <div class="container">
+                <h2 class="section-title">Powerful Features</h2>
+                <p class="section-subtitle">
+                    Everything you need for smart link management
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Whitelist Mode</h3>
+                        <p>
+                            Only applies to specified domains for better control
+                            and performance. You decide which sites to enhance.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Dynamic Content</h3>
+                        <p>
+                            Handles both existing and dynamically added links
+                            using MutationObserver for real-time updates.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Security First</h3>
+                        <p>
+                            Adds rel="noopener noreferrer" to prevent security
+                            issues. Your browsing stays safe.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3>Dark Mode</h3>
+                        <p>
+                            Automatically adapts to system dark/light mode
+                            preferences with smooth transitions.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🌍</div>
+                        <h3>Internationalization</h3>
+                        <p>
+                            Auto language detection (English/Chinese) based on
+                            browser settings. More languages coming soon.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <h3>Persistent Storage</h3>
+                        <p>
+                            Your whitelist preferences are saved and synced
+                            across devices automatically.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Versions Section -->
+        <section id="versions" class="section versions">
+            <div class="container">
+                <h2 class="section-title">Choose Your Version</h2>
+                <p class="section-subtitle">
+                    Two implementations, same great features
+                </p>
+
+                <div class="versions-grid">
+                    <div class="version-card">
+                        <div class="version-header">
+                            <div class="version-icon">🚀</div>
+                            <h3>Userscript Version</h3>
+                            <span class="version-badge">Tampermonkey</span>
+                        </div>
+                        <p class="version-description">
+                            Perfect for quick testing, development, or users who
+                            prefer Tampermonkey/Greasemonkey.
+                        </p>
+
+                        <div class="version-features">
+                            <h4>Features:</h4>
+                            <ul>
+                                <li>✓ Menu-based management</li>
+                                <li>✓ GM_* APIs for storage</li>
+                                <li>✓ Modal interface</li>
+                                <li>✓ Cross-browser support</li>
+                                <li>✓ Easy to customize</li>
+                            </ul>
+                        </div>
+
+                        <div class="version-best-for">
+                            <strong>Best for:</strong> Developers, power users,
+                            quick testing
+                        </div>
+
+                        <a href="#install-userscript" class="btn btn-outline">
+                            Install Userscript →
+                        </a>
+                    </div>
+
+                    <div class="version-card version-card-featured">
+                        <div class="featured-badge">Recommended</div>
+                        <div class="version-header">
+                            <div class="version-icon">🌐</div>
+                            <h3>Chrome Extension</h3>
+                            <span class="version-badge version-badge-primary"
+                                >Manifest V3</span
+                            >
+                        </div>
+                        <p class="version-description">
+                            Native Chrome extension with better performance and
+                            seamless browser integration.
+                        </p>
+
+                        <div class="version-features">
+                            <h4>Features:</h4>
+                            <ul>
+                                <li>✓ Modern popup interface</li>
+                                <li>✓ Quick add current domain</li>
+                                <li>✓ chrome.storage sync</li>
+                                <li>✓ Auto-updates (Web Store)</li>
+                                <li>✓ Better performance</li>
+                            </ul>
+                        </div>
+
+                        <div class="version-best-for">
+                            <strong>Best for:</strong> Production use, end
+                            users, Web Store distribution
+                        </div>
+
+                        <a href="#install-extension" class="btn btn-primary">
+                            Install Extension →
+                        </a>
+                    </div>
+                </div>
+
+                <div class="comparison-table">
+                    <h3>Feature Comparison</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Userscript</th>
+                                <th>Extension</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Link Management</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Whitelist Control</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Dark Mode</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Internationalization</td>
+                                <td>✓</td>
+                                <td>✓</td>
+                            </tr>
+                            <tr>
+                                <td>Installation</td>
+                                <td>Manual Script</td>
+                                <td>One-Click</td>
+                            </tr>
+                            <tr>
+                                <td>Updates</td>
+                                <td>Manual</td>
+                                <td>Automatic</td>
+                            </tr>
+                            <tr>
+                                <td>UI Type</td>
+                                <td>Menu Commands</td>
+                                <td>Popup Interface</td>
+                            </tr>
+                            <tr>
+                                <td>Distribution</td>
+                                <td>GitHub</td>
+                                <td>Chrome Web Store</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section id="install" class="section installation">
+            <div class="container">
+                <h2 class="section-title">Quick Installation</h2>
+
+                <div class="install-tabs">
+                    <button class="install-tab active" data-tab="userscript">
+                        🚀 Userscript
+                    </button>
+                    <button class="install-tab" data-tab="extension">
+                        🌐 Extension
+                    </button>
+                </div>
+
+                <div class="install-content">
+                    <!-- Userscript Installation -->
+                    <div id="install-userscript" class="install-panel active">
+                        <div class="install-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Install Tampermonkey</h3>
+                                    <p>
+                                        Install the
+                                        <a
+                                            href="https://www.tampermonkey.net/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            >Tampermonkey</a
+                                        >
+                                        browser extension from your browser's
+                                        extension store.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Create New Script</h3>
+                                    <p>
+                                        Click the Tampermonkey icon → Select
+                                        "Create a new script"
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Copy & Save</h3>
+                                    <p>
+                                        Copy the code from
+                                        <code
+                                            >userscript/OpenInNewTabs.user.js</code
+                                        >
+                                        and save it (Ctrl+S or File → Save)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Start Using</h3>
+                                    <p>
+                                        Navigate to any website, open
+                                        Tampermonkey menu to add domains to
+                                        whitelist
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Download from GitHub</span>
+                                <button class="copy-btn" data-copy="userscript">
+                                    Copy Link
+                                </button>
+                            </div>
+                            <pre><code>https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Extension Installation -->
+                    <div id="install-extension" class="install-panel">
+                        <div class="install-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Download Extension</h3>
+                                    <p>
+                                        Clone or download the repository from
+                                        GitHub
+                                    </p>
+                                    <div class="code-snippet">
+                                        git clone
+                                        https://github.com/xiaowulang-turbo/OpenInNewTabs.git
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Enable Developer Mode</h3>
+                                    <p>
+                                        Open Chrome → Go to
+                                        <code>chrome://extensions/</code> →
+                                        Enable "Developer mode" (toggle in top
+                                        right)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Load Extension</h3>
+                                    <p>
+                                        Click "Load unpacked" → Select the
+                                        <code>extension</code> directory from
+                                        the downloaded repository
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Start Using</h3>
+                                    <p>
+                                        Click the extension icon to open the
+                                        popup and add domains to your whitelist
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="install-note">
+                            <strong>💡 Note:</strong> The extension is currently
+                            available for developer mode installation. Chrome
+                            Web Store distribution coming soon!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="section screenshots">
+            <div class="container">
+                <h2 class="section-title">Beautiful Interface</h2>
+                <p class="section-subtitle">Modern UI with dark mode support</p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <div class="screenshot-placeholder">
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">🎨</div>
+                                <p>Extension Popup</p>
+                                <small>Quick add current domain</small>
+                            </div>
+                        </div>
+                        <p class="screenshot-caption">
+                            Chrome Extension - Light Mode
+                        </p>
+                    </div>
+
+                    <div class="screenshot-card">
+                        <div class="screenshot-placeholder screenshot-dark">
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">🌙</div>
+                                <p>Extension Popup</p>
+                                <small>Dark mode enabled</small>
+                            </div>
+                        </div>
+                        <p class="screenshot-caption">
+                            Chrome Extension - Dark Mode
+                        </p>
+                    </div>
+
+                    <div class="screenshot-card">
+                        <div class="screenshot-placeholder">
+                            <div class="placeholder-content">
+                                <div class="placeholder-icon">📝</div>
+                                <p>Whitelist Manager</p>
+                                <small>Userscript modal interface</small>
+                            </div>
+                        </div>
+                        <p class="screenshot-caption">
+                            Userscript - Modal Interface
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Get Started?</h2>
+                    <p>
+                        Choose your preferred version and start managing your
+                        links smarter today.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#install" class="btn btn-primary btn-large">
+                            Install Now →
+                        </a>
+                        <a
+                            href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-outline btn-large"
+                        >
+                            View Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Open In New Tabs</h4>
+                        <p>
+                            Smart link management with whitelist control.
+                            Available as userscript and extension.
+                        </p>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                                    >GitHub Repository</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/issues"
+                                    >Report Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/LICENSE"
+                                    >MIT License</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/README.md"
+                                    >Userscript Docs</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/extension/README.md"
+                                    >Extension Docs</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/README.md"
+                                    >Main Documentation</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>
+                        &copy; 2025 Open In New Tabs. Released under MIT
+                        License.
+                    </p>
+                    <p>
+                        Made with ❤️ by
+                        <a
+                            href="https://github.com/xiaowulang-turbo"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Xiaowu</a
+                        >
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
