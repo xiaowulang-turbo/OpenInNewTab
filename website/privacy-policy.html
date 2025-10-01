@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Privacy Policy for Open In New Tabs - Learn how we handle your data"
+        />
+        <title>Privacy Policy - Open In New Tabs</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="i18n.js"></script>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <header class="hero" style="min-height: auto; padding: 2rem 0">
+            <nav class="nav">
+                <div class="nav-container">
+                    <div class="logo">
+                        <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; color: inherit;">
+                            <span class="logo-icon">🔗</span>
+                            <span class="logo-text">Open In New Tabs</span>
+                        </a>
+                    </div>
+                    <ul class="nav-links">
+                        <li>
+                            <a data-i18n="navHome" href="index.html">Home</a>
+                        </li>
+                        <li>
+                            <a data-i18n="navFeatures" href="index.html#features">Features</a>
+                        </li>
+                        <li>
+                            <a data-i18n="navInstall" href="index.html#install">Installation</a>
+                        </li>
+                        <li>
+                            <div class="lang-selector">
+                                <button
+                                    class="lang-dropdown-btn"
+                                    id="langDropdownBtn"
+                                >
+                                    <span class="lang-icon">🌐</span>
+                                    <span class="lang-current" id="langCurrent"
+                                        >EN</span
+                                    >
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                                <div
+                                    class="lang-dropdown-menu"
+                                    id="langDropdownMenu"
+                                >
+                                    <button class="lang-option" data-lang="en">
+                                        <span class="lang-flag">🇺🇸</span>
+                                        <span>English</span>
+                                    </button>
+                                    <button class="lang-option" data-lang="zh">
+                                        <span class="lang-flag">🇨🇳</span>
+                                        <span>中文</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="theme-toggle-wrapper">
+                                <label
+                                    class="theme-switch"
+                                    title="Toggle dark/light theme"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id="themeToggle"
+                                        aria-label="Toggle theme"
+                                    />
+                                    <span class="theme-slider"></span>
+                                    <span class="theme-icon moon">🌙</span>
+                                    <span class="theme-icon sun">☀️</span>
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <a
+                                href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="btn-github"
+                            >
+                                <span class="github-icon">⭐</span>
+                                GitHub
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Privacy Policy Content -->
+        <section class="section">
+            <div class="container" style="max-width: 900px">
+                <div class="privacy-policy-content" style="background: var(--color-bg); padding: 3rem; border-radius: var(--radius-lg); box-shadow: 0 4px 20px var(--color-shadow);">
+                    <h1 style="text-align: center; margin-bottom: 2rem" data-i18n="privacyPolicyTitle">
+                        Privacy Policy for Open In New Tabs
+                    </h1>
+                    
+                    <p style="text-align: center; color: var(--color-text-light); margin-bottom: 3rem">
+                        <strong data-i18n="privacyLastUpdated">Last updated:</strong> January 2025
+                    </p>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyDataCollectionTitle">Data Collection</h2>
+                        <p data-i18n="privacyDataCollectionDesc">
+                            Open In New Tabs does not collect, store, or transmit any personal data to external servers.
+                        </p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyLocalStorageTitle">Local Storage</h2>
+                        <p data-i18n="privacyLocalStorageDesc1">
+                            The extension uses Chrome's local storage (chrome.storage.sync) to save:
+                        </p>
+                        <ul>
+                            <li data-i18n="privacyLocalStorageItem1">User's whitelist of domain names</li>
+                        </ul>
+                        <p data-i18n="privacyLocalStorageDesc2">
+                            This data is stored locally on your device and synchronized across your Chrome browsers if you're signed in. We do not have access to this data.
+                        </p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyPermissionsTitle">Permissions</h2>
+                        <ul>
+                            <li>
+                                <strong>storage</strong>: 
+                                <span data-i18n="privacyPermStorage">Used to save your whitelist preferences locally</span>
+                            </li>
+                            <li>
+                                <strong>activeTab</strong>: 
+                                <span data-i18n="privacyPermActiveTab">Used to detect current tab's domain for quick-add feature</span>
+                            </li>
+                            <li>
+                                <strong>scripting</strong>: 
+                                <span data-i18n="privacyPermScripting">Used to inject content scripts on whitelisted domains</span>
+                            </li>
+                            <li>
+                                <strong>host_permissions</strong>: 
+                                <span data-i18n="privacyPermHost">Required to modify links on whitelisted websites</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyThirdPartyTitle">Third-Party Services</h2>
+                        <p data-i18n="privacyThirdPartyDesc">
+                            This extension does not use any third-party services, analytics, or tracking tools.
+                        </p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyChangesTitle">Changes to This Policy</h2>
+                        <p data-i18n="privacyChangesDesc">
+                            We may update this privacy policy from time to time. Changes will be posted on this page.
+                        </p>
+                    </div>
+
+                    <div class="policy-section">
+                        <h2 data-i18n="privacyContactTitle">Contact</h2>
+                        <p>
+                            <span data-i18n="privacyContactDesc">For questions about this privacy policy, please visit:</span>
+                            <a
+                                href="https://github.com/xiaowulang-turbo/OpenInNewTabs/issues"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                https://github.com/xiaowulang-turbo/OpenInNewTabs/issues
+                            </a>
+                        </p>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 3rem">
+                        <a data-i18n="privacyBackHome" href="index.html" class="btn btn-primary">
+                            <span data-i18n="privacyBackHome">Back to Home</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4 data-i18n="footerTitle">Open In New Tabs</h4>
+                        <p data-i18n="footerDesc">
+                            Smart link management with whitelist control.
+                            Available as userscript and extension.
+                        </p>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 data-i18n="footerQuickLinks">Quick Links</h4>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs"
+                                    data-i18n="footerGithubRepo"
+                                    >GitHub Repository</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/issues"
+                                    data-i18n="footerReportIssues"
+                                    >Report Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="privacy-policy.html"
+                                    data-i18n="footerPrivacyPolicy"
+                                    >Privacy Policy</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 data-i18n="footerResources">Resources</h4>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/README.md"
+                                    data-i18n="footerUserscriptDocs"
+                                    >Userscript Docs</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/extension/README.md"
+                                    data-i18n="footerExtensionDocs"
+                                    >Extension Docs</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/LICENSE"
+                                    data-i18n="footerLicense"
+                                    >MIT License</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p data-i18n="footerCopyright">
+                        &copy; 2025 Open In New Tabs. Released under MIT
+                        License.
+                    </p>
+                    <p>
+                        <span data-i18n="footerMadeWith">Made with ❤️ by</span>
+                        <a
+                            href="https://github.com/xiaowulang-turbo"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Xiaowu</a
+                        >
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
+

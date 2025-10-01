@@ -6,6 +6,7 @@
 const translations = {
     en: {
         // Navigation
+        navHome: "Home",
         navFeatures: "Features",
         navVersions: "Versions",
         navInstall: "Installation",
@@ -160,6 +161,7 @@ const translations = {
         footerQuickLinks: "Quick Links",
         footerGithubRepo: "GitHub Repository",
         footerReportIssues: "Report Issues",
+        footerPrivacyPolicy: "Privacy Policy",
         footerLicense: "MIT License",
         footerResources: "Resources",
         footerUserscriptDocs: "Userscript Docs",
@@ -167,10 +169,41 @@ const translations = {
         footerMainDocs: "Main Documentation",
         footerCopyright: "© 2025 Open In New Tabs. Released under MIT License.",
         footerMadeWith: "Made with ❤️ by",
+
+        // Privacy Policy Page
+        footerTitle: "Open In New Tabs",
+        privacyPolicyTitle: "Privacy Policy for Open In New Tabs",
+        privacyLastUpdated: "Last updated:",
+        privacyDataCollectionTitle: "Data Collection",
+        privacyDataCollectionDesc:
+            "Open In New Tabs does not collect, store, or transmit any personal data to external servers.",
+        privacyLocalStorageTitle: "Local Storage",
+        privacyLocalStorageDesc1:
+            "The extension uses Chrome's local storage (chrome.storage.sync) to save:",
+        privacyLocalStorageItem1: "User's whitelist of domain names",
+        privacyLocalStorageDesc2:
+            "This data is stored locally on your device and synchronized across your Chrome browsers if you're signed in. We do not have access to this data.",
+        privacyPermissionsTitle: "Permissions",
+        privacyPermStorage: "Used to save your whitelist preferences locally",
+        privacyPermActiveTab:
+            "Used to detect current tab's domain for quick-add feature",
+        privacyPermScripting:
+            "Used to inject content scripts on whitelisted domains",
+        privacyPermHost: "Required to modify links on whitelisted websites",
+        privacyThirdPartyTitle: "Third-Party Services",
+        privacyThirdPartyDesc:
+            "This extension does not use any third-party services, analytics, or tracking tools.",
+        privacyChangesTitle: "Changes to This Policy",
+        privacyChangesDesc:
+            "We may update this privacy policy from time to time. Changes will be posted on this page.",
+        privacyContactTitle: "Contact",
+        privacyContactDesc: "For questions about this privacy policy, please visit:",
+        privacyBackHome: "Back to Home",
     },
 
     zh: {
         // Navigation
+        navHome: "首页",
         navFeatures: "功能特性",
         navVersions: "版本选择",
         navInstall: "安装指南",
@@ -316,6 +349,7 @@ const translations = {
         footerQuickLinks: "快速链接",
         footerGithubRepo: "GitHub 仓库",
         footerReportIssues: "报告问题",
+        footerPrivacyPolicy: "隐私政策",
         footerLicense: "MIT 许可证",
         footerResources: "资源",
         footerUserscriptDocs: "用户脚本文档",
@@ -323,6 +357,34 @@ const translations = {
         footerMainDocs: "主文档",
         footerCopyright: "© 2025 Open In New Tabs. 基于 MIT 许可证发布。",
         footerMadeWith: "用 ❤️ 制作 by",
+
+        // Privacy Policy Page
+        footerTitle: "Open In New Tabs",
+        privacyPolicyTitle: "Open In New Tabs 隐私政策",
+        privacyLastUpdated: "最后更新：",
+        privacyDataCollectionTitle: "数据收集",
+        privacyDataCollectionDesc:
+            "Open In New Tabs 不会收集、存储或向外部服务器传输任何个人数据。",
+        privacyLocalStorageTitle: "本地存储",
+        privacyLocalStorageDesc1:
+            "扩展使用 Chrome 的本地存储 (chrome.storage.sync) 来保存：",
+        privacyLocalStorageItem1: "用户的白名单域名",
+        privacyLocalStorageDesc2:
+            "这些数据存储在您的设备本地，如果您已登录 Chrome，数据会在您的浏览器之间同步。我们无法访问这些数据。",
+        privacyPermissionsTitle: "权限说明",
+        privacyPermStorage: "用于在本地保存您的白名单配置",
+        privacyPermActiveTab: "用于检测当前标签页的域名，实现快速添加功能",
+        privacyPermScripting: "用于向白名单域名的页面注入内容脚本",
+        privacyPermHost: "用于修改白名单网站上的链接",
+        privacyThirdPartyTitle: "第三方服务",
+        privacyThirdPartyDesc:
+            "本扩展不使用任何第三方服务、分析工具或跟踪工具。",
+        privacyChangesTitle: "政策更新",
+        privacyChangesDesc:
+            "我们可能会不时更新此隐私政策。更新内容将发布在本页面。",
+        privacyContactTitle: "联系我们",
+        privacyContactDesc: "如有关于此隐私政策的问题，请访问：",
+        privacyBackHome: "返回首页",
     },
 }
 
