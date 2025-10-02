@@ -1,9 +1,9 @@
-# Privacy Policy for Open In New Tabs
+# Privacy Policy for Open In New Tab
 
 Last updated: January 2025
 
 ## Data Collection
-Open In New Tabs does not collect, store, or transmit any personal data to external servers.
+Open In New Tab does not collect, store, or transmit any personal data to external servers.
 
 ## Local Storage
 The extension uses Chrome's local storage (chrome.storage.sync) to save:
@@ -24,4 +24,4 @@ This extension does not use any third-party services, analytics, or tracking too
 We may update this privacy policy from time to time. Changes will be posted on this page.
 
 ## Contact
-For questions about this privacy policy, please visit: https://github.com/xiaowulang-turbo/OpenInNewTabs/issues
+For questions about this privacy policy, please visit: https://github.com/xiaowulang-turbo/OpenInNewTab/issues

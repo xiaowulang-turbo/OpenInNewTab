@@ -1,6 +1,6 @@
-# Open In New Tabs - Userscript Version
+# Open In New Tab - Userscript Version
 
-A Tampermonkey userscript that forces all links to open in new tabs using a whitelist-based approach with dark mode and internationalization support.
+A Tampermonkey userscript that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
 ## Features
 
@@ -20,7 +20,7 @@ A Tampermonkey userscript that forces all links to open in new tabs using a whit
 1. Install [Tampermonkey](https://www.tampermonkey.net/) browser extension
 2. Click the Tampermonkey icon in your browser toolbar
 3. Select "Create a new script"
-4. Replace the default content with the code from `OpenInNewTabs.user.js`
+4. Replace the default content with the code from `OpenInNewTab.user.js`
 5. Save the script (Ctrl+S or File → Save)
 
 ## Configuration

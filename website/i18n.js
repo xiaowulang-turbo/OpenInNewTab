@@ -15,9 +15,9 @@ const translations = {
         heroTitle: "Smart Link Management",
         heroTitleHighlight: "Your Way",
         heroSubtitle:
-            "Force all links to open in new tabs with intelligent whitelist control.",
+            "Force all links to open in new tab with intelligent whitelist control.",
         heroSubtitle2:
-            "Available as Tampermonkey userscript and Chrome extension.",
+            "Available as Tampermonkey userscript and Chrome extension for opening each link in new tab.",
         btnGetStarted: "Get Started",
         btnViewGithub: "View on GitHub",
         badgeDarkMode: "✨ Dark Mode",
@@ -35,7 +35,7 @@ const translations = {
 
         featureDynamicTitle: "Dynamic Content",
         featureDynamicDesc:
-            "Handles both existing and dynamically added links using MutationObserver for real-time updates.",
+            "Handles both existing and dynamically added links using MutationObserver for real-time updates. Each link opens in new tab.",
 
         featureSecurityTitle: "Security First",
         featureSecurityDesc:
@@ -167,16 +167,16 @@ const translations = {
         footerUserscriptDocs: "Userscript Docs",
         footerExtensionDocs: "Extension Docs",
         footerMainDocs: "Main Documentation",
-        footerCopyright: "© 2025 Open In New Tabs. Released under MIT License.",
+        footerCopyright: "© 2025 Open In New Tab. Released under MIT License.",
         footerMadeWith: "Made with ❤️ by",
 
         // Privacy Policy Page
-        footerTitle: "Open In New Tabs",
-        privacyPolicyTitle: "Privacy Policy for Open In New Tabs",
+        footerTitle: "Open In New Tab",
+        privacyPolicyTitle: "Privacy Policy for Open In New Tab",
         privacyLastUpdated: "Last updated:",
         privacyDataCollectionTitle: "Data Collection",
         privacyDataCollectionDesc:
-            "Open In New Tabs does not collect, store, or transmit any personal data to external servers.",
+            "Open In New Tab does not collect, store, or transmit any personal data to external servers.",
         privacyLocalStorageTitle: "Local Storage",
         privacyLocalStorageDesc1:
             "The extension uses Chrome's local storage (chrome.storage.sync) to save:",
@@ -211,7 +211,7 @@ const translations = {
         // Hero Section
         heroTitle: "智能链接管理",
         heroTitleHighlight: "随心所控",
-        heroSubtitle: "通过智能白名单控制，强制所有链接在新标签页打开。",
+        heroSubtitle: "通过智能白名单控制，强制每个链接在新标签页打开。",
         heroSubtitle2: "提供 Tampermonkey 用户脚本和 Chrome 扩展两个版本。",
         btnGetStarted: "立即开始",
         btnViewGithub: "查看 GitHub",
@@ -355,16 +355,16 @@ const translations = {
         footerUserscriptDocs: "用户脚本文档",
         footerExtensionDocs: "扩展文档",
         footerMainDocs: "主文档",
-        footerCopyright: "© 2025 Open In New Tabs. 基于 MIT 许可证发布。",
+        footerCopyright: "© 2025 Open In New Tab. 基于 MIT 许可证发布。",
         footerMadeWith: "用 ❤️ 制作 by",
 
         // Privacy Policy Page
-        footerTitle: "Open In New Tabs",
-        privacyPolicyTitle: "Open In New Tabs 隐私政策",
+        footerTitle: "Open In New Tab",
+        privacyPolicyTitle: "Open In New Tab 隐私政策",
         privacyLastUpdated: "最后更新：",
         privacyDataCollectionTitle: "数据收集",
         privacyDataCollectionDesc:
-            "Open In New Tabs 不会收集、存储或向外部服务器传输任何个人数据。",
+            "Open In New Tab 不会收集、存储或向外部服务器传输任何个人数据。",
         privacyLocalStorageTitle: "本地存储",
         privacyLocalStorageDesc1:
             "扩展使用 Chrome 的本地存储 (chrome.storage.sync) 来保存：",

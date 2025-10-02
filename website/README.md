@@ -1,6 +1,6 @@
-# Open In New Tabs - Official Website
+# Open In New Tab - Official Website
 
-This is the official landing page for the Open In New Tabs project, showcasing both the Tampermonkey userscript and Chrome extension versions.
+This is the official landing page for the Open In New Tab project, showcasing both the Tampermonkey userscript and Chrome extension versions.
 
 ## Features
 
@@ -26,7 +26,7 @@ website/
 1. **Clone the repository:**
 
     ```bash
-    cd OpenInNewTabs/website
+    cd OpenInNewTab/website
     ```
 
 2. **Open in browser:**
@@ -68,7 +68,7 @@ website/
     - Save
 
 3. **Access your site:**
-    - Visit `https://xiaowulang-turbo.github.io/OpenInNewTabs/`
+    - Visit `https://xiaowulang-turbo.github.io/OpenInNewTab/`
 
 ### Netlify
 

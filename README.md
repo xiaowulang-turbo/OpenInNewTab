@@ -1,20 +1,20 @@
-# Open In New Tabs
+# Open In New Tab
 
-A monorepo project providing two implementations to force all links to open in new tabs using a whitelist-based approach:
+A monorepo project providing two implementations to force all links to open in new tab using a whitelist-based approach:
 
 -   **Userscript Version**: Tampermonkey/Greasemonkey userscript
 -   **Chrome Extension Version**: Native Chrome extension with popup interface
 
 Both versions feature dark mode support, internationalization, and modern UI design.
 
-📖 **[Visit Official Website](website/)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTabs)**
+📖 **[Visit Official Website](website/)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## Project Structure
 
 ```
-/OpenInNewTabs/ (Monorepo Root)
+/OpenInNewTab/ (Monorepo Root)
 ├── userscript/              # Tampermonkey userscript version
-│   ├── OpenInNewTabs.user.js
+│   ├── OpenInNewTab.user.js
 │   ├── README.md
 │   └── LICENSE
 ├── extension/               # Chrome extension version

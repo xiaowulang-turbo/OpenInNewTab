@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name         Open In New Tabs
-// @namespace    https://github.com/xiaowulang-turbo/OpenInNewTabs
-// @version      1.1.3
-// @description  Force all links to open in new tabs using whitelist mode
+// @name         Open In New Tab
+// @namespace    https://github.com/xiaowulang-turbo/OpenInNewTab
+// @version      1.1.5
+// @description  Force all links to open in new tab using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
-// @updateUrl    https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js
-// @downloadURL  https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js
+// @updateUrl    https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js
+// @downloadURL  https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js
 // @license      MIT
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -503,9 +503,9 @@
     }
 
     /**
-     * Force all links to open in new tabs
+     * Force all links to open in new tab
      */
-    function forceNewTabs() {
+    function forceNewTab() {
         if (!isWhitelisted()) {
             return
         }
@@ -561,8 +561,8 @@
             openWhitelistManager
         )
 
-        // Start forcing new tabs
-        forceNewTabs()
+        // Start forcing new tab
+        forceNewTab()
     }
 
     if (document.readyState === "loading") {

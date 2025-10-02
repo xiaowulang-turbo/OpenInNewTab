@@ -1,5 +1,5 @@
 /**
- * Popup Script - Open In New Tabs Extension
+ * Popup Script - Open In New Tab Extension
  * Handles whitelist management in the extension popup
  */
 

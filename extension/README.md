@@ -1,6 +1,6 @@
-# Open In New Tabs - Chrome Extension Version
+# Open In New Tab - Chrome Extension Version
 
-A Chrome extension that forces all links to open in new tabs using a whitelist-based approach with dark mode and internationalization support.
+A Chrome extension that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
 ## Features
 
@@ -23,7 +23,7 @@ A Chrome extension that forces all links to open in new tabs using a whitelist-b
 
     ```bash
     git clone <repository-url>
-    cd OpenInNewTabs/extension
+    cd OpenInNewTab/extension
     ```
 
 2. **Install the extension:**
@@ -161,7 +161,7 @@ The extension popup automatically adapts to your system's dark/light mode prefer
 
     ```bash
     git clone <repository-url>
-    cd OpenInNewTabs
+    cd OpenInNewTab
     ```
 
 2. **Load in developer mode:**

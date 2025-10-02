@@ -1,5 +1,5 @@
 /**
- * Open In New Tabs - Website JavaScript
+ * Open In New Tab - Website JavaScript
  * Interactive functionality for the landing page
  */
 
@@ -46,7 +46,7 @@
 
                 if (copyType === "userscript") {
                     textToCopy =
-                        "https://github.com/xiaowulang-turbo/OpenInNewTabs/blob/main/userscript/OpenInNewTabs.user.js"
+                        "https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js"
                 }
 
                 // Get current language for button text
@@ -438,7 +438,7 @@
         initScrollAnimations()
         initNavbarScroll()
 
-        console.log("🚀 Open In New Tabs website loaded successfully!")
+        console.log("🚀 Open In New Tab website loaded successfully!")
     }
 
     // Initialize when DOM is ready
