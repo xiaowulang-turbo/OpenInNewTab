@@ -2,6 +2,7 @@
  * Open In New Tab - Website JavaScript
  * Interactive functionality for the landing page
  */
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 ;(function () {
     "use strict"
