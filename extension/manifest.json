@@ -4,7 +4,7 @@
     "version": "1.1.4",
     "description": "Force all links to open in new tab using whitelist mode with dark mode and internationalization support",
 
-    "permissions": ["storage", "activeTab", "scripting"],
+    "permissions": ["storage", "activeTab"],
 
     "host_permissions": ["*://*/*"],
 
