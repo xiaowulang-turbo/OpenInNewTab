@@ -317,7 +317,7 @@ code {
     width: 22px;
     left: 3px;
     bottom: 3px;
-    background: white;
+    background: var(--color-bg);
     transition: 0.3s;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -399,14 +399,14 @@ code {
 }
 
 .btn-secondary {
-    background: white;
+    background: var(--color-bg-alt);
     color: var(--color-text);
     border: 2px solid var(--color-border);
 }
 
 .btn-secondary:hover {
     border-color: var(--color-primary);
-    background: var(--color-bg-alt);
+    background: var(--color-bg);
 }
 
 .btn-outline {
@@ -426,14 +426,14 @@ code {
 }
 
 .btn-github {
-    background: #24292e;
+    background: var(--color-bg-alt);
     color: white;
     padding: 8px 16px;
     border-radius: var(--radius-sm);
 }
 
 .btn-github:hover {
-    background: #1b1f23;
+    background: var(--color-bg);
     color: white;
 }
 
@@ -449,7 +449,7 @@ code {
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    color: var(--color-text);
     text-align: center;
     padding: var(--spacing-xl) var(--spacing-md);
 }
@@ -466,7 +466,11 @@ code {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-primary-dark) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -775,8 +779,8 @@ code {
 }
 
 .code-snippet {
-    background: #2d2d2d;
-    color: #f8f8f2;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
     padding: var(--spacing-sm);
     border-radius: var(--radius-sm);
     font-family: "Courier New", monospace;
@@ -803,15 +807,15 @@ code {
 .code-block pre {
     margin: 0;
     padding: var(--spacing-md);
-    background: #2d2d2d;
-    color: #f8f8f2;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
     overflow-x: auto;
 }
 
 .copy-btn {
     padding: 6px 16px;
     background: var(--color-primary);
-    color: white;
+    color: var(--color-text);
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -824,7 +828,7 @@ code {
 }
 
 .install-note {
-    background: #fff3cd;
+    background: var(--color-bg-alt);
     border-left: 4px solid #ffc107;
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--radius-sm);
@@ -839,10 +843,13 @@ code {
 }
 
 .screenshot-card {
+    display: flex;
+    flex-direction: column;
     text-align: center;
 }
 
 .screenshot-placeholder {
+    flex: 1;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: var(--radius-md);
     padding: var(--spacing-xl);
@@ -859,7 +866,7 @@ code {
 }
 
 .placeholder-content {
-    color: white;
+    color: var(--color-text);
     text-align: center;
 }
 
@@ -910,8 +917,8 @@ code {
 
 /* Footer */
 .footer {
-    background: #2d2d2d;
-    color: white;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
     padding: var(--spacing-xl) 0 var(--spacing-md);
 }
 
@@ -940,7 +947,7 @@ code {
 }
 
 .footer-section a {
-    color: white;
+    color: var(--color-text);
     opacity: 0.8;
     transition: var(--transition);
 }
@@ -953,7 +960,7 @@ code {
 .footer-bottom {
     text-align: center;
     padding-top: var(--spacing-md);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--color-border);
     opacity: 0.6;
 }
 
