@@ -2,8 +2,7 @@
  * Open In New Tab - Website JavaScript
  * Interactive functionality for the landing page
  */
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
+// import { SpeedInsights } from "@vercel/speed-insights/next"
 ;(function () {
     "use strict"
 
@@ -261,6 +260,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
          */
         function updateComplexElements(lang) {
             const t = translations[lang]
+
+            // Update Greasy Fork link based on language
+            const greasyforkLink = document.getElementById("greasyforkLink")
+            if (greasyforkLink) {
+                const langPrefix = lang === "zh" ? "zh-CN" : "en"
+                greasyforkLink.href = `https://greasyfork.org/${langPrefix}/scripts/551033-open-in-new-tab`
+            }
 
             // Update copy button text if needed
             const copyButtons = document.querySelectorAll(".copy-btn")

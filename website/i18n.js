@@ -103,18 +103,20 @@ const translations = {
         tabExtension: "🌐 Extension",
 
         installUserscriptStep1Title: "Install Tampermonkey",
-        installUserscriptStep1Desc:
+        installUserscriptStep1Desc1: "Install the",
+        installUserscriptStep1Desc2:
             "browser extension from your browser's extension store.",
-        installUserscriptStep2Title: "Create New Script",
+        installUserscriptStep2Title: "One-Click Install",
         installUserscriptStep2Desc:
-            'Click the Tampermonkey icon → Select "Create a new script"',
-        installUserscriptStep3Title: "Copy & Save",
-        installUserscriptStep3Desc: "Copy the code from",
-        installUserscriptStep3Desc2: "and save it (Ctrl+S or File → Save)",
-        installUserscriptStep4Title: "Start Using",
-        installUserscriptStep4Desc:
-            "Navigate to any website, open Tampermonkey menu to add domains to whitelist",
-        installUserscriptDownload: "Download from GitHub",
+            "Click the install button below to go to Greasy Fork and install the script with one click.",
+        installUserscriptBtnGreasyFork: "Install from Greasy Fork",
+        installUserscriptBtnDirect: "Direct Install",
+        installUserscriptStep3Title: "Start Using",
+        installUserscriptStep3Desc:
+            "Navigate to any website, open Tampermonkey menu to add domains to whitelist.",
+        installUserscriptAlternative: "Alternative: Manual Installation",
+        installUserscriptManualDesc:
+            "If you prefer manual installation, download the script from GitHub and install it manually in Tampermonkey.",
         btnCopyLink: "Copy Link",
         btnCopied: "Copied!",
         btnCopyFailed: "Failed",
@@ -197,7 +199,8 @@ const translations = {
         privacyChangesDesc:
             "We may update this privacy policy from time to time. Changes will be posted on this page.",
         privacyContactTitle: "Contact",
-        privacyContactDesc: "For questions about this privacy policy, please visit:",
+        privacyContactDesc:
+            "For questions about this privacy policy, please visit:",
         privacyBackHome: "Back to Home",
     },
 
@@ -296,16 +299,19 @@ const translations = {
         tabExtension: "🌐 扩展程序",
 
         installUserscriptStep1Title: "安装 Tampermonkey",
-        installUserscriptStep1Desc: "浏览器扩展。",
-        installUserscriptStep2Title: "创建新脚本",
-        installUserscriptStep2Desc: '点击 Tampermonkey 图标 → 选择"创建新脚本"',
-        installUserscriptStep3Title: "复制并保存",
-        installUserscriptStep3Desc: "从",
-        installUserscriptStep3Desc2: "复制代码并保存（Ctrl+S 或 文件 → 保存）",
-        installUserscriptStep4Title: "开始使用",
-        installUserscriptStep4Desc:
-            "访问任意网站，打开 Tampermonkey 菜单将域名添加到白名单",
-        installUserscriptDownload: "从 GitHub 下载",
+        installUserscriptStep1Desc1: "安装",
+        installUserscriptStep1Desc2: "浏览器扩展。",
+        installUserscriptStep2Title: "一键安装",
+        installUserscriptStep2Desc:
+            "点击下方安装按钮前往 Greasy Fork，一键安装脚本。",
+        installUserscriptBtnGreasyFork: "从 Greasy Fork 安装",
+        installUserscriptBtnDirect: "直接安装",
+        installUserscriptStep3Title: "开始使用",
+        installUserscriptStep3Desc:
+            "访问任意网站，打开 Tampermonkey 菜单将域名添加到白名单。",
+        installUserscriptAlternative: "备选方案：手动安装",
+        installUserscriptManualDesc:
+            "如果您偏好手动安装，可以从 GitHub 下载脚本并在 Tampermonkey 中手动安装。",
         btnCopyLink: "复制链接",
         btnCopied: "已复制！",
         btnCopyFailed: "复制失败",

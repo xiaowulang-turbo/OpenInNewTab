@@ -451,17 +451,25 @@
                             <div class="step">
                                 <div class="step-number">1</div>
                                 <div class="step-content">
-                                    <h3>Install Tampermonkey</h3>
+                                    <h3 data-i18n="installUserscriptStep1Title">
+                                        Install Tampermonkey
+                                    </h3>
                                     <p>
-                                        Install the
+                                        <span
+                                            data-i18n="installUserscriptStep1Desc1"
+                                            >Install the</span
+                                        >
                                         <a
                                             href="https://www.tampermonkey.net/"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             >Tampermonkey</a
                                         >
-                                        browser extension from your browser's
-                                        extension store.
+                                        <span
+                                            data-i18n="installUserscriptStep1Desc2"
+                                            >browser extension from your
+                                            browser's extension store.</span
+                                        >
                                     </p>
                                 </div>
                             </div>
@@ -469,36 +477,71 @@
                             <div class="step">
                                 <div class="step-number">2</div>
                                 <div class="step-content">
-                                    <h3>Create New Script</h3>
-                                    <p>
-                                        Click the Tampermonkey icon → Select
-                                        "Create a new script"
+                                    <h3 data-i18n="installUserscriptStep2Title">
+                                        One-Click Install
+                                    </h3>
+                                    <p data-i18n="installUserscriptStep2Desc">
+                                        Click the install button below to go to
+                                        Greasy Fork and install the script with
+                                        one click.
                                     </p>
+                                    <div
+                                        style="
+                                            margin-top: 12px;
+                                            display: flex;
+                                            gap: 12px;
+                                            flex-wrap: wrap;
+                                        "
+                                    >
+                                        <a
+                                            id="greasyforkLink"
+                                            href="https://greasyfork.org/en/scripts/551033-open-in-new-tab"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn btn-primary"
+                                            style="
+                                                display: inline-flex;
+                                                align-items: center;
+                                                gap: 8px;
+                                            "
+                                        >
+                                            🌐
+                                            <span
+                                                data-i18n="installUserscriptBtnGreasyFork"
+                                                >Install from Greasy Fork</span
+                                            >
+                                        </a>
+                                        <a
+                                            href="https://github.com/xiaowulang-turbo/OpenInNewTab/raw/main/userscript/OpenInNewTab.user.js"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn btn-outline"
+                                            style="
+                                                display: inline-flex;
+                                                align-items: center;
+                                                gap: 8px;
+                                            "
+                                        >
+                                            📦
+                                            <span
+                                                data-i18n="installUserscriptBtnDirect"
+                                                >Direct Install</span
+                                            >
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="step">
                                 <div class="step-number">3</div>
                                 <div class="step-content">
-                                    <h3>Copy & Save</h3>
-                                    <p>
-                                        Copy the code from
-                                        <code
-                                            >userscript/OpenInNewTab.user.js</code
-                                        >
-                                        and save it (Ctrl+S or File → Save)
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="step">
-                                <div class="step-number">4</div>
-                                <div class="step-content">
-                                    <h3>Start Using</h3>
-                                    <p>
+                                    <h3 data-i18n="installUserscriptStep3Title">
+                                        Start Using
+                                    </h3>
+                                    <p data-i18n="installUserscriptStep3Desc">
                                         Navigate to any website, open
                                         Tampermonkey menu to add domains to
-                                        whitelist
+                                        whitelist.
                                     </p>
                                 </div>
                             </div>
@@ -506,12 +549,23 @@
 
                         <div class="code-block">
                             <div class="code-header">
-                                <span>Download from GitHub</span>
-                                <button class="copy-btn" data-copy="userscript">
-                                    Copy Link
-                                </button>
+                                <span data-i18n="installUserscriptAlternative"
+                                    >Alternative: Manual Installation</span
+                                >
                             </div>
-                            <pre><code>https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js</code></pre>
+                            <div
+                                style="
+                                    padding: 16px;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                "
+                            >
+                                <p data-i18n="installUserscriptManualDesc">
+                                    If you prefer manual installation, download
+                                    the script from GitHub and install it
+                                    manually in Tampermonkey.
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -740,8 +794,7 @@
 
                 <div class="footer-bottom">
                     <p data-i18n="footerCopyright">
-                        &copy; 2025 Open In New Tab. Released under MIT
-                        License.
+                        &copy; 2025 Open In New Tab. Released under MIT License.
                     </p>
                     <p>
                         <span data-i18n="footerMadeWith">Made with ❤️ by</span>
