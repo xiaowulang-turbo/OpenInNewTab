@@ -17,8 +17,20 @@
             <nav class="nav">
                 <div class="nav-container">
                     <div class="logo">
-                        <a href="index.html" style="display: flex; align-items: center; gap: 0.5rem; color: inherit;">
-                            <span class="logo-icon">🔗</span>
+                        <a
+                            href="index.html"
+                            style="
+                                display: flex;
+                                align-items: center;
+                                gap: 0.5rem;
+                                color: inherit;
+                            "
+                        >
+                            <img
+                                class="logo-icon"
+                                src="icon16.png"
+                                alt="Open In New Tab"
+                            />
                             <span class="logo-text">Open In New Tab</span>
                         </a>
                     </div>
@@ -27,10 +39,16 @@
                             <a data-i18n="navHome" href="index.html">Home</a>
                         </li>
                         <li>
-                            <a data-i18n="navFeatures" href="index.html#features">Features</a>
+                            <a
+                                data-i18n="navFeatures"
+                                href="index.html#features"
+                                >Features</a
+                            >
                         </li>
                         <li>
-                            <a data-i18n="navInstall" href="index.html#install">Installation</a>
+                            <a data-i18n="navInstall" href="index.html#install"
+                                >Installation</a
+                            >
                         </li>
                         <li>
                             <div class="lang-selector">
@@ -95,32 +113,62 @@
         <!-- Privacy Policy Content -->
         <section class="section">
             <div class="container" style="max-width: 900px">
-                <div class="privacy-policy-content" style="background: var(--color-bg); padding: 3rem; border-radius: var(--radius-lg); box-shadow: 0 4px 20px var(--color-shadow);">
-                    <h1 style="text-align: center; margin-bottom: 2rem" data-i18n="privacyPolicyTitle">
+                <div
+                    class="privacy-policy-content"
+                    style="
+                        background: var(--color-bg);
+                        padding: 3rem;
+                        border-radius: var(--radius-lg);
+                        box-shadow: 0 4px 20px var(--color-shadow);
+                    "
+                >
+                    <h1
+                        style="text-align: center; margin-bottom: 2rem"
+                        data-i18n="privacyPolicyTitle"
+                    >
                         Privacy Policy for Open In New Tab
                     </h1>
-                    
-                    <p style="text-align: center; color: var(--color-text-light); margin-bottom: 3rem">
-                        <strong data-i18n="privacyLastUpdated">Last updated:</strong> January 2025
+
+                    <p
+                        style="
+                            text-align: center;
+                            color: var(--color-text-light);
+                            margin-bottom: 3rem;
+                        "
+                    >
+                        <strong data-i18n="privacyLastUpdated"
+                            >Last updated:</strong
+                        >
+                        January 2025
                     </p>
 
                     <div class="policy-section">
-                        <h2 data-i18n="privacyDataCollectionTitle">Data Collection</h2>
+                        <h2 data-i18n="privacyDataCollectionTitle">
+                            Data Collection
+                        </h2>
                         <p data-i18n="privacyDataCollectionDesc">
-                            Open In New Tab does not collect, store, or transmit any personal data to external servers.
+                            Open In New Tab does not collect, store, or transmit
+                            any personal data to external servers.
                         </p>
                     </div>
 
                     <div class="policy-section">
-                        <h2 data-i18n="privacyLocalStorageTitle">Local Storage</h2>
+                        <h2 data-i18n="privacyLocalStorageTitle">
+                            Local Storage
+                        </h2>
                         <p data-i18n="privacyLocalStorageDesc1">
-                            The extension uses Chrome's local storage (chrome.storage.sync) to save:
+                            The extension uses Chrome's local storage
+                            (chrome.storage.sync) to save:
                         </p>
                         <ul>
-                            <li data-i18n="privacyLocalStorageItem1">User's whitelist of domain names</li>
+                            <li data-i18n="privacyLocalStorageItem1">
+                                User's whitelist of domain names
+                            </li>
                         </ul>
                         <p data-i18n="privacyLocalStorageDesc2">
-                            This data is stored locally on your device and synchronized across your Chrome browsers if you're signed in. We do not have access to this data.
+                            This data is stored locally on your device and
+                            synchronized across your Chrome browsers if you're
+                            signed in. We do not have access to this data.
                         </p>
                     </div>
 
@@ -128,42 +176,63 @@
                         <h2 data-i18n="privacyPermissionsTitle">Permissions</h2>
                         <ul>
                             <li>
-                                <strong>storage</strong>: 
-                                <span data-i18n="privacyPermStorage">Used to save your whitelist preferences locally</span>
+                                <strong>storage</strong>:
+                                <span data-i18n="privacyPermStorage"
+                                    >Used to save your whitelist preferences
+                                    locally</span
+                                >
                             </li>
                             <li>
-                                <strong>activeTab</strong>: 
-                                <span data-i18n="privacyPermActiveTab">Used to detect current tab's domain for quick-add feature</span>
+                                <strong>activeTab</strong>:
+                                <span data-i18n="privacyPermActiveTab"
+                                    >Used to detect current tab's domain for
+                                    quick-add feature</span
+                                >
                             </li>
                             <li>
-                                <strong>scripting</strong>: 
-                                <span data-i18n="privacyPermScripting">Used to inject content scripts on whitelisted domains</span>
+                                <strong>scripting</strong>:
+                                <span data-i18n="privacyPermScripting"
+                                    >Used to inject content scripts on
+                                    whitelisted domains</span
+                                >
                             </li>
                             <li>
-                                <strong>host_permissions</strong>: 
-                                <span data-i18n="privacyPermHost">Required to modify links on whitelisted websites</span>
+                                <strong>host_permissions</strong>:
+                                <span data-i18n="privacyPermHost"
+                                    >Required to modify links on whitelisted
+                                    websites</span
+                                >
                             </li>
                         </ul>
                     </div>
 
                     <div class="policy-section">
-                        <h2 data-i18n="privacyThirdPartyTitle">Third-Party Services</h2>
+                        <h2 data-i18n="privacyThirdPartyTitle">
+                            Third-Party Services
+                        </h2>
                         <p data-i18n="privacyThirdPartyDesc">
-                            This extension does not use any third-party services, analytics, or tracking tools.
+                            This extension does not use any third-party
+                            services, analytics, or tracking tools.
                         </p>
                     </div>
 
                     <div class="policy-section">
-                        <h2 data-i18n="privacyChangesTitle">Changes to This Policy</h2>
+                        <h2 data-i18n="privacyChangesTitle">
+                            Changes to This Policy
+                        </h2>
                         <p data-i18n="privacyChangesDesc">
-                            We may update this privacy policy from time to time. Changes will be posted on this page.
+                            We may update this privacy policy from time to time.
+                            Changes will be posted on this page.
                         </p>
                     </div>
 
                     <div class="policy-section">
                         <h2 data-i18n="privacyContactTitle">Contact</h2>
                         <p>
-                            <span data-i18n="privacyContactDesc">For questions about this privacy policy, please visit:</span>
+                            <span data-i18n="privacyContactDesc"
+                                >For questions about this privacy policy, please
+                                visit:</span
+                            >
                             <a
                                 href="https://github.com/xiaowulang-turbo/OpenInNewTab/issues"
                                 target="_blank"
@@ -175,8 +244,14 @@
                     </div>
 
                     <div style="text-align: center; margin-top: 3rem">
-                        <a data-i18n="privacyBackHome" href="index.html" class="btn btn-primary">
-                            <span data-i18n="privacyBackHome">Back to Home</span>
+                        <a
+                            data-i18n="privacyBackHome"
+                            href="index.html"
+                            class="btn btn-primary"
+                        >
+                            <span data-i18n="privacyBackHome"
+                                >Back to Home</span
+                            >
                         </a>
                     </div>
                 </div>
@@ -252,8 +327,7 @@
 
                 <div class="footer-bottom">
                     <p data-i18n="footerCopyright">
-                        &copy; 2025 Open In New Tab. Released under MIT
-                        License.
+                        &copy; 2025 Open In New Tab. Released under MIT License.
                     </p>
                     <p>
                         <span data-i18n="footerMadeWith">Made with ❤️ by</span>
@@ -271,4 +345,3 @@
         <script src="script.js"></script>
     </body>
 </html>
-
