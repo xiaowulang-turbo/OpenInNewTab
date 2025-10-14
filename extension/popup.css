@@ -26,7 +26,7 @@
     --btn-danger-shadow-hover: rgba(244, 67, 54, 0.4);
 }
 
-/* Dark mode colors */
+/* Dark mode colors - system preference */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg-primary: #1a1a1a;
@@ -49,6 +49,52 @@
         --btn-danger-shadow: rgba(239, 83, 80, 0.3);
         --btn-danger-shadow-hover: rgba(239, 83, 80, 0.4);
     }
+}
+
+/* Manual dark mode override */
+body[style*="color-scheme: dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: #404040;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --input-bg: #333333;
+    --input-border: #555555;
+    --input-text: #ffffff;
+    --btn-primary: #66bb6a;
+    --btn-primary-dark: #4caf50;
+    --btn-primary-light: #81c784;
+    --btn-primary-shadow: rgba(102, 187, 106, 0.3);
+    --btn-primary-shadow-hover: rgba(102, 187, 106, 0.4);
+    --btn-danger: #ef5350;
+    --btn-danger-dark: #e53935;
+    --btn-danger-shadow: rgba(239, 83, 80, 0.3);
+    --btn-danger-shadow-hover: rgba(239, 83, 80, 0.4);
+}
+
+/* Manual light mode override */
+body[style*="color-scheme: light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.15);
+    --input-bg: #ffffff;
+    --input-border: #dddddd;
+    --input-text: #333333;
+    --btn-primary: #4caf50;
+    --btn-primary-dark: #45a049;
+    --btn-primary-light: #66bb6a;
+    --btn-primary-shadow: rgba(76, 175, 80, 0.3);
+    --btn-primary-shadow-hover: rgba(76, 175, 80, 0.4);
+    --btn-danger: #f44336;
+    --btn-danger-dark: #d32f2f;
+    --btn-danger-shadow: rgba(244, 67, 54, 0.3);
+    --btn-danger-shadow-hover: rgba(244, 67, 54, 0.4);
 }
 
 * {
@@ -92,10 +138,17 @@ body {
     margin: 0;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.settings-btn,
 .close-btn {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
     color: var(--text-secondary);
     cursor: pointer;
     width: 32px;
@@ -107,6 +160,11 @@ body {
     transition: all 0.2s ease;
 }
 
+.close-btn {
+    font-size: 24px;
+}
+
+.settings-btn:hover,
 .close-btn:hover {
     background: var(--bg-primary);
     color: var(--text-primary);
@@ -172,7 +230,11 @@ body {
     align-items: center;
     gap: 6px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, var(--btn-primary), var(--btn-primary-dark));
+    background: linear-gradient(
+        135deg,
+        var(--btn-primary),
+        var(--btn-primary-dark)
+    );
     color: white;
     border: none;
     border-radius: 8px;
@@ -195,7 +257,11 @@ body {
 }
 
 .quick-add-btn.added {
-    background: linear-gradient(135deg, var(--btn-primary-light), var(--btn-primary));
+    background: linear-gradient(
+        135deg,
+        var(--btn-primary-light),
+        var(--btn-primary)
+    );
     opacity: 0.7;
     cursor: not-allowed;
 }
@@ -258,7 +324,11 @@ body {
 
 .add-btn {
     padding: 12px 24px;
-    background: linear-gradient(135deg, var(--btn-primary), var(--btn-primary-dark));
+    background: linear-gradient(
+        135deg,
+        var(--btn-primary),
+        var(--btn-primary-dark)
+    );
     color: white;
     border: none;
     border-radius: 8px;
@@ -316,7 +386,11 @@ body {
 }
 
 .remove-btn {
-    background: linear-gradient(135deg, var(--btn-danger), var(--btn-danger-dark));
+    background: linear-gradient(
+        135deg,
+        var(--btn-danger),
+        var(--btn-danger-dark)
+    );
     color: white;
     border: none;
     border-radius: 6px;
@@ -406,4 +480,170 @@ body {
 .domains-section {
     scrollbar-width: thin;
     scrollbar-color: var(--border-color) var(--bg-secondary);
+}
+
+/* Settings Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 340px;
+    box-shadow: 0 8px 32px var(--shadow-color);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+/* Setting Items */
+.setting-item {
+    margin-bottom: 24px;
+}
+
+.setting-item:last-child {
+    margin-bottom: 0;
+}
+
+.setting-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Theme Toggle Group */
+.theme-toggle-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 8px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.theme-option:hover {
+    border-color: var(--btn-primary);
+    background: var(--bg-primary);
+}
+
+.theme-option.active {
+    border-color: var(--btn-primary);
+    background: var(--btn-primary);
+    color: white;
+}
+
+.theme-option .theme-icon {
+    font-size: 24px;
+}
+
+.theme-option .theme-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.theme-option.active .theme-text {
+    color: white;
+}
+
+/* Language Select */
+.language-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.language-select:hover {
+    border-color: var(--btn-primary);
+}
+
+.language-select:focus {
+    border-color: var(--btn-primary);
 }

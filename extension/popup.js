@@ -25,6 +25,12 @@
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
             noDomains: "No domains in whitelist",
+            settingsTitle: "Settings",
+            themeLabel: "Theme",
+            themeLightText: "Light",
+            themeDarkText: "Dark",
+            themeAutoText: "Auto",
+            languageLabel: "Language",
         },
         zh: {
             modalTitle: "白名单管理",
@@ -41,12 +47,104 @@
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
             noDomains: "白名单中没有域名",
+            settingsTitle: "设置",
+            themeLabel: "主题",
+            themeLightText: "亮色",
+            themeDarkText: "暗色",
+            themeAutoText: "自动",
+            languageLabel: "语言",
         },
     }
 
     let currentDomain = ""
 
     let currentLanguage = "en"
+    let currentTheme = "auto"
+
+    /**
+     * Get theme preference from storage
+     * @returns {Promise<string>} Theme preference ('light', 'dark', or 'auto')
+     */
+    async function getThemePreference() {
+        try {
+            const result = await chrome.storage.sync.get(["userTheme"])
+            return result.userTheme || "auto"
+        } catch (error) {
+            console.error("Error getting theme preference:", error)
+            return "auto"
+        }
+    }
+
+    /**
+     * Set theme preference to storage
+     * @param {string} theme Theme to save
+     */
+    async function setThemePreference(theme) {
+        try {
+            await chrome.storage.sync.set({ userTheme: theme })
+            currentTheme = theme
+        } catch (error) {
+            console.error("Error saving theme preference:", error)
+        }
+    }
+
+    /**
+     * Apply theme to document
+     * @param {string} theme Theme to apply ('light', 'dark', or 'auto')
+     */
+    function applyTheme(theme) {
+        const body = document.body
+
+        if (theme === "auto") {
+            // Use system preference
+            const prefersDark = window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches
+            body.style.colorScheme = prefersDark ? "dark" : "light"
+        } else {
+            // Use manual theme
+            body.style.colorScheme = theme
+        }
+
+        // Update active state of theme buttons
+        document.querySelectorAll(".theme-option").forEach((btn) => {
+            if (btn.getAttribute("data-theme") === theme) {
+                btn.classList.add("active")
+            } else {
+                btn.classList.remove("active")
+            }
+        })
+    }
+
+    /**
+     * Get language preference from storage
+     * @returns {Promise<string>} Language code ('en' or 'zh')
+     */
+    async function getLanguagePreference() {
+        try {
+            const result = await chrome.storage.sync.get(["userLanguage"])
+            if (result.userLanguage) {
+                return result.userLanguage
+            }
+            // Fallback to browser detection
+            return detectLanguage()
+        } catch (error) {
+            console.error("Error getting language preference:", error)
+            return detectLanguage()
+        }
+    }
+
+    /**
+     * Set language preference to storage
+     * @param {string} lang Language to save
+     */
+    async function setLanguagePreference(lang) {
+        try {
+            await chrome.storage.sync.set({ userLanguage: lang })
+        } catch (error) {
+            console.error("Error saving language preference:", error)
+        }
+    }
 
     /**
      * Detect browser language setting
@@ -73,10 +171,14 @@
     /**
      * Update UI language
      */
-    function updateLanguage() {
-        currentLanguage = detectLanguage()
+    async function updateLanguage(lang) {
+        if (lang) {
+            currentLanguage = lang
+        } else {
+            currentLanguage = await getLanguagePreference()
+        }
 
-        // Update UI elements
+        // Update main UI elements
         document.getElementById("modalTitle").textContent =
             getText("modalTitle")
         document.getElementById("currentDomainLabel").textContent =
@@ -91,6 +193,23 @@
             getText("addButton")
         document.getElementById("closeButton").textContent =
             getText("closeButton")
+
+        // Update settings modal elements
+        document.getElementById("settingsTitle").textContent =
+            getText("settingsTitle")
+        document.getElementById("themeLabel").textContent =
+            getText("themeLabel")
+        document.getElementById("themeLightText").textContent =
+            getText("themeLightText")
+        document.getElementById("themeDarkText").textContent =
+            getText("themeDarkText")
+        document.getElementById("themeAutoText").textContent =
+            getText("themeAutoText")
+        document.getElementById("languageLabel").textContent =
+            getText("languageLabel")
+
+        // Update language select value
+        document.getElementById("languageSelect").value = currentLanguage
 
         // Update quick add button
         updateQuickAddButton()
@@ -345,6 +464,62 @@
     }
 
     /**
+     * Open settings modal
+     */
+    function openSettingsModal() {
+        const modal = document.getElementById("settingsModal")
+        modal.classList.add("show")
+    }
+
+    /**
+     * Close settings modal
+     */
+    function closeSettingsModal() {
+        const modal = document.getElementById("settingsModal")
+        modal.classList.remove("show")
+    }
+
+    /**
+     * Initialize settings modal
+     */
+    function initializeSettingsModal() {
+        const settingsBtn = document.getElementById("settingsButton")
+        const modalCloseBtn = document.getElementById("modalCloseBtn")
+        const modal = document.getElementById("settingsModal")
+        const themeButtons = document.querySelectorAll(".theme-option")
+        const languageSelect = document.getElementById("languageSelect")
+
+        // Open modal
+        settingsBtn.addEventListener("click", openSettingsModal)
+
+        // Close modal
+        modalCloseBtn.addEventListener("click", closeSettingsModal)
+
+        // Close modal when clicking outside
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeSettingsModal()
+            }
+        })
+
+        // Theme selection
+        themeButtons.forEach((btn) => {
+            btn.addEventListener("click", async () => {
+                const theme = btn.getAttribute("data-theme")
+                await setThemePreference(theme)
+                applyTheme(theme)
+            })
+        })
+
+        // Language selection
+        languageSelect.addEventListener("change", async (e) => {
+            const lang = e.target.value
+            await setLanguagePreference(lang)
+            await updateLanguage(lang)
+        })
+    }
+
+    /**
      * Initialize popup
      */
     async function initialize() {
@@ -354,8 +529,15 @@
             document.getElementById("currentDomainValue").textContent =
                 currentDomain || "N/A"
 
-            // Set up language
-            updateLanguage()
+            // Load and apply theme preference
+            currentTheme = await getThemePreference()
+            applyTheme(currentTheme)
+
+            // Load and apply language preference
+            await updateLanguage()
+
+            // Initialize settings modal
+            initializeSettingsModal()
 
             // Set up event listeners
             const quickAddBtn = document.getElementById("quickAddBtn")

@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Open In New Tab",
-    "version": "1.1.4",
+    "version": "1.2.0",
     "description": "Force all links to open in new tab using whitelist mode with dark mode and internationalization support",
 
     "permissions": ["storage", "activeTab"],

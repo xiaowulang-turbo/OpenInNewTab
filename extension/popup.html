@@ -10,9 +10,18 @@
         <div class="container">
             <header class="header">
                 <h1 id="modalTitle">Whitelist Management</h1>
-                <button id="closeButton" class="close-btn" title="Close">
-                    &times;
-                </button>
+                <div class="header-buttons">
+                    <button
+                        id="settingsButton"
+                        class="settings-btn"
+                        title="Settings"
+                    >
+                        ⚙️
+                    </button>
+                    <button id="closeButton" class="close-btn" title="Close">
+                        &times;
+                    </button>
+                </div>
             </header>
 
             <main class="main-content">
@@ -65,6 +74,69 @@
                     </div>
                 </div>
             </main>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="settingsTitle">Settings</h2>
+                    <button id="modalCloseBtn" class="modal-close-btn">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Theme Setting -->
+                    <div class="setting-item">
+                        <label class="setting-label" id="themeLabel"
+                            >Theme</label
+                        >
+                        <div class="theme-toggle-group">
+                            <button
+                                class="theme-option"
+                                data-theme="light"
+                                id="themeLightBtn"
+                            >
+                                <span class="theme-icon">☀️</span>
+                                <span class="theme-text" id="themeLightText"
+                                    >Light</span
+                                >
+                            </button>
+                            <button
+                                class="theme-option"
+                                data-theme="dark"
+                                id="themeDarkBtn"
+                            >
+                                <span class="theme-icon">🌙</span>
+                                <span class="theme-text" id="themeDarkText"
+                                    >Dark</span
+                                >
+                            </button>
+                            <button
+                                class="theme-option"
+                                data-theme="auto"
+                                id="themeAutoBtn"
+                            >
+                                <span class="theme-icon">🔄</span>
+                                <span class="theme-text" id="themeAutoText"
+                                    >Auto</span
+                                >
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Language Setting -->
+                    <div class="setting-item">
+                        <label class="setting-label" id="languageLabel"
+                            >Language</label
+                        >
+                        <select id="languageSelect" class="language-select">
+                            <option value="en">English</option>
+                            <option value="zh">中文</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script src="popup.js"></script>
