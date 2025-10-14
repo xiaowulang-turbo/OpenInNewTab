@@ -7,7 +7,7 @@ A monorepo project providing two implementations to force all links to open in n
 
 Both versions feature dark mode support, internationalization, and modern UI design.
 
-📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## Project Structure
 
@@ -42,7 +42,7 @@ Choose your preferred version:
 ### 🚀 Userscript Version
 
 -   **Best for**: Quick testing, development, or users who prefer Tampermonkey
--   **Install from**: [Greasy Fork](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab) | [See userscript/README.md](userscript/README.md#installation)
+-   **Install from**: [Greasy Fork](https://greasyfork.org/en/scripts/551033-open-in-new-tab) | [See userscript/README.md](userscript/README.md#installation)
 -   **Features**: Menu-based management, dark mode, internationalization
 
 ### 🌐 Chrome Extension Version

@@ -2,7 +2,7 @@
 
 This is the official landing page for the Open In New Tab project, showcasing both the Tampermonkey userscript and Chrome extension versions.
 
-🌐 **[Live Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+🌐 **[Live Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## Features
 

@@ -2,7 +2,7 @@
 
 A Tampermonkey userscript that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
-📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Install from Greasy Fork](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Install from Greasy Fork](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## Features
 
@@ -28,7 +28,7 @@ A Tampermonkey userscript that forces all links to open in new tab using a white
     - [Safari](https://apps.apple.com/us/app/tampermonkey/id1482490089)
 
 2. **Install the script:**
-    - Visit [Greasy Fork](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)
+    - Visit [Greasy Fork](https://greasyfork.org/en/scripts/551033-open-in-new-tab)
     - Click the green "Install this script" button
     - Tampermonkey will open with the script details
     - Click "Install" to complete
