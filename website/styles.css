@@ -351,12 +351,12 @@ code {
 }
 
 .theme-icon.sun {
-    right: 6px;
+    right: 4.5px;
     opacity: 0;
 }
 
 .theme-icon.moon {
-    left: 6px;
+    left: 4.5px;
     opacity: 1;
 }
 
@@ -863,6 +863,19 @@ code {
 
 .screenshot-dark {
     background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+.screenshot-dark .placeholder-content {
+    color: #ffffff; /* Force white text on dark screenshots */
+}
+
+.screenshot-dark .placeholder-content small {
+    color: rgba(
+        255,
+        255,
+        255,
+        0.8
+    ); /* Semi-transparent white for secondary text */
 }
 
 .placeholder-content {
