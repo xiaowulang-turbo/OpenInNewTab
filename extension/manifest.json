@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Open In New Tab",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "description": "Force all links to open in new tab using whitelist mode with dark mode and internationalization support",
 
     "permissions": ["storage", "activeTab"],
@@ -24,6 +24,8 @@
         "default_popup": "popup.html",
         "default_title": "Open In New Tab - Manage Whitelist"
     },
+
+    "options_page": "options.html",
 
     "icons": {
         "16": "icons/icon16.png",

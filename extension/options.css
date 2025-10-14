@@ -1,0 +1,333 @@
+/**
+ * Options Page Styles - Open In New Tabs Extension
+ * Imports popup.css for theme support and adds page-specific styles
+ */
+
+@import url("./popup.css");
+
+/* Override body width for full page layout */
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Options Container */
+.options-container {
+    max-width: 800px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.options-header {
+    padding: 32px 24px;
+}
+
+.header-content h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Main Content */
+.options-main {
+    flex: 1;
+    padding: 32px 24px;
+}
+
+/* Settings Section */
+.settings-section {
+    margin-bottom: 32px;
+}
+
+.settings-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 16px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Settings Card */
+.settings-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Setting Row */
+.setting-row {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+.theme-option {
+    padding: 8px 12px;
+}
+
+.setting-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.language-select {
+    width: auto;
+}
+
+.setting-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.setting-description {
+    display: block;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--btn-primary);
+    background: var(--btn-primary);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Input with Button */
+.input-with-button {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 300px;
+}
+
+.input-with-button input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--input-bg);
+    color: var(--input-text);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.input-with-button input:focus {
+    border-color: var(--btn-primary);
+}
+
+.input-with-button .add-btn {
+    padding: 10px 20px;
+    background: linear-gradient(
+        135deg,
+        var(--btn-primary),
+        var(--btn-primary-dark)
+    );
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px var(--btn-primary-shadow);
+    white-space: nowrap;
+}
+
+.input-with-button .add-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--btn-primary-shadow-hover);
+}
+
+/* Domains Container */
+.domains-container {
+    padding: 24px;
+    padding-top: 0;
+}
+
+.domains-header {
+    margin-bottom: 16px;
+}
+
+.domains-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.domains-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Domain Item (reuse from popup.css) */
+.domain-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.domain-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.domain-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+    word-break: break-all;
+}
+
+.remove-btn {
+    background: linear-gradient(
+        135deg,
+        var(--btn-danger),
+        var(--btn-danger-dark)
+    );
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px var(--btn-danger-shadow);
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.remove-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--btn-danger-shadow-hover);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    padding: 48px 16px;
+    font-style: italic;
+}
+
+/* Footer */
+.options-footer {
+    padding: 20px 24px;
+    margin-top: auto;
+}
+
+.footer-content {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Scrollbar for domains list */
+.domains-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.domains-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.domains-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.domains-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .options-header {
+        padding: 24px 16px;
+    }
+
+    .header-content h1 {
+        font-size: 24px;
+    }
+
+    .options-main {
+        padding: 24px 16px;
+    }
+
+    .setting-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .input-with-button {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .button-group {
+        width: 100%;
+    }
+
+    .action-btn {
+        flex: 1;
+    }
+}

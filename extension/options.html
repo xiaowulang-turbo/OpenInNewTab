@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open In New Tab - Options</title>
+        <link rel="stylesheet" href="options.css" />
+    </head>
+    <body>
+        <div class="options-container">
+            <header class="options-header">
+                <div class="header-content">
+                    <h1 id="optionsTitle">Extension Settings</h1>
+                    <p id="optionsSubtitle" class="subtitle">
+                        Configure your preferences and manage whitelist
+                    </p>
+                </div>
+            </header>
+
+            <main class="options-main">
+                <!-- Theme & Language Section -->
+                <section class="settings-section">
+                    <h2 class="section-heading" id="appearanceHeading">
+                        Appearance & Language
+                    </h2>
+                    <div class="settings-card">
+                        <!-- Theme Setting -->
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label class="setting-title" id="themeLabel"
+                                    >Theme</label
+                                >
+                                <span class="setting-description" id="themeDesc"
+                                    >Choose your preferred theme</span
+                                >
+                            </div>
+                            <div class="theme-toggle-group">
+                                <button
+                                    class="theme-option"
+                                    data-theme="light"
+                                    id="themeLightBtn"
+                                >
+                                    <span class="theme-icon">☀️</span>
+                                    <span class="theme-text" id="themeLightText"
+                                        >Light</span
+                                    >
+                                </button>
+                                <button
+                                    class="theme-option"
+                                    data-theme="dark"
+                                    id="themeDarkBtn"
+                                >
+                                    <span class="theme-icon">🌙</span>
+                                    <span class="theme-text" id="themeDarkText"
+                                        >Dark</span
+                                    >
+                                </button>
+                                <button
+                                    class="theme-option"
+                                    data-theme="auto"
+                                    id="themeAutoBtn"
+                                >
+                                    <span class="theme-icon">🔄</span>
+                                    <span class="theme-text" id="themeAutoText"
+                                        >Auto</span
+                                    >
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Language Setting -->
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label class="setting-title" id="languageLabel"
+                                    >Language</label
+                                >
+                                <span
+                                    class="setting-description"
+                                    id="languageDesc"
+                                    >Select your language</span
+                                >
+                            </div>
+                            <select id="languageSelect" class="language-select">
+                                <option value="en">English</option>
+                                <option value="zh">中文</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Whitelist Management Section -->
+                <section class="settings-section">
+                    <h2 class="section-heading" id="whitelistHeading">
+                        Whitelist Management
+                    </h2>
+                    <div class="settings-card">
+                        <!-- Import/Export -->
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label
+                                    class="setting-title"
+                                    id="importExportLabel"
+                                    >Import / Export</label
+                                >
+                                <span
+                                    class="setting-description"
+                                    id="importExportDesc"
+                                    >Backup or restore your whitelist</span
+                                >
+                            </div>
+                            <div class="button-group">
+                                <button id="exportBtn" class="action-btn">
+                                    <span id="exportBtnText">Export</span>
+                                </button>
+                                <button id="importBtn" class="action-btn">
+                                    <span id="importBtnText">Import</span>
+                                </button>
+                                <input
+                                    type="file"
+                                    id="importFileInput"
+                                    accept=".json"
+                                    style="display: none"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Add Domain -->
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label class="setting-title" id="addDomainLabel"
+                                    >Add Domain</label
+                                >
+                                <span
+                                    class="setting-description"
+                                    id="addDomainDesc"
+                                    >Add a new domain to whitelist</span
+                                >
+                            </div>
+                            <div class="input-with-button">
+                                <input
+                                    type="text"
+                                    id="newDomainInput"
+                                    placeholder="example.com"
+                                />
+                                <button id="addDomainBtn" class="add-btn">
+                                    <span id="addBtnText">Add</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Domains List -->
+                        <div class="domains-container">
+                            <div class="domains-header">
+                                <span class="domains-count" id="domainsCount"
+                                    >0 domains</span
+                                >
+                            </div>
+                            <div id="domainsList" class="domains-list">
+                                <!-- Domains will be added here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="options-footer">
+                <div class="footer-content">
+                    <span id="footerText"
+                        >Open In New Tab Extension v1.2.0</span
+                    >
+                </div>
+            </footer>
+        </div>
+
+        <script src="options.js"></script>
+    </body>
+</html>
