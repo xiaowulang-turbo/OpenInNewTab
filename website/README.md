@@ -2,6 +2,8 @@
 
 This is the official landing page for the Open In New Tab project, showcasing both the Tampermonkey userscript and Chrome extension versions.
 
+🌐 **[Live Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+
 ## Features
 
 -   **Modern Design**: Clean, responsive layout with smooth animations
@@ -50,7 +52,46 @@ website/
 
 ## Deployment
 
-### GitHub Pages
+The website is currently deployed on **Vercel** at [https://open-in-new-tab.vercel.app/](https://open-in-new-tab.vercel.app/)
+
+### Deploy Your Own
+
+#### Vercel (Recommended)
+
+1. **Install Vercel CLI:**
+
+    ```bash
+    npm install -g vercel
+    ```
+
+2. **Deploy:**
+
+    ```bash
+    cd website
+    vercel --prod
+    ```
+
+3. **Or use Vercel Dashboard:**
+    - Go to [Vercel](https://vercel.com/)
+    - Import your GitHub repository
+    - Set root directory to `website`
+    - Deploy
+
+#### Netlify
+
+1. **Drag and Drop:**
+
+    - Go to [Netlify](https://app.netlify.com/)
+    - Drag the `website` folder to deploy
+
+2. **Or use Netlify CLI:**
+    ```bash
+    npm install -g netlify-cli
+    cd website
+    netlify deploy --prod
+    ```
+
+#### GitHub Pages
 
 1. **Push to GitHub:**
 
@@ -68,35 +109,7 @@ website/
     - Save
 
 3. **Access your site:**
-    - Visit `https://xiaowulang-turbo.github.io/OpenInNewTab/`
-
-### Netlify
-
-1. **Drag and Drop:**
-
-    - Go to [Netlify](https://app.netlify.com/)
-    - Drag the `website` folder to deploy
-
-2. **Or use Netlify CLI:**
-    ```bash
-    npm install -g netlify-cli
-    cd website
-    netlify deploy --prod
-    ```
-
-### Vercel
-
-1. **Install Vercel CLI:**
-
-    ```bash
-    npm install -g vercel
-    ```
-
-2. **Deploy:**
-    ```bash
-    cd website
-    vercel --prod
-    ```
+    - Visit `https://<username>.github.io/<repository>/`
 
 ## Dark Mode Implementation
 

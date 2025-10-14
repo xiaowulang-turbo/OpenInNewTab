@@ -2,6 +2,8 @@
 
 A Tampermonkey userscript that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
+📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Install from Greasy Fork](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+
 ## Features
 
 -   **Whitelist Mode**: Only applies to specified domains for better control and performance
@@ -17,11 +19,28 @@ A Tampermonkey userscript that forces all links to open in new tab using a white
 
 ## Installation
 
+### Option 1: Install from Greasy Fork (Recommended)
+
+1. **Install Tampermonkey:**
+
+    - [Chrome/Edge](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+    - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+    - [Safari](https://apps.apple.com/us/app/tampermonkey/id1482490089)
+
+2. **Install the script:**
+    - Visit [Greasy Fork](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)
+    - Click the green "Install this script" button
+    - Tampermonkey will open with the script details
+    - Click "Install" to complete
+
+### Option 2: Manual Installation
+
 1. Install [Tampermonkey](https://www.tampermonkey.net/) browser extension
 2. Click the Tampermonkey icon in your browser toolbar
 3. Select "Create a new script"
-4. Replace the default content with the code from `OpenInNewTab.user.js`
-5. Save the script (Ctrl+S or File → Save)
+4. Copy the code from `OpenInNewTab.user.js`
+5. Paste it into the editor
+6. Save the script (Ctrl+S or File → Save)
 
 ## Configuration
 
@@ -31,21 +50,31 @@ The script comes with a set of default whitelisted domains (currently empty). Yo
 
 ### User Management
 
-#### Adding Current Domain
+#### Quick Access via Menu
 
--   In any webpage, right-click the Tampermonkey icon in your browser toolbar
--   Select "添加白名单" (or "Add to Whitelist" in English) from the menu
--   The current domain will be instantly added to your whitelist
--   You'll see an alert confirming the addition
+Right-click the Tampermonkey icon in your browser toolbar to access script commands.
+
+#### Adding Current Domain (Quick Add)
+
+1. Visit any website you want to add to whitelist
+2. Right-click the Tampermonkey icon in your browser toolbar
+3. Select "添加当前网站到白名单" (or "Add Current Site to Whitelist" in English)
+4. The current domain will be instantly added
+5. A notification will confirm the addition
 
 #### Managing Your Whitelist
 
-1. **Via Tampermonkey Menu**: Right-click the Tampermonkey icon in your browser toolbar
-2. Select "管理白名单" (or "Manage Whitelist" in English) from the menu
-3. A modal will open showing all your whitelisted domains
-4. **Add new domains**: Type a domain (e.g., `example.com`) in the input field and click "添加" (or "Add" in English)
-5. **Remove domains**: Click the red "移除" (or "Remove" in English) button next to any domain
-6. **View all domains**: See all your whitelisted domains in a clean, organized list
+1. **Open Whitelist Manager:**
+
+    - Right-click the Tampermonkey icon
+    - Select "管理白名单" (or "Manage Whitelist" in English)
+    - A modal dialog will open
+
+2. **In the Whitelist Manager:**
+    - **View all domains**: See your complete whitelist in a clean, organized list
+    - **Add new domains**: Type a domain (e.g., `example.com`) and click "添加" / "Add"
+    - **Remove domains**: Click the red "移除" / "Remove" button next to any domain
+    - **Close**: Click the × button or click outside the modal
 
 ### Domain Matching
 

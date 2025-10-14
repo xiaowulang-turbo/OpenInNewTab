@@ -2,6 +2,8 @@
 
 A Chrome extension that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
+📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+
 ## Features
 
 -   **Whitelist Mode**: Only applies to specified domains for better control and performance
@@ -17,12 +19,16 @@ A Chrome extension that forces all links to open in new tab using a whitelist-ba
 
 ## Installation
 
-### Developer Mode Installation
+### Option 1: Chrome Web Store (Coming Soon)
+
+The extension will be available on Chrome Web Store soon. Stay tuned!
+
+### Option 2: Developer Mode Installation
 
 1. **Clone or download the project:**
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/xiaowulang-turbo/OpenInNewTab.git
     cd OpenInNewTab/extension
     ```
 
@@ -54,19 +60,35 @@ The extension comes with an empty default whitelist. Users can add domains throu
 
 ### User Management
 
-#### Adding Current Domain
+#### Quick Access
 
--   Click the extension icon in the browser toolbar
--   The popup will open showing the whitelist management interface
--   The current domain will be automatically detected and can be added with one click
+Click the extension icon in the browser toolbar to open the popup interface.
+
+#### Adding Current Domain (Quick Add)
+
+-   The popup automatically detects the current website domain
+-   Click the green "Add" button next to the current domain
+-   The domain is instantly added to your whitelist
 
 #### Managing Your Whitelist
 
-1. **Via Extension Popup**: Click the extension icon in the browser toolbar
-2. The popup will open showing all your whitelisted domains
+**Via Extension Popup:**
+
+1. Click the extension icon in the browser toolbar
+2. The popup shows all your whitelisted domains
 3. **Add new domains**: Type a domain (e.g., `example.com`) in the input field and click "Add"
 4. **Remove domains**: Click the red "Remove" button next to any domain
 5. **View all domains**: See all your whitelisted domains in a clean, organized list
+
+**Via Options Page:**
+
+1. Click the settings icon (⚙️) in the popup
+2. Click "More Options" button at the bottom
+3. Access the full configuration page with:
+    - Theme settings (Light/Dark/Auto)
+    - Language settings (English/中文)
+    - Complete whitelist management
+    - Import/Export whitelist data
 
 ### Domain Matching
 
