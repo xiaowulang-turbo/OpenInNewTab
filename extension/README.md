@@ -4,6 +4,30 @@ A Chrome extension that forces all links to open in new tab using a whitelist-ba
 
 📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
+## 🎯 Quick Start Guide
+
+### How Whitelist Mode Works
+
+This extension uses a **whitelist-based approach**:
+
+1. **Install the extension** - By default, NO websites are affected
+2. **Add domains to whitelist** - Click the extension icon and add websites you want to modify
+3. **Links open in new tabs** - Only on whitelisted websites, all links will automatically open in new tabs
+4. **Other websites remain unchanged** - Non-whitelisted websites work normally
+
+### Step-by-Step Usage Example
+
+Let's say you want all links on `github.com` to open in new tabs:
+
+1. **Navigate to github.com** in your browser
+2. **Click the extension icon** in your browser toolbar
+3. **See the current domain** displayed at the top (e.g., "Current Domain: github.com")
+4. **Click the green "Add" button** next to the current domain
+5. **Done!** All links on github.com now open in new tabs
+6. **To remove**: Click the extension icon again and click the red "Remove" button
+
+You can also manually add domains by typing them in the input field (e.g., `stackoverflow.com`, `reddit.com`) and clicking "Add".
+
 ## Features
 
 -   **Whitelist Mode**: Only applies to specified domains for better control and performance

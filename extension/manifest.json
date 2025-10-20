@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Open In New Tab",
     "version": "1.3.0",
-    "description": "Force all links to open in new tab using whitelist mode with dark mode and internationalization support",
+    "description": "Whitelist-based: Add domains via popup to open links in new tabs. Quick add current site, manage domains, dark mode, i18n support.",
 
     "permissions": ["storage", "activeTab"],
 

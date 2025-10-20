@@ -1,11 +1,22 @@
 # Open In New Tab
 
-A monorepo project providing two implementations to force all links to open in new tab using a whitelist-based approach:
+A monorepo project providing two implementations to force all links to open in new tab using a **whitelist-based approach**:
 
 -   **Userscript Version**: Tampermonkey/Greasemonkey userscript
 -   **Chrome Extension Version**: Native Chrome extension with popup interface
 
 Both versions feature dark mode support, internationalization, and modern UI design.
+
+## 🎯 How Whitelist Mode Works
+
+The whitelist-based approach means:
+
+1. **By default, NO websites are affected** - The extension/script does nothing until you add domains
+2. **You control which sites to modify** - Add specific domains (e.g., github.com, reddit.com) to your whitelist
+3. **Links open in new tabs only on whitelisted sites** - Only the websites you add will have their links modified
+4. **Easy to manage** - Add or remove domains anytime through the popup interface or menu commands
+
+**Example**: If you add `github.com` to your whitelist, all links on GitHub will open in new tabs. Other websites like Google, Twitter, etc., will remain unchanged unless you also add them to the whitelist.
 
 📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[Star on GitHub](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
