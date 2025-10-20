@@ -293,16 +293,21 @@
             // Update install note
             const installNotes = document.querySelectorAll(".install-note")
             installNotes.forEach((note) => {
-                const strong = note.querySelector("strong")
-                if (strong) {
-                    strong.textContent = t.installExtensionNote
-                    const textNode = Array.from(note.childNodes).find(
-                        (node) => node.nodeType === Node.TEXT_NODE
-                    )
-                    if (textNode) {
-                        textNode.textContent = " " + t.installExtensionNoteText
-                    }
-                }
+                // Clear existing content
+                note.innerHTML = ""
+
+                // Create new <strong> element
+                const strong = document.createElement("strong")
+                strong.textContent = t.installExtensionNote
+
+                // Create new text node
+                const textNode = document.createTextNode(
+                    " " + t.installExtensionNoteText
+                )
+
+                // Append elements
+                note.appendChild(strong)
+                note.appendChild(textNode)
             })
         }
 
