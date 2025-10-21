@@ -290,25 +290,8 @@
                 }
             })
 
-            // Update install note
-            const installNotes = document.querySelectorAll(".install-note")
-            installNotes.forEach((note) => {
-                // Clear existing content
-                note.innerHTML = ""
-
-                // Create new <strong> element
-                const strong = document.createElement("strong")
-                strong.textContent = t.installExtensionNote
-
-                // Create new text node
-                const textNode = document.createTextNode(
-                    " " + t.installExtensionNoteText
-                )
-
-                // Append elements
-                note.appendChild(strong)
-                note.appendChild(textNode)
-            })
+            // Update install note (handled by data-i18n attributes)
+            // No need for manual updates as the note now uses data-i18n
         }
 
         /**
