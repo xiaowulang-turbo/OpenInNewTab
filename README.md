@@ -1,5 +1,7 @@
 # Open In New Tab
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 A monorepo project providing two implementations to force all links to open in new tab using a **whitelist-based approach**:
 
 -   **Userscript Version**: Tampermonkey/Greasemonkey userscript
@@ -53,21 +55,21 @@ Choose your preferred version:
 ### 🚀 Userscript Version
 
 -   **Best for**: Quick testing, development, or users who prefer Tampermonkey
--   **Install from**: [Greasy Fork](https://greasyfork.org/en/scripts/551033-open-in-new-tab) | [See userscript/README.md](userscript/README.md#installation)
+-   **Install from**: [Greasy Fork](https://greasyfork.org/en/scripts/551033-open-in-new-tab) | [See userscript/README.md](userscript/README.md#installation) ([中文](userscript/README.zh-CN.md#安装))
 -   **Features**: Menu-based management, dark mode, internationalization
 
 ### 🌐 Chrome Extension Version
 
 -   **Best for**: Production use, better performance, native browser integration
--   **Installation**: [See extension/README.md](extension/README.md#installation)
+-   **Installation**: [See extension/README.md](extension/README.md#installation) ([中文](extension/README.zh-CN.md#安装))
 -   **Features**: Popup interface, auto-updates, Web Store distribution
 
 ## Documentation
 
 For detailed documentation, please refer to the specific version you want to use:
 
--   **[Userscript Version](userscript/README.md)** - Complete Tampermonkey/Greasemonkey documentation
--   **[Chrome Extension Version](extension/README.md)** - Complete Chrome extension documentation
+-   **[Userscript Version](userscript/README.md)** ([中文](userscript/README.zh-CN.md)) - Complete Tampermonkey/Greasemonkey documentation
+-   **[Chrome Extension Version](extension/README.md)** ([中文](extension/README.zh-CN.md)) - Complete Chrome extension documentation
 
 Both versions share the same core functionality and features, but have different installation and usage instructions.
 

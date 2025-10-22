@@ -357,7 +357,7 @@ const translations = {
         screenshotsSubtitle: "支持深色模式的现代化 UI",
         screenshotExtensionPopup: "扩展弹窗",
         screenshotQuickAdd: "快速添加当前域名",
-        screenshotDarkMode: "深色模式已启用",
+        screenshotDarkMode: "深色模式已支持",
         screenshotWhitelistManager: "白名单管理器",
         screenshotModalInterface: "用户脚本模态界面",
         screenshotCaptionLight: "Chrome 扩展 - 浅色模式",

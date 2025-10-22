@@ -1,5 +1,7 @@
 # Open In New Tab - Chrome Extension Version
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 A Chrome extension that forces all links to open in new tab using a whitelist-based approach with dark mode and internationalization support.
 
 📖 **[Official Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
