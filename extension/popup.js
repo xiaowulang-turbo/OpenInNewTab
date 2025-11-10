@@ -266,6 +266,23 @@
     }
 
     /**
+     * Reload current tab
+     */
+    async function reloadCurrentTab() {
+        try {
+            const [tab] = await chrome.tabs.query({
+                active: true,
+                currentWindow: true,
+            })
+            if (tab && tab.id) {
+                await chrome.tabs.reload(tab.id)
+            }
+        } catch (error) {
+            console.error("Error reloading current tab:", error)
+        }
+    }
+
+    /**
      * Handle quick add button click
      */
     async function handleQuickAdd() {
@@ -282,6 +299,7 @@
             showNotification(`${currentDomain} ${getText("addedToWhitelist")}`)
             await updateQuickAddButton()
             loadWhitelist()
+            await reloadCurrentTab()
         } else {
             showNotification(
                 `${currentDomain} ${getText("alreadyInWhitelist")}`
@@ -386,6 +404,7 @@
                 // Update quick add button if the added domain is current domain
                 if (domain === currentDomain) {
                     await updateQuickAddButton()
+                    await reloadCurrentTab()
                 }
             } else {
                 showNotification(`${domain} ${getText("alreadyInWhitelist")}`)
@@ -413,6 +432,7 @@
                 // Update quick add button if the removed domain is current domain
                 if (domain === currentDomain) {
                     await updateQuickAddButton()
+                    await reloadCurrentTab()
                 }
             }
         } catch (error) {

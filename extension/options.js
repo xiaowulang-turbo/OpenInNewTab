@@ -323,6 +323,35 @@
     }
 
     /**
+     * Reload tabs matching the domain
+     * @param {string} domain Domain to match
+     */
+    async function reloadMatchingTabs(domain) {
+        try {
+            const tabs = await chrome.tabs.query({})
+            for (const tab of tabs) {
+                if (tab.url) {
+                    try {
+                        const url = new URL(tab.url)
+                        const hostname = url.hostname
+                        if (
+                            hostname === domain ||
+                            hostname.endsWith("." + domain)
+                        ) {
+                            await chrome.tabs.reload(tab.id)
+                        }
+                    } catch (error) {
+                        // Skip invalid URLs
+                        continue
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error reloading matching tabs:", error)
+        }
+    }
+
+    /**
      * Add domain to whitelist
      * @param {string} domain Domain to add
      */
@@ -335,6 +364,7 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("addedToWhitelist")}`)
                 loadWhitelist()
+                await reloadMatchingTabs(domain)
             } else {
                 showNotification(`${domain} ${getText("alreadyInWhitelist")}`)
             }
@@ -358,6 +388,7 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("removedFromWhitelist")}`)
                 loadWhitelist()
+                await reloadMatchingTabs(domain)
             }
         } catch (error) {
             console.error("Error removing domain:", error)
