@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Open In New Tab",
     "version": "1.4.0",
-    "description": "Whitelist-based: Add domains via popup to open links in new tabs. Quick add current site, manage domains, dark mode, i18n support.",
+    "description": "Force all links on selected websites to open in new tabs. Simply click the extension icon and add any website to your whitelist. Perfect for multitasking and keeping your workflow organized.",
 
     "permissions": ["storage", "activeTab"],
 
