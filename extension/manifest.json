@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Open In New Tab",
     "version": "1.4.0",
-    "description": "Force all links on selected websites to open in new tabs. Simply click the extension icon and add any website to your whitelist. Perfect for multitasking and keeping your workflow organized.",
+    "description": "Force all links on selected websites to open in new tabs. Simply click the extension icon and add any website to your whitelist. ",
 
     "permissions": ["storage", "activeTab"],
 
