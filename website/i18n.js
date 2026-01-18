@@ -17,7 +17,7 @@ const translations = {
         heroSubtitle:
             "Force all links to open in new tab with intelligent whitelist control.",
         heroSubtitle2:
-            "Available as Tampermonkey userscript and Chrome extension for opening each link in new tab.",
+            "Available as Chrome extension and Tampermonkey userscript for opening each link in new tab.",
         btnGetStarted: "Get Started",
         btnViewGithub: "View on GitHub",
         badgeDarkMode: "✨ Dark Mode",
@@ -163,7 +163,7 @@ const translations = {
 
         // Footer
         footerDesc:
-            "Smart link management with whitelist control. Available as userscript and extension.",
+            "Smart link management with whitelist control. Available as extension and userscript.",
         footerQuickLinks: "Quick Links",
         footerGithubRepo: "GitHub Repository",
         footerReportIssues: "Report Issues",
@@ -219,7 +219,7 @@ const translations = {
         heroTitle: "智能链接管理",
         heroTitleHighlight: "随心所控",
         heroSubtitle: "通过智能白名单控制，强制每个链接在新标签页打开。",
-        heroSubtitle2: "提供 Tampermonkey 用户脚本和 Chrome 扩展两个版本。",
+        heroSubtitle2: "提供 Chrome 扩展和 Tampermonkey 用户脚本两个版本。",
         btnGetStarted: "立即开始",
         btnViewGithub: "查看仓库",
         badgeDarkMode: "✨ 深色模式",
@@ -360,7 +360,7 @@ const translations = {
         btnViewDocs: "查看文档",
 
         // Footer
-        footerDesc: "智能链接管理与白名单控制。提供用户脚本和扩展两个版本。",
+        footerDesc: "智能链接 management 与白名单控制。提供扩展和用户脚本两个版本。",
         footerQuickLinks: "快速链接",
         footerGithubRepo: "GitHub 仓库",
         footerReportIssues: "报告问题",

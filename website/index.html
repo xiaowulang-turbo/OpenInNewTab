@@ -115,8 +115,8 @@
                     >
                     <br />
                     <span data-i18n="heroSubtitle2"
-                        >Available as Tampermonkey userscript and Chrome
-                        extension.</span
+                        >Available as Chrome extension and Tampermonkey
+                        userscript.</span
                     >
                 </p>
                 <div class="hero-buttons">
@@ -234,78 +234,6 @@
                 </p>
 
                 <div class="versions-grid">
-                    <div class="version-card">
-                        <div class="version-header">
-                            <div class="version-icon">🚀</div>
-                            <h3 data-i18n="versionUserscriptTitle">
-                                Userscript Version
-                            </h3>
-                            <span class="version-badge">Tampermonkey</span>
-                        </div>
-                        <p
-                            class="version-description"
-                            data-i18n="versionUserscriptDesc"
-                        >
-                            Perfect for quick testing, development, or users who
-                            prefer Tampermonkey/Greasemonkey.
-                        </p>
-
-                        <div class="version-features">
-                            <h4 data-i18n="versionUserscriptFeatures">
-                                Features:
-                            </h4>
-                            <ul>
-                                <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature1"
-                                        >Menu-based management</span
-                                    >
-                                </li>
-                                <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature2"
-                                        >GM_* APIs for storage</span
-                                    >
-                                </li>
-                                <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature3"
-                                        >Modal interface</span
-                                    >
-                                </li>
-                                <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature4"
-                                        >Cross-browser support</span
-                                    >
-                                </li>
-                                <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature5"
-                                        >Easy to customize</span
-                                    >
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="version-best-for">
-                            <strong data-i18n="versionUserscriptBestFor"
-                                >Best for:</strong
-                            >
-                            <span data-i18n="versionUserscriptBestForText"
-                                >Developers, power users, quick testing</span
-                            >
-                        </div>
-
-                        <a
-                            href="#install-userscript"
-                            class="btn btn-outline"
-                            data-i18n="btnInstallUserscript"
-                        >
-                            Install Userscript →
-                        </a>
-                    </div>
-
                     <div class="version-card version-card-featured">
                         <div
                             class="featured-badge"
@@ -386,6 +314,78 @@
                             data-i18n="btnInstallExtension"
                         >
                             Install Extension →
+                        </a>
+                    </div>
+
+                    <div class="version-card">
+                        <div class="version-header">
+                            <div class="version-icon">🚀</div>
+                            <h3 data-i18n="versionUserscriptTitle">
+                                Userscript Version
+                            </h3>
+                            <span class="version-badge">Tampermonkey</span>
+                        </div>
+                        <p
+                            class="version-description"
+                            data-i18n="versionUserscriptDesc"
+                        >
+                            Perfect for quick testing, development, or users who
+                            prefer Tampermonkey/Greasemonkey.
+                        </p>
+
+                        <div class="version-features">
+                            <h4 data-i18n="versionUserscriptFeatures">
+                                Features:
+                            </h4>
+                            <ul>
+                                <li>
+                                    ✓
+                                    <span data-i18n="versionUserscriptFeature1"
+                                        >Menu-based management</span
+                                    >
+                                </li>
+                                <li>
+                                    ✓
+                                    <span data-i18n="versionUserscriptFeature2"
+                                        >GM_* APIs for storage</span
+                                    >
+                                </li>
+                                <li>
+                                    ✓
+                                    <span data-i18n="versionUserscriptFeature3"
+                                        >Modal interface</span
+                                    >
+                                </li>
+                                <li>
+                                    ✓
+                                    <span data-i18n="versionUserscriptFeature4"
+                                        >Cross-browser support</span
+                                    >
+                                </li>
+                                <li>
+                                    ✓
+                                    <span data-i18n="versionUserscriptFeature5"
+                                        >Easy to customize</span
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="version-best-for">
+                            <strong data-i18n="versionUserscriptBestFor"
+                                >Best for:</strong
+                            >
+                            <span data-i18n="versionUserscriptBestForText"
+                                >Developers, power users, quick testing</span
+                            >
+                        </div>
+
+                        <a
+                            href="#install-userscript"
+                            class="btn btn-outline"
+                            data-i18n="btnInstallUserscript"
+                        >
+                            Install Userscript →
                         </a>
                     </div>
                 </div>
@@ -487,23 +487,84 @@
                 <div class="install-tabs">
                     <button
                         class="install-tab active"
-                        data-tab="userscript"
-                        data-i18n="tabUserscript"
-                    >
-                        🚀 Userscript
-                    </button>
-                    <button
-                        class="install-tab"
                         data-tab="extension"
                         data-i18n="tabExtension"
                     >
                         🌐 Extension
                     </button>
+                    <button
+                        class="install-tab"
+                        data-tab="userscript"
+                        data-i18n="tabUserscript"
+                    >
+                        🚀 Userscript
+                    </button>
                 </div>
 
                 <div class="install-content">
+                    <div id="install-extension" class="install-panel active">
+                        <div class="install-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3 data-i18n="installExtensionStep1Title">
+                                        Visit Web Store
+                                    </h3>
+                                    <p data-i18n="installExtensionStep1Desc">
+                                        Go to the official Chrome Web Store page.
+                                    </p>
+                                    <div style="margin-top: 12px;">
+                                        <a
+                                            href="https://chromewebstore.google.com/detail/open-in-new-tab/dncofijfkmdpjpidepjjicpmojdecgoo"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn btn-primary"
+                                            style="display: inline-flex; align-items: center; gap: 8px;"
+                                        >
+                                            🌐
+                                            <span data-i18n="btnInstallExtension">Install Extension</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3 data-i18n="installExtensionStep2Title">
+                                        Add to Chrome
+                                    </h3>
+                                    <p data-i18n="installExtensionStep2Desc">
+                                        Click 'Add to Chrome' to install instantly.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3 data-i18n="installExtensionStep3Title">
+                                        Start Using
+                                    </h3>
+                                    <p data-i18n="installExtensionStep3Desc">
+                                        Click the extension icon to manage your whitelist.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="install-note">
+                            <strong data-i18n="installExtensionNote"
+                                >💡 Tip:</strong
+                            >
+                            <span data-i18n="installExtensionNoteText"
+                                >The extension is now available for one-click installation from the Chrome Web Store.</span
+                            >
+                        </div>
+                    </div>
+
                     <!-- Userscript Installation -->
-                    <div id="install-userscript" class="install-panel active">
+                    <div id="install-userscript" class="install-panel">
                         <div class="install-steps">
                             <div class="step">
                                 <div class="step-number">1</div>
@@ -623,70 +684,6 @@
                                     manually in Tampermonkey.
                                 </p>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Extension Installation -->
-                    <div id="install-extension" class="install-panel">
-                        <div class="install-steps">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep1Title">
-                                        Visit Web Store
-                                    </h3>
-                                    <p data-i18n="installExtensionStep1Desc">
-                                        Go to the official Chrome Web Store page.
-                                    </p>
-                                    <div style="margin-top: 12px;">
-                                        <a
-                                            href="https://chromewebstore.google.com/detail/open-in-new-tab/dncofijfkmdpjpidepjjicpmojdecgoo"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="btn btn-primary"
-                                            style="display: inline-flex; align-items: center; gap: 8px;"
-                                        >
-                                            🌐
-                                            <span data-i18n="btnInstallExtension">Install Extension</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep2Title">
-                                        Add to Chrome
-                                    </h3>
-                                    <p data-i18n="installExtensionStep2Desc">
-                                        Click 'Add to Chrome' to install instantly.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep3Title">
-                                        Start Using
-                                    </h3>
-                                    <p data-i18n="installExtensionStep3Desc">
-                                        Click the extension icon to manage your whitelist.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="install-note">
-                            <strong data-i18n="installExtensionNote"
-                                >💡 Note:</strong
-                            >
-                            <span data-i18n="installExtensionNoteText"
-                                >The extension is currently available for
-                                developer mode installation. Chrome Web Store
-                                distribution coming soon!</span
-                            >
                         </div>
                     </div>
                 </div>
