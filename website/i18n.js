@@ -131,22 +131,16 @@ const translations = {
         btnCopied: "Copied!",
         btnCopyFailed: "Failed",
 
-        installExtensionStep1Title: "Download Extension",
-        installExtensionStep1Desc:
-            "Clone or download the repository from GitHub",
-        installExtensionStep2Title: "Enable Developer Mode",
-        installExtensionStep2Desc: "Open Chrome → Go to",
-        installExtensionStep2Desc2:
-            '→ Enable "Developer mode" (toggle in top right)',
-        installExtensionStep3Title: "Load Extension",
-        installExtensionStep3Desc: 'Click "Load unpacked" → Select the',
-        installExtensionStep3Desc2: "directory from the downloaded repository",
-        installExtensionStep4Title: "Start Using",
-        installExtensionStep4Desc:
-            "Click the extension icon to open the popup and add domains to your whitelist",
-        installExtensionNote: "💡 Note:",
-        installExtensionNoteText:
-            "The extension is currently available for developer mode installation. Chrome Web Store distribution coming soon!",
+        installExtensionStep1Title: "Visit Web Store",
+        installExtensionStep1Desc: "Go to the official Chrome Web Store page.",
+        installExtensionStep2Title: "Add to Chrome",
+        installExtensionStep2Desc: "Click 'Add to Chrome' to install instantly.",
+        installExtensionStep3Title: "Start Using",
+        installExtensionStep3Desc: "Click the extension icon to manage your whitelist.",
+        installExtensionStep4Title: "",
+        installExtensionStep4Desc: "",
+        installExtensionNote: "💡 Tip:",
+        installExtensionNoteText: "The extension is now available for one-click installation from the Chrome Web Store.",
 
         // Screenshots Section
         screenshotsTitle: "Beautiful Interface",
@@ -336,21 +330,16 @@ const translations = {
         btnCopied: "已复制！",
         btnCopyFailed: "复制失败",
 
-        installExtensionStep1Title: "下载扩展",
-        installExtensionStep1Desc: "从 GitHub 克隆或下载仓库",
-        installExtensionStep2Title: "启用开发者模式",
-        installExtensionStep2Desc: "打开 Chrome → 访问",
-        installExtensionStep2Desc2: '→ 启用"开发者模式"（右上角开关）',
-        installExtensionStep3Title: "加载扩展",
-        installExtensionStep3Desc:
-            '点击"加载已解压的扩展程序" → 选择下载的仓库中的',
-        installExtensionStep3Desc2: "目录",
-        installExtensionStep4Title: "开始使用",
-        installExtensionStep4Desc:
-            "点击扩展图标打开弹出窗口，将域名添加到你的白名单",
-        installExtensionNote: "💡 注意：",
-        installExtensionNoteText:
-            "扩展目前仅支持开发者模式安装。Chrome 应用商店版本即将推出！",
+        installExtensionStep1Title: "访问应用商店",
+        installExtensionStep1Desc: "前往 Chrome 应用商店官方面页。",
+        installExtensionStep2Title: "添加至 Chrome",
+        installExtensionStep2Desc: "点击“添加至 Chrome”即可完成一键安装。",
+        installExtensionStep3Title: "开始使用",
+        installExtensionStep3Desc: "点击浏览器右上角的扩展图标即可管理白名单。",
+        installExtensionStep4Title: "",
+        installExtensionStep4Desc: "",
+        installExtensionNote: "💡 提示：",
+        installExtensionNoteText: "扩展程序现已正式上线 Chrome 应用商店，推荐使用一键安装。",
 
         // Screenshots Section
         screenshotsTitle: "精美界面",
