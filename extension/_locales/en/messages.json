@@ -1,0 +1,14 @@
+{
+    "extName": {
+        "message": "Open In New Tab",
+        "description": "The name of the extension."
+    },
+    "extDesc": {
+        "message": "Force all links on selected websites to open in new tabs. Simply click the extension icon and add any website to your whitelist.",
+        "description": "The description of the extension."
+    },
+    "actionTitle": {
+        "message": "Open In New Tab - Manage Whitelist",
+        "description": "The default title of the extension's action."
+    }
+}

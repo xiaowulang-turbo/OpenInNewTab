@@ -1,0 +1,14 @@
+{
+    "extName": {
+        "message": "Open In New Tab（在新标签页中打开）",
+        "description": "The name of the extension."
+    },
+    "extDesc": {
+        "message": "强制在所选网站上的所有链接在新标签页中打开。只需点击扩展图标，并将任何网站添加到您的白名单中。",
+        "description": "The description of the extension."
+    },
+    "actionTitle": {
+        "message": "在新标签页中打开 - 管理白名单",
+        "description": "The default title of the extension's action."
+    }
+}
