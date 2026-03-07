@@ -316,6 +316,18 @@
     /**
      * Initialize all functionality when DOM is ready
      */
+    function updateCopyrightYear() {
+        const year = new Date().getFullYear()
+        const footerCopyright = document.getElementById("footerCopyright")
+        if (footerCopyright) {
+            const currentLang = document.documentElement.getAttribute("lang") || "en"
+            const suffix = currentLang === "zh"
+                ? " Open In New Tab. 基于 MIT 许可证发布。"
+                : " Open In New Tab. Released under MIT License."
+            footerCopyright.innerHTML = `&copy; ${year}${suffix}`
+        }
+    }
+
     function initialize() {
         initLanguageSystem()
         initThemeSystem()
@@ -324,6 +336,7 @@
         initSmoothScroll()
         initScrollAnimations()
         initNavbarScroll()
+        updateCopyrightYear()
     }
 
     if (document.readyState === "loading") {
