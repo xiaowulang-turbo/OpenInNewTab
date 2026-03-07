@@ -20,10 +20,10 @@ const translations = {
             "Available as Chrome extension and Tampermonkey userscript for opening each link in new tab.",
         btnGetStarted: "Get Started",
         btnViewGithub: "View on GitHub",
-        badgeDarkMode: "✨ Dark Mode",
-        badgeI18n: "🌍 i18n Support",
-        badgeLightweight: "⚡ Lightweight",
-        badgeSecure: "🔒 Secure",
+        badgeDarkMode: "Dark Mode",
+        badgeI18n: "i18n Support",
+        badgeLightweight: "Lightweight",
+        badgeSecure: "Secure",
 
         // Features Section
         featuresTitle: "Powerful Features",
@@ -109,8 +109,8 @@ const translations = {
 
         // Installation Section
         installTitle: "Quick Installation",
-        tabUserscript: "🚀 Userscript",
-        tabExtension: "🌐 Extension",
+        tabUserscript: "Userscript",
+        tabExtension: "Extension",
 
         installUserscriptStep1Title: "Install Tampermonkey",
         installUserscriptStep1Desc1: "Install the",
@@ -139,7 +139,7 @@ const translations = {
         installExtensionStep3Desc: "Click the extension icon to manage your whitelist.",
         installExtensionStep4Title: "",
         installExtensionStep4Desc: "",
-        installExtensionNote: "💡 Tip:",
+        installExtensionNote: "Tip:",
         installExtensionNoteText: "The extension is now available for one-click installation from the Chrome Web Store.",
 
         // Screenshots Section
@@ -222,10 +222,10 @@ const translations = {
         heroSubtitle2: "提供 Chrome 扩展和 Tampermonkey 用户脚本两个版本。",
         btnGetStarted: "立即开始",
         btnViewGithub: "查看仓库",
-        badgeDarkMode: "✨ 深色模式",
-        badgeI18n: "🌍 国际化支持",
-        badgeLightweight: "⚡ 轻量级",
-        badgeSecure: "🔒 安全可靠",
+        badgeDarkMode: "深色模式",
+        badgeI18n: "国际化支持",
+        badgeLightweight: "轻量级",
+        badgeSecure: "安全可靠",
 
         // Features Section
         featuresTitle: "强大功能",
@@ -309,8 +309,8 @@ const translations = {
 
         // Installation Section
         installTitle: "快速安装",
-        tabUserscript: "🚀 用户脚本",
-        tabExtension: "🌐 扩展程序",
+        tabUserscript: "用户脚本",
+        tabExtension: "扩展程序",
 
         installUserscriptStep1Title: "安装 Tampermonkey",
         installUserscriptStep1Desc1: "安装",
@@ -331,14 +331,14 @@ const translations = {
         btnCopyFailed: "复制失败",
 
         installExtensionStep1Title: "访问应用商店",
-        installExtensionStep1Desc: "前往 Chrome 应用商店官方面页。",
+        installExtensionStep1Desc: "前往 Chrome 应用商店官方页面。",
         installExtensionStep2Title: "添加至 Chrome",
-        installExtensionStep2Desc: "点击“添加至 Chrome”即可完成一键安装。",
+        installExtensionStep2Desc: '点击"添加至 Chrome"即可完成一键安装。',
         installExtensionStep3Title: "开始使用",
         installExtensionStep3Desc: "点击浏览器右上角的扩展图标即可管理白名单。",
         installExtensionStep4Title: "",
         installExtensionStep4Desc: "",
-        installExtensionNote: "💡 提示：",
+        installExtensionNote: "提示：",
         installExtensionNoteText: "扩展程序现已正式上线 Chrome 应用商店，推荐使用一键安装。",
 
         // Screenshots Section
@@ -360,7 +360,7 @@ const translations = {
         btnViewDocs: "查看文档",
 
         // Footer
-        footerDesc: "智能链接 management 与白名单控制。提供扩展和用户脚本两个版本。",
+        footerDesc: "智能链接管理与白名单控制。提供扩展和用户脚本两个版本。",
         footerQuickLinks: "快速链接",
         footerGithubRepo: "GitHub 仓库",
         footerReportIssues: "报告问题",

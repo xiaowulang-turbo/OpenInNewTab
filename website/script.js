@@ -2,7 +2,6 @@
  * Open In New Tab - Website JavaScript
  * Interactive functionality for the landing page
  */
-// import { SpeedInsights } from "@vercel/speed-insights/next"
 ;(function () {
     "use strict"
 
@@ -17,11 +16,9 @@
             tab.addEventListener("click", () => {
                 const targetTab = tab.getAttribute("data-tab")
 
-                // Remove active class from all tabs and panels
                 tabs.forEach((t) => t.classList.remove("active"))
                 panels.forEach((p) => p.classList.remove("active"))
 
-                // Add active class to clicked tab and corresponding panel
                 tab.classList.add("active")
                 const targetPanel = document.getElementById(
                     `install-${targetTab}`
@@ -49,7 +46,6 @@
                         "https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js"
                 }
 
-                // Get current language for button text
                 const currentLang =
                     localStorage.getItem("user-language") ||
                     (navigator.language?.startsWith("zh") ? "zh" : "en")
@@ -59,7 +55,7 @@
                     await navigator.clipboard.writeText(textToCopy)
                     const originalText = button.textContent
                     button.textContent = t.btnCopied
-                    button.style.background = "#4caf50"
+                    button.style.background = "rgba(124, 58, 237, 0.3)"
 
                     setTimeout(() => {
                         button.textContent = originalText
@@ -85,8 +81,6 @@
         navLinks.forEach((link) => {
             link.addEventListener("click", (e) => {
                 const href = link.getAttribute("href")
-
-                // Skip if it's just "#"
                 if (href === "#") return
 
                 e.preventDefault()
@@ -105,7 +99,7 @@
     }
 
     /**
-     * Add scroll-based animation to feature cards
+     * Add scroll-based animation to cards and elements
      */
     function initScrollAnimations() {
         const observerOptions = {
@@ -127,8 +121,8 @@
         const featureCards = document.querySelectorAll(".feature-card")
         featureCards.forEach((card, index) => {
             card.style.opacity = "0"
-            card.style.transform = "translateY(30px)"
-            card.style.transition = `all 0.6s ease ${index * 0.1}s`
+            card.style.transform = "translateY(20px)"
+            card.style.transition = `opacity 0.5s ease ${index * 0.08}s, transform 0.5s ease ${index * 0.08}s`
             observer.observe(card)
         })
 
@@ -136,8 +130,8 @@
         const versionCards = document.querySelectorAll(".version-card")
         versionCards.forEach((card, index) => {
             card.style.opacity = "0"
-            card.style.transform = "translateY(30px)"
-            card.style.transition = `all 0.6s ease ${index * 0.2}s`
+            card.style.transform = "translateY(20px)"
+            card.style.transition = `opacity 0.5s ease ${index * 0.15}s, transform 0.5s ease ${index * 0.15}s`
             observer.observe(card)
         })
 
@@ -145,54 +139,52 @@
         const steps = document.querySelectorAll(".step")
         steps.forEach((step, index) => {
             step.style.opacity = "0"
-            step.style.transform = "translateX(-30px)"
-            step.style.transition = `all 0.6s ease ${index * 0.1}s`
+            step.style.transform = "translateY(15px)"
+            step.style.transition = `opacity 0.4s ease ${index * 0.1}s, transform 0.4s ease ${index * 0.1}s`
             observer.observe(step)
+        })
+
+        // Observe screenshot cards
+        const screenshotCards = document.querySelectorAll(".screenshot-card")
+        screenshotCards.forEach((card, index) => {
+            card.style.opacity = "0"
+            card.style.transform = "translateY(20px)"
+            card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`
+            observer.observe(card)
         })
     }
 
     /**
-     * Add navbar background on scroll
+     * Navbar scroll effect - border brightness changes
      */
     function initNavbarScroll() {
         const nav = document.querySelector(".nav")
-        let lastScroll = 0
 
         window.addEventListener("scroll", () => {
             const currentScroll = window.pageYOffset
 
-            if (currentScroll > 100) {
-                nav.style.boxShadow = "0 2px 10px rgba(0,0,0,0.1)"
+            if (currentScroll > 50) {
+                nav.style.borderBottomColor = "var(--color-border-hover)"
             } else {
-                nav.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)"
+                nav.style.borderBottomColor = "var(--color-border)"
             }
-
-            lastScroll = currentScroll
         })
     }
 
     /**
-     * Language Management System
+     * Language Management System (Single Button)
      */
     function initLanguageSystem() {
         const LANG_STORAGE_KEY = "user-language"
-        const dropdownBtn = document.getElementById("langDropdownBtn")
-        const dropdownMenu = document.getElementById("langDropdownMenu")
-        const langCurrent = document.getElementById("langCurrent")
-        const langOptions = document.querySelectorAll(".lang-option")
+        const langToggle = document.getElementById("langToggle")
+        const langIcon = langToggle?.querySelector(".lang-icon")
 
-        /**
-         * Get user's language preference
-         * Priority: localStorage > browser language > English (default)
-         */
         function getUserLanguage() {
-            // Check localStorage first
             const savedLang = localStorage.getItem(LANG_STORAGE_KEY)
             if (savedLang && (savedLang === "en" || savedLang === "zh")) {
                 return savedLang
             }
 
-            // Check browser language
             const browserLang = navigator.language || navigator.userLanguage
             if (browserLang.startsWith("zh")) {
                 return "zh"
@@ -200,32 +192,18 @@
             return "en"
         }
 
-        /**
-         * Toggle dropdown menu
-         */
-        function toggleDropdown() {
-            dropdownMenu.classList.toggle("show")
-            dropdownBtn.classList.toggle("active")
+        function updateIcon(lang) {
+            if (langIcon) {
+                langIcon.textContent = lang === "en" ? "中文" : "EN"
+            }
         }
 
-        /**
-         * Close dropdown menu
-         */
-        function closeDropdown() {
-            dropdownMenu.classList.remove("show")
-            dropdownBtn.classList.remove("active")
-        }
-
-        /**
-         * Apply language to all elements with data-i18n attribute
-         */
         function applyLanguage(lang) {
             if (!translations || !translations[lang]) {
                 console.error(`Language "${lang}" not found in translations`)
                 return
             }
 
-            // Update all elements with data-i18n attribute
             const elements = document.querySelectorAll("[data-i18n]")
             elements.forEach((element) => {
                 const key = element.getAttribute("data-i18n")
@@ -234,41 +212,20 @@
                 }
             })
 
-            // Handle special cases with complex HTML structures
             updateComplexElements(lang)
-
-            // Update current language display
-            langCurrent.textContent = lang === "zh" ? "中文" : "EN"
-
-            // Update active state of language options
-            langOptions.forEach((option) => {
-                if (option.getAttribute("data-lang") === lang) {
-                    option.classList.add("active")
-                } else {
-                    option.classList.remove("active")
-                }
-            })
-
-            // Update HTML lang attribute
+            updateIcon(lang)
             document.documentElement.setAttribute("lang", lang)
-
-            console.log(`🌍 Language switched to: ${lang}`)
         }
 
-        /**
-         * Update elements with complex HTML structures
-         */
         function updateComplexElements(lang) {
             const t = translations[lang]
 
-            // Update Greasy Fork link based on language
             const greasyforkLink = document.getElementById("greasyforkLink")
             if (greasyforkLink) {
                 const langPrefix = lang === "zh" ? "zh-CN" : "en"
                 greasyforkLink.href = `https://greasyfork.org/${langPrefix}/scripts/551033-open-in-new-tab`
             }
 
-            // Update copy button text if needed
             const copyButtons = document.querySelectorAll(".copy-btn")
             copyButtons.forEach((btn) => {
                 if (
@@ -279,7 +236,6 @@
                 }
             })
 
-            // Update code header
             const codeHeaders = document.querySelectorAll(".code-header span")
             codeHeaders.forEach((span) => {
                 if (
@@ -289,136 +245,72 @@
                     span.textContent = t.installUserscriptDownload
                 }
             })
-
-            // Update install note (handled by data-i18n attributes)
-            // No need for manual updates as the note now uses data-i18n
         }
 
-        /**
-         * Handle language switch
-         */
-        function handleLanguageSwitch(lang) {
-            // Apply language
-            applyLanguage(lang)
-
-            // Save to localStorage
-            localStorage.setItem(LANG_STORAGE_KEY, lang)
-
-            // Close dropdown
-            closeDropdown()
+        function toggleLanguage() {
+            const currentLang = document.documentElement.getAttribute("lang")
+            const newLang = currentLang === "en" ? "zh" : "en"
+            applyLanguage(newLang)
+            localStorage.setItem(LANG_STORAGE_KEY, newLang)
         }
 
-        // Initialize language on page load
         const initialLang = getUserLanguage()
         applyLanguage(initialLang)
 
-        // Toggle dropdown when button is clicked
-        dropdownBtn.addEventListener("click", (e) => {
-            e.stopPropagation()
-            toggleDropdown()
-        })
-
-        // Add click event listeners to language options
-        langOptions.forEach((option) => {
-            option.addEventListener("click", (e) => {
-                e.stopPropagation()
-                const lang = option.getAttribute("data-lang")
-                handleLanguageSwitch(lang)
-            })
-        })
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", (e) => {
-            if (
-                !dropdownBtn.contains(e.target) &&
-                !dropdownMenu.contains(e.target)
-            ) {
-                closeDropdown()
-            }
-        })
-
-        // Close dropdown on escape key
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                closeDropdown()
-            }
-        })
-
-        console.log(`🌍 Language initialized: ${initialLang}`)
+        if (langToggle) {
+            langToggle.addEventListener("click", toggleLanguage)
+        }
     }
 
     /**
-     * Theme Management System
+     * Theme Management System (Single Icon)
      */
     function initThemeSystem() {
         const STORAGE_KEY = "user-theme"
         const themeToggle = document.getElementById("themeToggle")
+        const themeIcon = themeToggle?.querySelector(".theme-icon")
 
-        /**
-         * Get user's theme preference
-         * Priority: localStorage > system preference > light (default)
-         */
         function getUserTheme() {
-            // Check localStorage first
             const savedTheme = localStorage.getItem(STORAGE_KEY)
-            if (savedTheme) {
+            if (savedTheme && (savedTheme === "dark" || savedTheme === "light")) {
                 return savedTheme
             }
-
-            // Check system preference
-            const prefersDark = window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches
-            return prefersDark ? "dark" : "light"
+            return "dark" // Default to dark
         }
 
-        /**
-         * Apply theme to document
-         */
+        function updateIcon(theme) {
+            if (themeIcon) {
+                themeIcon.textContent = theme === "dark" ? "☀️" : "🌙"
+            }
+        }
+
         function applyTheme(theme) {
             document.documentElement.setAttribute("data-theme", theme)
-
-            // Update checkbox state
-            themeToggle.checked = theme === "dark"
+            updateIcon(theme)
         }
 
-        /**
-         * Handle theme toggle
-         */
-        function handleThemeChange() {
-            const newTheme = themeToggle.checked ? "dark" : "light"
-
-            // Apply new theme
-            document.documentElement.setAttribute("data-theme", newTheme)
-
-            // Save to localStorage
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute("data-theme")
+            const newTheme = currentTheme === "dark" ? "light" : "dark"
+            applyTheme(newTheme)
             localStorage.setItem(STORAGE_KEY, newTheme)
-
-            console.log(`🎨 Theme switched to: ${newTheme} mode`)
         }
 
-        // Initialize theme on page load
         const initialTheme = getUserTheme()
         applyTheme(initialTheme)
 
-        // Add change event listener for checkbox
-        themeToggle.addEventListener("change", handleThemeChange)
+        if (themeToggle) {
+            themeToggle.addEventListener("click", toggleTheme)
+        }
 
-        // Listen for system theme changes (only if user hasn't manually set theme)
         window
             .matchMedia("(prefers-color-scheme: dark)")
             .addEventListener("change", (e) => {
-                // Only auto-switch if no manual preference saved
                 if (!localStorage.getItem(STORAGE_KEY)) {
                     const newTheme = e.matches ? "dark" : "light"
                     applyTheme(newTheme)
-                    console.log(
-                        `🎨 System theme changed to: ${newTheme} mode (auto)`
-                    )
                 }
             })
-
-        console.log(`🎨 Theme initialized: ${initialTheme} mode`)
     }
 
     /**
@@ -432,11 +324,8 @@
         initSmoothScroll()
         initScrollAnimations()
         initNavbarScroll()
-
-        console.log("🚀 Open In New Tab website loaded successfully!")
     }
 
-    // Initialize when DOM is ready
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initialize)
     } else {

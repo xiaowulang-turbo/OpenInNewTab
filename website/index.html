@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,115 +9,86 @@
         />
         <title>Open In New Tab - Smart Link Management</title>
         <link rel="icon" href="icon16.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;700&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="styles.css" />
         <script src="i18n.js"></script>
     </head>
     <body>
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <img
+                        class="logo-icon"
+                        src="icon24.png"
+                        alt="Open In New Tab"
+                        onerror="this.style.display='none'"
+                    />
+                    <span class="logo-text">Open In New Tab</span>
+                </div>
+                <ul class="nav-links">
+                    <li>
+                        <a href="#features" data-i18n="navFeatures">Features</a>
+                    </li>
+                    <li>
+                        <a href="#versions" data-i18n="navVersions">Versions</a>
+                    </li>
+                    <li>
+                        <a href="#install" data-i18n="navInstall">Installation</a>
+                    </li>
+                    <li>
+                        <button class="lang-toggle" id="langToggle" title="Switch language">
+                            <span class="lang-icon">EN</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                            <span class="theme-icon">☀️</span>
+                        </button>
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/xiaowulang-turbo/OpenInNewTab"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn-github"
+                        >
+                            <span class="github-icon">
+                                <svg viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                                </svg>
+                            </span>
+                            GitHub
+                        </a>
+                    </li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
         <!-- Hero Section -->
         <header class="hero">
-            <nav class="nav">
-                <div class="nav-container">
-                    <div class="logo">
-                        <img
-                            class="logo-icon"
-                            src="icon24.png"
-                            alt="Open In New Tab"
-                        />
-                        <span class="logo-text">Open In New Tab</span>
-                    </div>
-                    <ul class="nav-links">
-                        <li>
-                            <a href="#features" data-i18n="navFeatures"
-                                >Features</a
-                            >
-                        </li>
-                        <li>
-                            <a href="#versions" data-i18n="navVersions"
-                                >Versions</a
-                            >
-                        </li>
-                        <li>
-                            <a href="#install" data-i18n="navInstall"
-                                >Installation</a
-                            >
-                        </li>
-                        <li>
-                            <div class="lang-selector">
-                                <button
-                                    class="lang-dropdown-btn"
-                                    id="langDropdownBtn"
-                                >
-                                    <span class="lang-icon">🌐</span>
-                                    <span class="lang-current" id="langCurrent"
-                                        >EN</span
-                                    >
-                                    <span class="dropdown-arrow">▼</span>
-                                </button>
-                                <div
-                                    class="lang-dropdown-menu"
-                                    id="langDropdownMenu"
-                                >
-                                    <button class="lang-option" data-lang="en">
-                                        <span class="lang-flag">🇺🇸</span>
-                                        <span>English</span>
-                                    </button>
-                                    <button class="lang-option" data-lang="zh">
-                                        <span class="lang-flag">🇨🇳</span>
-                                        <span>中文</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="theme-toggle-wrapper">
-                                <label
-                                    class="theme-switch"
-                                    title="Toggle dark/light theme"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id="themeToggle"
-                                        aria-label="Toggle theme"
-                                    />
-                                    <span class="theme-slider"></span>
-                                    <span class="theme-icon moon">🌙</span>
-                                    <span class="theme-icon sun">☀️</span>
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <a
-                                href="https://github.com/xiaowulang-turbo/OpenInNewTab"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="btn-github"
-                            >
-                                <span class="github-icon">⭐</span>
-                                GitHub
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
             <div class="hero-content">
                 <h1 class="hero-title">
                     <span data-i18n="heroTitle">Smart Link Management</span>
                     <br />
-                    <span class="gradient-text" data-i18n="heroTitleHighlight"
-                        >Your Way</span
-                    >
+                    <span class="gradient-text" data-i18n="heroTitleHighlight">Your Way</span>
                 </h1>
                 <p class="hero-subtitle">
-                    <span data-i18n="heroSubtitle"
-                        >Force all links to open in new tabs with intelligent
-                        whitelist control.</span
-                    >
+                    <span data-i18n="heroSubtitle">Force all links to open in new tabs with intelligent whitelist control.</span>
                     <br />
-                    <span data-i18n="heroSubtitle2"
-                        >Available as Chrome extension and Tampermonkey
-                        userscript.</span
-                    >
+                    <span data-i18n="heroSubtitle2">Available as Chrome extension and Tampermonkey userscript.</span>
                 </p>
                 <div class="hero-buttons">
                     <a href="#install" class="btn btn-primary">
@@ -131,20 +102,14 @@
                         class="btn btn-secondary"
                     >
                         <span data-i18n="btnViewGithub">View on GitHub</span>
-                        <span class="github-icon">↗</span>
+                        <span class="btn-arrow">↗</span>
                     </a>
                 </div>
                 <div class="hero-badges">
-                    <span class="badge" data-i18n="badgeDarkMode"
-                        >✨ Dark Mode</span
-                    >
-                    <span class="badge" data-i18n="badgeI18n"
-                        >🌍 i18n Support</span
-                    >
-                    <span class="badge" data-i18n="badgeLightweight"
-                        >⚡ Lightweight</span
-                    >
-                    <span class="badge" data-i18n="badgeSecure">🔒 Secure</span>
+                    <span class="badge" data-i18n="badgeDarkMode">Dark Mode</span>
+                    <span class="badge" data-i18n="badgeI18n">i18n Support</span>
+                    <span class="badge" data-i18n="badgeLightweight">Lightweight</span>
+                    <span class="badge" data-i18n="badgeSecure">Secure</span>
                 </div>
             </div>
         </header>
@@ -152,72 +117,83 @@
         <!-- Features Section -->
         <section id="features" class="section features">
             <div class="container">
-                <h2 class="section-title" data-i18n="featuresTitle">
-                    Powerful Features
-                </h2>
-                <p class="section-subtitle" data-i18n="featuresSubtitle">
-                    Everything you need for smart link management
-                </p>
+                <h2 class="section-title" data-i18n="featuresTitle">Powerful Features</h2>
+                <p class="section-subtitle" data-i18n="featuresSubtitle">Everything you need for smart link management</p>
 
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">📋</div>
-                        <h3 data-i18n="featureWhitelistTitle">
-                            Whitelist Mode
-                        </h3>
-                        <p data-i18n="featureWhitelistDesc">
-                            Only applies to specified domains for better control
-                            and performance. You decide which sites to enhance.
-                        </p>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                                <rect x="9" y="3" width="6" height="4" rx="2"/>
+                                <path d="M9 14l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="featureWhitelistTitle">Whitelist Mode</h3>
+                        <p data-i18n="featureWhitelistDesc">Only applies to specified domains for better control and performance. You decide which sites to enhance.</p>
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                        </div>
                         <h3 data-i18n="featureDynamicTitle">Dynamic Content</h3>
-                        <p data-i18n="featureDynamicDesc">
-                            Handles both existing and dynamically added links
-                            using MutationObserver for real-time updates.
-                        </p>
+                        <p data-i18n="featureDynamicDesc">Handles both existing and dynamically added links using MutationObserver for real-time updates.</p>
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0110 0v4"/>
+                                <circle cx="12" cy="16" r="1"/>
+                            </svg>
+                        </div>
                         <h3 data-i18n="featureSecurityTitle">Security First</h3>
-                        <p data-i18n="featureSecurityDesc">
-                            Adds rel="noopener noreferrer" to prevent security
-                            issues. Your browsing stays safe.
-                        </p>
+                        <p data-i18n="featureSecurityDesc">Adds rel="noopener noreferrer" to prevent security issues. Your browsing stays safe.</p>
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">🎨</div>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <circle cx="12" cy="12" r="5"/>
+                                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                            </svg>
+                        </div>
                         <h3 data-i18n="featureDarkModeTitle">Dark Mode</h3>
-                        <p data-i18n="featureDarkModeDesc">
-                            Automatically adapts to system dark/light mode
-                            preferences with smooth transitions.
-                        </p>
+                        <p data-i18n="featureDarkModeDesc">Automatically adapts to system dark/light mode preferences with smooth transitions.</p>
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">🌍</div>
-                        <h3 data-i18n="featureI18nTitle">
-                            Internationalization
-                        </h3>
-                        <p data-i18n="featureI18nDesc">
-                            Auto language detection (English/Chinese) based on
-                            browser settings. More languages coming soon.
-                        </p>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="featureI18nTitle">Internationalization</h3>
+                        <p data-i18n="featureI18nDesc">Auto language detection (English/Chinese) based on browser settings. More languages coming soon.</p>
                     </div>
 
                     <div class="feature-card">
-                        <div class="feature-icon">💾</div>
-                        <h3 data-i18n="featureStorageTitle">
-                            Persistent Storage
-                        </h3>
-                        <p data-i18n="featureStorageDesc">
-                            Your whitelist preferences are saved and synced
-                            across devices automatically.
-                        </p>
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="url(#grad6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <defs><linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#a855f7"/><stop offset="100%" style="stop-color:#3b82f6"/></linearGradient></defs>
+                                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                                <polyline points="17 21 17 13 7 13 7 21"/>
+                                <polyline points="7 3 7 8 15 8"/>
+                            </svg>
+                        </div>
+                        <h3 data-i18n="featureStorageTitle">Persistent Storage</h3>
+                        <p data-i18n="featureStorageDesc">Your whitelist preferences are saved and synced across devices automatically.</p>
                     </div>
                 </div>
             </div>
@@ -226,84 +202,54 @@
         <!-- Versions Section -->
         <section id="versions" class="section versions">
             <div class="container">
-                <h2 class="section-title" data-i18n="versionsTitle">
-                    Choose Your Version
-                </h2>
-                <p class="section-subtitle" data-i18n="versionsSubtitle">
-                    Two implementations, same great features
-                </p>
+                <h2 class="section-title" data-i18n="versionsTitle">Choose Your Version</h2>
+                <p class="section-subtitle" data-i18n="versionsSubtitle">Two implementations, same great features</p>
 
                 <div class="versions-grid">
                     <div class="version-card version-card-featured">
-                        <div
-                            class="featured-badge"
-                            data-i18n="badgeRecommended"
-                        >
-                            Recommended
-                        </div>
+                        <div class="featured-badge" data-i18n="badgeRecommended">Recommended</div>
                         <div class="version-header">
-                            <div class="version-icon">🌐</div>
-                            <h3 data-i18n="versionExtensionTitle">
-                                Chrome Extension
-                            </h3>
-                            <span class="version-badge version-badge-primary"
-                                >Manifest V3</span
-                            >
+                            <div class="version-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="2" y1="12" x2="22" y2="12"/>
+                                    <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="versionExtensionTitle">Chrome Extension</h3>
+                            <span class="version-badge version-badge-primary">Manifest V3</span>
                         </div>
-                        <p
-                            class="version-description"
-                            data-i18n="versionExtensionDesc"
-                        >
-                            Native Chrome extension with better performance and
-                            seamless browser integration.
-                        </p>
+                        <p class="version-description" data-i18n="versionExtensionDesc">Native Chrome extension with better performance and seamless browser integration.</p>
 
                         <div class="version-features">
-                            <h4 data-i18n="versionExtensionFeatures">
-                                Features:
-                            </h4>
+                            <h4 data-i18n="versionExtensionFeatures">Features:</h4>
                             <ul>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionExtensionFeature1"
-                                        >Modern popup interface</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionExtensionFeature1">Modern popup interface</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionExtensionFeature2"
-                                        >Quick add current domain</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionExtensionFeature2">Quick add current domain</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionExtensionFeature3"
-                                        >chrome.storage sync</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionExtensionFeature3">chrome.storage sync</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionExtensionFeature4"
-                                        >Auto-updates (Web Store)</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionExtensionFeature4">Auto-updates (Web Store)</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionExtensionFeature5"
-                                        >Better performance</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionExtensionFeature5">Better performance</span>
                                 </li>
                             </ul>
                         </div>
 
                         <div class="version-best-for">
-                            <strong data-i18n="versionExtensionBestFor"
-                                >Best for:</strong
-                            >
-                            <span data-i18n="versionExtensionBestForText"
-                                >Production use, end users, Web Store
-                                distribution</span
-                            >
+                            <strong data-i18n="versionExtensionBestFor">Best for:</strong>
+                            <span data-i18n="versionExtensionBestForText">Production use, end users, Web Store distribution</span>
                         </div>
 
                         <a
@@ -319,65 +265,48 @@
 
                     <div class="version-card">
                         <div class="version-header">
-                            <div class="version-icon">🚀</div>
-                            <h3 data-i18n="versionUserscriptTitle">
-                                Userscript Version
-                            </h3>
+                            <div class="version-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/>
+                                    <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/>
+                                    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                                    <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="versionUserscriptTitle">Userscript Version</h3>
                             <span class="version-badge">Tampermonkey</span>
                         </div>
-                        <p
-                            class="version-description"
-                            data-i18n="versionUserscriptDesc"
-                        >
-                            Perfect for quick testing, development, or users who
-                            prefer Tampermonkey/Greasemonkey.
-                        </p>
+                        <p class="version-description" data-i18n="versionUserscriptDesc">Perfect for quick testing, development, or users who prefer Tampermonkey/Greasemonkey.</p>
 
                         <div class="version-features">
-                            <h4 data-i18n="versionUserscriptFeatures">
-                                Features:
-                            </h4>
+                            <h4 data-i18n="versionUserscriptFeatures">Features:</h4>
                             <ul>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature1"
-                                        >Menu-based management</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionUserscriptFeature1">Menu-based management</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature2"
-                                        >GM_* APIs for storage</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionUserscriptFeature2">GM_* APIs for storage</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature3"
-                                        >Modal interface</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionUserscriptFeature3">Modal interface</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature4"
-                                        >Cross-browser support</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionUserscriptFeature4">Cross-browser support</span>
                                 </li>
                                 <li>
-                                    ✓
-                                    <span data-i18n="versionUserscriptFeature5"
-                                        >Easy to customize</span
-                                    >
+                                    <span class="check-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-6" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                                    <span data-i18n="versionUserscriptFeature5">Easy to customize</span>
                                 </li>
                             </ul>
                         </div>
 
                         <div class="version-best-for">
-                            <strong data-i18n="versionUserscriptBestFor"
-                                >Best for:</strong
-                            >
-                            <span data-i18n="versionUserscriptBestForText"
-                                >Developers, power users, quick testing</span
-                            >
+                            <strong data-i18n="versionUserscriptBestFor">Best for:</strong>
+                            <span data-i18n="versionUserscriptBestForText">Developers, power users, quick testing</span>
                         </div>
 
                         <a
@@ -396,80 +325,50 @@
                         <thead>
                             <tr>
                                 <th data-i18n="comparisonFeature">Feature</th>
-                                <th data-i18n="comparisonUserscript">
-                                    Userscript
-                                </th>
-                                <th data-i18n="comparisonExtension">
-                                    Extension
-                                </th>
+                                <th data-i18n="comparisonUserscript">Userscript</th>
+                                <th data-i18n="comparisonExtension">Extension</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td data-i18n="comparisonLinkManagement">
-                                    Link Management
-                                </td>
+                                <td data-i18n="comparisonLinkManagement">Link Management</td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td data-i18n="comparisonWhitelist">
-                                    Whitelist Control
-                                </td>
+                                <td data-i18n="comparisonWhitelist">Whitelist Control</td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td data-i18n="comparisonDarkMode">
-                                    Dark Mode
-                                </td>
+                                <td data-i18n="comparisonDarkMode">Dark Mode</td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td data-i18n="comparisonI18n">
-                                    Internationalization
-                                </td>
+                                <td data-i18n="comparisonI18n">Internationalization</td>
                                 <td>✓</td>
                                 <td>✓</td>
                             </tr>
                             <tr>
-                                <td data-i18n="comparisonInstallation">
-                                    Installation
-                                </td>
-                                <td data-i18n="comparisonInstallManual">
-                                    Manual Script
-                                </td>
-                                <td data-i18n="comparisonInstallOneClick">
-                                    One-Click
-                                </td>
+                                <td data-i18n="comparisonInstallation">Installation</td>
+                                <td data-i18n="comparisonInstallManual">Manual Script</td>
+                                <td data-i18n="comparisonInstallOneClick">One-Click</td>
                             </tr>
                             <tr>
                                 <td data-i18n="comparisonUpdates">Updates</td>
-                                <td data-i18n="comparisonUpdatesManual">
-                                    Manual
-                                </td>
-                                <td data-i18n="comparisonUpdatesAuto">
-                                    Automatic
-                                </td>
+                                <td data-i18n="comparisonUpdatesManual">Manual</td>
+                                <td data-i18n="comparisonUpdatesAuto">Automatic</td>
                             </tr>
                             <tr>
                                 <td data-i18n="comparisonUIType">UI Type</td>
-                                <td data-i18n="comparisonUIMenu">
-                                    Menu Commands
-                                </td>
-                                <td data-i18n="comparisonUIPopup">
-                                    Popup Interface
-                                </td>
+                                <td data-i18n="comparisonUIMenu">Menu Commands</td>
+                                <td data-i18n="comparisonUIPopup">Popup Interface</td>
                             </tr>
                             <tr>
-                                <td data-i18n="comparisonDistribution">
-                                    Distribution
-                                </td>
+                                <td data-i18n="comparisonDistribution">Distribution</td>
                                 <td data-i18n="comparisonDistGithub">GitHub</td>
-                                <td data-i18n="comparisonDistWebStore">
-                                    Chrome Web Store
-                                </td>
+                                <td data-i18n="comparisonDistWebStore">Chrome Web Store</td>
                             </tr>
                         </tbody>
                     </table>
@@ -480,9 +379,7 @@
         <!-- Installation Section -->
         <section id="install" class="section installation">
             <div class="container">
-                <h2 class="section-title" data-i18n="installTitle">
-                    Quick Installation
-                </h2>
+                <h2 class="section-title" data-i18n="installTitle">Quick Installation</h2>
 
                 <div class="install-tabs">
                     <button
@@ -490,14 +387,14 @@
                         data-tab="extension"
                         data-i18n="tabExtension"
                     >
-                        🌐 Extension
+                        Extension
                     </button>
                     <button
                         class="install-tab"
                         data-tab="userscript"
                         data-i18n="tabUserscript"
                     >
-                        🚀 Userscript
+                        Userscript
                     </button>
                 </div>
 
@@ -507,21 +404,15 @@
                             <div class="step">
                                 <div class="step-number">1</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep1Title">
-                                        Visit Web Store
-                                    </h3>
-                                    <p data-i18n="installExtensionStep1Desc">
-                                        Go to the official Chrome Web Store page.
-                                    </p>
+                                    <h3 data-i18n="installExtensionStep1Title">Visit Web Store</h3>
+                                    <p data-i18n="installExtensionStep1Desc">Go to the official Chrome Web Store page.</p>
                                     <div style="margin-top: 12px;">
                                         <a
                                             href="https://chromewebstore.google.com/detail/open-in-new-tab/dncofijfkmdpjpidepjjicpmojdecgoo"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             class="btn btn-primary"
-                                            style="display: inline-flex; align-items: center; gap: 8px;"
                                         >
-                                            🌐
                                             <span data-i18n="btnInstallExtension">Install Extension</span>
                                         </a>
                                     </div>
@@ -531,35 +422,23 @@
                             <div class="step">
                                 <div class="step-number">2</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep2Title">
-                                        Add to Chrome
-                                    </h3>
-                                    <p data-i18n="installExtensionStep2Desc">
-                                        Click 'Add to Chrome' to install instantly.
-                                    </p>
+                                    <h3 data-i18n="installExtensionStep2Title">Add to Chrome</h3>
+                                    <p data-i18n="installExtensionStep2Desc">Click 'Add to Chrome' to install instantly.</p>
                                 </div>
                             </div>
 
                             <div class="step">
                                 <div class="step-number">3</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installExtensionStep3Title">
-                                        Start Using
-                                    </h3>
-                                    <p data-i18n="installExtensionStep3Desc">
-                                        Click the extension icon to manage your whitelist.
-                                    </p>
+                                    <h3 data-i18n="installExtensionStep3Title">Start Using</h3>
+                                    <p data-i18n="installExtensionStep3Desc">Click the extension icon to manage your whitelist.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="install-note">
-                            <strong data-i18n="installExtensionNote"
-                                >💡 Tip:</strong
-                            >
-                            <span data-i18n="installExtensionNoteText"
-                                >The extension is now available for one-click installation from the Chrome Web Store.</span
-                            >
+                            <strong data-i18n="installExtensionNote">Tip:</strong>
+                            <span data-i18n="installExtensionNoteText">The extension is now available for one-click installation from the Chrome Web Store.</span>
                         </div>
                     </div>
 
@@ -569,25 +448,15 @@
                             <div class="step">
                                 <div class="step-number">1</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installUserscriptStep1Title">
-                                        Install Tampermonkey
-                                    </h3>
+                                    <h3 data-i18n="installUserscriptStep1Title">Install Tampermonkey</h3>
                                     <p>
-                                        <span
-                                            data-i18n="installUserscriptStep1Desc1"
-                                            >Install the</span
-                                        >
+                                        <span data-i18n="installUserscriptStep1Desc1">Install the</span>
                                         <a
                                             href="https://www.tampermonkey.net/"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            >Tampermonkey</a
-                                        >
-                                        <span
-                                            data-i18n="installUserscriptStep1Desc2"
-                                            >browser extension from your
-                                            browser's extension store.</span
-                                        >
+                                        >Tampermonkey</a>
+                                        <span data-i18n="installUserscriptStep1Desc2">browser extension from your browser's extension store.</span>
                                     </p>
                                 </div>
                             </div>
@@ -595,56 +464,26 @@
                             <div class="step">
                                 <div class="step-number">2</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installUserscriptStep2Title">
-                                        One-Click Install
-                                    </h3>
-                                    <p data-i18n="installUserscriptStep2Desc">
-                                        Click the install button below to go to
-                                        Greasy Fork and install the script with
-                                        one click.
-                                    </p>
-                                    <div
-                                        style="
-                                            margin-top: 12px;
-                                            display: flex;
-                                            gap: 12px;
-                                            flex-wrap: wrap;
-                                        "
-                                    >
+                                    <h3 data-i18n="installUserscriptStep2Title">One-Click Install</h3>
+                                    <p data-i18n="installUserscriptStep2Desc">Click the install button below to go to Greasy Fork and install the script with one click.</p>
+                                    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
                                         <a
                                             id="greasyforkLink"
                                             href="https://greasyfork.org/en/scripts/551033-open-in-new-tab"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             class="btn btn-primary"
-                                            style="
-                                                display: inline-flex;
-                                                align-items: center;
-                                                gap: 8px;
-                                            "
                                         >
-                                            🌐
-                                            <span
-                                                data-i18n="installUserscriptBtnGreasyFork"
-                                                >Install from Greasy Fork</span
-                                            >
+                                            <span data-i18n="installUserscriptBtnGreasyFork">Install from Greasy Fork</span>
+                                            <span class="btn-arrow">→</span>
                                         </a>
                                         <a
                                             href="https://github.com/xiaowulang-turbo/OpenInNewTab/raw/main/userscript/OpenInNewTab.user.js"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             class="btn btn-outline"
-                                            style="
-                                                display: inline-flex;
-                                                align-items: center;
-                                                gap: 8px;
-                                            "
                                         >
-                                            📦
-                                            <span
-                                                data-i18n="installUserscriptBtnDirect"
-                                                >Direct Install</span
-                                            >
+                                            <span data-i18n="installUserscriptBtnDirect">Direct Install</span>
                                         </a>
                                     </div>
                                 </div>
@@ -653,36 +492,18 @@
                             <div class="step">
                                 <div class="step-number">3</div>
                                 <div class="step-content">
-                                    <h3 data-i18n="installUserscriptStep3Title">
-                                        Start Using
-                                    </h3>
-                                    <p data-i18n="installUserscriptStep3Desc">
-                                        Navigate to any website, open
-                                        Tampermonkey menu to add domains to
-                                        whitelist.
-                                    </p>
+                                    <h3 data-i18n="installUserscriptStep3Title">Start Using</h3>
+                                    <p data-i18n="installUserscriptStep3Desc">Navigate to any website, open Tampermonkey menu to add domains to whitelist.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="code-block">
                             <div class="code-header">
-                                <span data-i18n="installUserscriptAlternative"
-                                    >Alternative: Manual Installation</span
-                                >
+                                <span data-i18n="installUserscriptAlternative">Alternative: Manual Installation</span>
                             </div>
-                            <div
-                                style="
-                                    padding: 16px;
-                                    font-size: 14px;
-                                    line-height: 1.6;
-                                "
-                            >
-                                <p data-i18n="installUserscriptManualDesc">
-                                    If you prefer manual installation, download
-                                    the script from GitHub and install it
-                                    manually in Tampermonkey.
-                                </p>
+                            <div style="padding: 1rem; font-size: 0.875rem; line-height: 1.6;">
+                                <p data-i18n="installUserscriptManualDesc">If you prefer manual installation, download the script from GitHub and install it manually in Tampermonkey.</p>
                             </div>
                         </div>
                     </div>
@@ -693,72 +514,60 @@
         <!-- Screenshots Section -->
         <section class="section screenshots">
             <div class="container">
-                <h2 class="section-title" data-i18n="screenshotsTitle">
-                    Beautiful Interface
-                </h2>
-                <p class="section-subtitle" data-i18n="screenshotsSubtitle">
-                    Modern UI with dark mode support
-                </p>
+                <h2 class="section-title" data-i18n="screenshotsTitle">Beautiful Interface</h2>
+                <p class="section-subtitle" data-i18n="screenshotsSubtitle">Modern UI with dark mode support</p>
 
                 <div class="screenshots-grid">
                     <div class="screenshot-card">
                         <div class="screenshot-placeholder">
                             <div class="placeholder-content">
-                                <div class="placeholder-icon">🎨</div>
-                                <p data-i18n="screenshotExtensionPopup">
-                                    Extension Popup
-                                </p>
-                                <small data-i18n="screenshotQuickAdd"
-                                    >Quick add current domain</small
-                                >
+                                <div class="placeholder-icon">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="4"/>
+                                        <line x1="8" y1="9" x2="16" y2="9"/>
+                                        <line x1="8" y1="13" x2="14" y2="13"/>
+                                        <circle cx="17" cy="16" r="2" fill="#a855f7" stroke="none"/>
+                                    </svg>
+                                </div>
+                                <p data-i18n="screenshotExtensionPopup">Extension Popup</p>
+                                <small data-i18n="screenshotQuickAdd">Quick add current domain</small>
                             </div>
                         </div>
-                        <p
-                            class="screenshot-caption"
-                            data-i18n="screenshotCaptionLight"
-                        >
-                            Chrome Extension - Light Mode
-                        </p>
+                        <p class="screenshot-caption" data-i18n="screenshotCaptionLight">Chrome Extension - Light Mode</p>
                     </div>
 
                     <div class="screenshot-card">
                         <div class="screenshot-placeholder screenshot-dark">
                             <div class="placeholder-content">
-                                <div class="placeholder-icon">🌙</div>
-                                <p data-i18n="screenshotExtensionPopup">
-                                    Extension Popup
-                                </p>
-                                <small data-i18n="screenshotDarkMode"
-                                    >Dark mode enabled</small
-                                >
+                                <div class="placeholder-icon">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                                    </svg>
+                                </div>
+                                <p data-i18n="screenshotExtensionPopup">Extension Popup</p>
+                                <small data-i18n="screenshotDarkMode">Dark mode enabled</small>
                             </div>
                         </div>
-                        <p
-                            class="screenshot-caption"
-                            data-i18n="screenshotCaptionDark"
-                        >
-                            Chrome Extension - Dark Mode
-                        </p>
+                        <p class="screenshot-caption" data-i18n="screenshotCaptionDark">Chrome Extension - Dark Mode</p>
                     </div>
 
                     <div class="screenshot-card">
                         <div class="screenshot-placeholder">
                             <div class="placeholder-content">
-                                <div class="placeholder-icon">📝</div>
-                                <p data-i18n="screenshotWhitelistManager">
-                                    Whitelist Manager
-                                </p>
-                                <small data-i18n="screenshotModalInterface"
-                                    >Userscript modal interface</small
-                                >
+                                <div class="placeholder-icon">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                        <line x1="16" y1="13" x2="8" y2="13"/>
+                                        <line x1="16" y1="17" x2="8" y2="17"/>
+                                        <polyline points="10 9 9 9 8 9"/>
+                                    </svg>
+                                </div>
+                                <p data-i18n="screenshotWhitelistManager">Whitelist Manager</p>
+                                <small data-i18n="screenshotModalInterface">Userscript modal interface</small>
                             </div>
                         </div>
-                        <p
-                            class="screenshot-caption"
-                            data-i18n="screenshotCaptionUserscript"
-                        >
-                            Userscript - Modal Interface
-                        </p>
+                        <p class="screenshot-caption" data-i18n="screenshotCaptionUserscript">Userscript - Modal Interface</p>
                     </div>
                 </div>
             </div>
@@ -769,10 +578,7 @@
             <div class="container">
                 <div class="cta-content">
                     <h2 data-i18n="ctaTitle">Ready to Get Started?</h2>
-                    <p data-i18n="ctaDesc">
-                        Choose your preferred version and start managing your
-                        links smarter today.
-                    </p>
+                    <p data-i18n="ctaDesc">Choose your preferred version and start managing your links smarter today.</p>
                     <div class="cta-buttons">
                         <a
                             href="#install"
@@ -801,42 +607,23 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <h4>Open In New Tab</h4>
-                        <p data-i18n="footerDesc">
-                            Smart link management with whitelist control.
-                            Available as userscript and extension.
-                        </p>
+                        <p data-i18n="footerDesc">Smart link management with whitelist control. Available as userscript and extension.</p>
                     </div>
 
                     <div class="footer-section">
                         <h4 data-i18n="footerQuickLinks">Quick Links</h4>
                         <ul>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab"
-                                    data-i18n="footerGithubRepo"
-                                    >GitHub Repository</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab" data-i18n="footerGithubRepo">GitHub Repository</a>
                             </li>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab/issues"
-                                    data-i18n="footerReportIssues"
-                                    >Report Issues</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab/issues" data-i18n="footerReportIssues">Report Issues</a>
                             </li>
                             <li>
-                                <a
-                                    href="privacy-policy.html"
-                                    data-i18n="footerPrivacyPolicy"
-                                    >Privacy Policy</a
-                                >
+                                <a href="privacy-policy.html" data-i18n="footerPrivacyPolicy">Privacy Policy</a>
                             </li>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/LICENSE"
-                                    data-i18n="footerLicense"
-                                    >MIT License</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/LICENSE" data-i18n="footerLicense">MIT License</a>
                             </li>
                         </ul>
                     </div>
@@ -845,42 +632,27 @@
                         <h4 data-i18n="footerResources">Resources</h4>
                         <ul>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/README.md"
-                                    data-i18n="footerUserscriptDocs"
-                                    >Userscript Docs</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/README.md" data-i18n="footerUserscriptDocs">Userscript Docs</a>
                             </li>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/extension/README.md"
-                                    data-i18n="footerExtensionDocs"
-                                    >Extension Docs</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/extension/README.md" data-i18n="footerExtensionDocs">Extension Docs</a>
                             </li>
                             <li>
-                                <a
-                                    href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/README.md"
-                                    data-i18n="footerMainDocs"
-                                    >Main Documentation</a
-                                >
+                                <a href="https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/README.md" data-i18n="footerMainDocs">Main Documentation</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="footer-bottom">
-                    <p data-i18n="footerCopyright">
-                        &copy; 2025 Open In New Tab. Released under MIT License.
-                    </p>
+                    <p data-i18n="footerCopyright">&copy; 2025 Open In New Tab. Released under MIT License.</p>
                     <p>
                         <span data-i18n="footerMadeWith">Made with ❤️ by</span>
                         <a
                             href="https://github.com/xiaowulang-turbo"
                             target="_blank"
                             rel="noopener noreferrer"
-                            >Xiaowu</a
-                        >
+                        >Xiaowu</a>
                     </p>
                 </div>
             </div>
