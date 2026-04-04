@@ -6,7 +6,6 @@ alwaysApply: true
 -   readme 使用英文编写
 -   代码注释使用英文编写
 -   代码尽可能优雅简洁
--   插件和脚本的版本号始终一致
+-   插件和脚本的版本号始终一致；发布号以 extension/manifest.json 为准，勿手改 userscript 的 // @version 或官网 app-version meta，用 npm run version:sync / 提交钩子同步
 -   同步更新各个 readme
 -   使用英文编写commit信息
--   尽可能更新小版本号

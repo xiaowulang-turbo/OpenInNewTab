@@ -2,6 +2,8 @@ extension.crx
 extension.zip
 extension.pem
 
+release/OpenInNewTab-extension-*.zip
+
 node_modules
 settings.json
 # .codebuddy

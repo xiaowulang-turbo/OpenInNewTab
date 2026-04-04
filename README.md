@@ -44,6 +44,7 @@ The whitelist-based approach means:
 │   ├── styles.css
 │   ├── script.js
 │   └── README.md
+├── scripts/                 # Repo tooling (version sync, extension zip)
 ├── README.md                # This file
 └── LICENSE                  # MIT License
 ```
@@ -72,6 +73,18 @@ For detailed documentation, please refer to the specific version you want to use
 -   **[Chrome Extension Version](extension/README.md)** ([中文](extension/README.zh-CN.md)) - Complete Chrome extension documentation
 
 Both versions share the same core functionality and features, but have different installation and usage instructions.
+
+## Versioning
+
+The Chrome extension **`extension/manifest.json`** `version` field is the single source of truth. The Tampermonkey header `// @version` and the website `<meta name="app-version">` values are kept in sync by scripts (do not edit those copies by hand for release numbers).
+
+-   `npm run version:sync` — propagate manifest version to the userscript and website meta tags.
+-   `npm run version:verify` — fail if manifest, userscript, and website disagree (use in CI or before release).
+-   `npm run version:bump` — increment the patch segment in the manifest, then sync.
+
+**Git hook**: If a commit’s staged files include anything under `extension/`, `userscript/`, or `website/`, the pre-commit hook runs **`version:bump`** (patch +1) and re-stages the synced files—**unless** `extension/manifest.json` itself is already staged, in which case only **`version:sync`** runs so you can set major/minor/patch manually in the manifest. Staged changes under `extension/` still run **`npm run pack:extension`** to refresh the local zip under `release/`.
+
+To skip hooks (e.g. `git commit --amend`), use `HUSKY=0 git commit` on Unix shells, or disable Husky for that command per your environment.
 
 ## License
 

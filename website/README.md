@@ -17,11 +17,14 @@ This is the official landing page for the Open In New Tab project, showcasing bo
 
 ```
 website/
-├── index.html          # Main HTML file
+├── index.html          # Main HTML file (includes <meta name="app-version"> synced from extension manifest)
 ├── styles.css          # All styles with CSS variables
 ├── script.js           # Interactive functionality
+├── i18n.js             # Translations
 └── README.md           # This file
 ```
+
+Release version shown in the footer is read from `app-version`; update it via the repo root `npm run version:sync` / manifest (see main [README.md](../README.md#versioning)).
 
 ## Local Development
 
