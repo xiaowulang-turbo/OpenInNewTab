@@ -14,11 +14,10 @@
             modalTitle: "Whitelist Management",
             currentDomainLabel: "Current Domain:",
             quickAddBtnText: "Add",
-            quickAddBtnAdded: "Added",
-            manualAddTitle: "Manual Add",
+            quickAddBtnRemove: "Remove",
+            quickAddBtnAddTitle: "Add current domain to whitelist",
+            quickAddBtnRemoveTitle: "Remove current domain from whitelist",
             whitelistTitle: "Whitelist",
-            inputPlaceholder: "Enter domain, e.g., example.com",
-            addButton: "Add",
             removeButton: "Remove",
             closeButton: "×",
             addedToWhitelist: "Added to whitelist!",
@@ -31,16 +30,16 @@
             themeDarkText: "Dark",
             themeAutoText: "Auto",
             languageLabel: "Language",
+            cannotDetectCurrentDomain: "Cannot detect current domain",
         },
         zh: {
             modalTitle: "白名单管理",
             currentDomainLabel: "当前域名：",
             quickAddBtnText: "添加",
-            quickAddBtnAdded: "已添加",
-            manualAddTitle: "手动添加",
+            quickAddBtnRemove: "移除",
+            quickAddBtnAddTitle: "将当前域名添加到白名单",
+            quickAddBtnRemoveTitle: "将当前域名从白名单移除",
             whitelistTitle: "白名单",
-            inputPlaceholder: "输入域名，如：example.com",
-            addButton: "添加",
             removeButton: "移除",
             closeButton: "×",
             addedToWhitelist: "已添加到白名单！",
@@ -53,6 +52,7 @@
             themeDarkText: "暗色",
             themeAutoText: "自动",
             languageLabel: "语言",
+            cannotDetectCurrentDomain: "无法识别当前域名",
         },
     }
 
@@ -183,14 +183,8 @@
             getText("modalTitle")
         document.getElementById("currentDomainLabel").textContent =
             getText("currentDomainLabel")
-        document.getElementById("manualAddTitle").textContent =
-            getText("manualAddTitle")
         document.getElementById("whitelistTitle").textContent =
             getText("whitelistTitle")
-        document.getElementById("newDomainInput").placeholder =
-            getText("inputPlaceholder")
-        document.getElementById("addDomainBtn").textContent =
-            getText("addButton")
         document.getElementById("closeButton").textContent =
             getText("closeButton")
 
@@ -253,15 +247,17 @@
         const userWhitelist = await getUserWhitelist()
 
         if (currentDomain && userWhitelist.includes(currentDomain)) {
-            quickAddBtn.classList.add("added")
-            quickAddBtn.disabled = true
-            quickAddBtnText.textContent = getText("quickAddBtnAdded")
-            quickAddBtn.title = getText("alreadyInWhitelist")
-        } else {
+            quickAddBtn.classList.add("remove-state")
             quickAddBtn.classList.remove("added")
             quickAddBtn.disabled = false
+            quickAddBtnText.textContent = getText("quickAddBtnRemove")
+            quickAddBtn.title = getText("quickAddBtnRemoveTitle")
+        } else {
+            quickAddBtn.classList.remove("added")
+            quickAddBtn.classList.remove("remove-state")
+            quickAddBtn.disabled = false
             quickAddBtnText.textContent = getText("quickAddBtnText")
-            quickAddBtn.title = "Add current domain to whitelist"
+            quickAddBtn.title = getText("quickAddBtnAddTitle")
         }
     }
 
@@ -287,24 +283,18 @@
      */
     async function handleQuickAdd() {
         if (!currentDomain) {
-            showNotification("Cannot detect current domain")
+            showNotification(getText("cannotDetectCurrentDomain"))
             return
         }
 
         const userWhitelist = await getUserWhitelist()
 
-        if (!userWhitelist.includes(currentDomain)) {
-            userWhitelist.push(currentDomain)
-            await saveUserWhitelist(userWhitelist)
-            showNotification(`${currentDomain} ${getText("addedToWhitelist")}`)
-            await updateQuickAddButton()
-            loadWhitelist()
-            await reloadCurrentTab()
-        } else {
-            showNotification(
-                `${currentDomain} ${getText("alreadyInWhitelist")}`
-            )
+        if (userWhitelist.includes(currentDomain)) {
+            await removeDomainFromWhitelist(currentDomain)
+            return
         }
+
+        await addDomainToWhitelist(currentDomain)
     }
 
     /**
@@ -561,25 +551,9 @@
 
             // Set up event listeners
             const quickAddBtn = document.getElementById("quickAddBtn")
-            const addBtn = document.getElementById("addDomainBtn")
-            const input = document.getElementById("newDomainInput")
             const closeBtn = document.getElementById("closeButton")
 
             quickAddBtn.addEventListener("click", handleQuickAdd)
-
-            addBtn.addEventListener("click", () => {
-                const domain = input.value.trim()
-                if (domain) {
-                    addDomainToWhitelist(domain)
-                    input.value = ""
-                }
-            })
-
-            input.addEventListener("keypress", (e) => {
-                if (e.key === "Enter") {
-                    addBtn.click()
-                }
-            })
 
             closeBtn.addEventListener("click", () => {
                 window.close()
@@ -590,9 +564,6 @@
 
             // Update quick add button state
             await updateQuickAddButton()
-
-            // Focus input for better UX
-            input.focus()
         } catch (error) {
             console.error("Error initializing popup:", error)
         }
