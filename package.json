@@ -1,0 +1,14 @@
+{
+    "private": true,
+    "scripts": {
+        "prepare": "husky",
+        "version:sync": "node scripts/sync-version.mjs",
+        "version:verify": "node scripts/verify-version.mjs",
+        "version:bump": "node scripts/bump-patch.mjs",
+        "pack:extension": "node scripts/pack-extension.mjs"
+    },
+    "devDependencies": {
+        "archiver": "^7.0.1",
+        "husky": "^9.1.7"
+    }
+}

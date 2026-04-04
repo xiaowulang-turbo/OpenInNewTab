@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+if echo "$STAGED" | grep -qE '^(extension/|userscript/|website/)'; then
+	if echo "$STAGED" | grep -q '^extension/manifest\.json$'; then
+		node scripts/sync-version.mjs
+	else
+		node scripts/bump-patch.mjs
+	fi
+	git add extension/manifest.json userscript/OpenInNewTab.user.js website/index.html website/privacy-policy.html
+fi
+
+if echo "$STAGED" | grep -qE '^extension/'; then
+	npm run pack:extension
+fi
