@@ -122,7 +122,7 @@ MIT License - 详见 LICENSE 文件
 
 ## 更新日志
 
--   **v1.4.1**: 版本号统一由 manifest 维护；官网页脚展示发布版本；条件性 pre-commit 自动 patch
+-   **v1.4.2**: 版本号统一由 manifest 维护；官网页脚展示发布版本；条件性 pre-commit 自动 patch
 -   **v1.3.0** (Extension): 添加选项页面、主题设置、完整的国际化支持
 -   **v1.1.5** (Userscript): 优化白名单管理界面、暗色模式支持
 -   更多历史版本请查看各子项目的 README

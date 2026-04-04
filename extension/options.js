@@ -32,7 +32,7 @@
             removeButton: "Remove",
             domainsCount: "{count} domains",
             noDomains: "No domains in whitelist",
-            footerText: "Open In New Tab Extension v1.2.0",
+            footerText: "Open In New Tab Extension v{version}",
             exportSuccess: "Whitelist exported successfully!",
             importSuccess: "Whitelist imported successfully!",
             importError: "Failed to import whitelist",
@@ -63,7 +63,7 @@
             removeButton: "移除",
             domainsCount: "{count} 个域名",
             noDomains: "白名单中没有域名",
-            footerText: "Open In New Tab 扩展 v1.2.0",
+            footerText: "Open In New Tab 扩展 v{version}",
             exportSuccess: "白名单导出成功！",
             importSuccess: "白名单导入成功！",
             importError: "导入白名单失败",
@@ -231,8 +231,10 @@
             getText("addDomainDesc")
         document.getElementById("addBtnText").textContent =
             getText("addBtnText")
-        document.getElementById("footerText").textContent =
-            getText("footerText")
+        document.getElementById("footerText").textContent = getText(
+            "footerText",
+            { version: chrome.runtime.getManifest().version }
+        )
         document.getElementById("newDomainInput").placeholder =
             getText("inputPlaceholder")
 
@@ -449,7 +451,7 @@
         try {
             const userWhitelist = await getUserWhitelist()
             const data = {
-                version: "1.2.0",
+                version: chrome.runtime.getManifest().version,
                 exportDate: new Date().toISOString(),
                 whitelist: userWhitelist,
             }

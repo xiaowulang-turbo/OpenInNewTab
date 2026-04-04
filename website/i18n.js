@@ -174,6 +174,7 @@ const translations = {
         footerExtensionDocs: "Extension Docs",
         footerMainDocs: "Main Documentation",
         footerCopyright: "© 2025 Open In New Tab. Released under MIT License.",
+        footerReleaseVersion: "Release v{version}",
         footerMadeWith: "Made with ❤️ by",
 
         // Privacy Policy Page
@@ -371,6 +372,7 @@ const translations = {
         footerExtensionDocs: "扩展文档",
         footerMainDocs: "主文档",
         footerCopyright: "© 2025 Open In New Tab. 基于 MIT 许可证发布。",
+        footerReleaseVersion: "当前发布版本 v{version}",
         footerMadeWith: "用 ❤️ 制作 by",
 
         // Privacy Policy Page

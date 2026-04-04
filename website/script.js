@@ -217,8 +217,25 @@
             document.documentElement.setAttribute("lang", lang)
         }
 
+        function updateFooterReleaseVersion(lang) {
+            const el = document.getElementById("footerReleaseVersion")
+            if (!el) {
+                return
+            }
+            const meta = document.querySelector('meta[name="app-version"]')
+            const v = meta?.getAttribute("content")?.trim() ?? ""
+            const t = translations[lang] || translations.en
+            const template =
+                t.footerReleaseVersion ||
+                translations.en.footerReleaseVersion ||
+                ""
+            el.textContent = template.replace("{version}", v)
+        }
+
         function updateComplexElements(lang) {
             const t = translations[lang]
+
+            updateFooterReleaseVersion(lang)
 
             const greasyforkLink = document.getElementById("greasyforkLink")
             if (greasyforkLink) {
