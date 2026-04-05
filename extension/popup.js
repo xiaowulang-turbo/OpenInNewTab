@@ -19,7 +19,6 @@
             quickAddBtnRemoveTitle: "Remove current domain from whitelist",
             whitelistTitle: "Whitelist",
             removeButton: "Remove",
-            closeButton: "×",
             addedToWhitelist: "Added to whitelist!",
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
@@ -41,7 +40,6 @@
             quickAddBtnRemoveTitle: "将当前域名从白名单移除",
             whitelistTitle: "白名单",
             removeButton: "移除",
-            closeButton: "×",
             addedToWhitelist: "已添加到白名单！",
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
@@ -185,8 +183,6 @@
             getText("currentDomainLabel")
         document.getElementById("whitelistTitle").textContent =
             getText("whitelistTitle")
-        document.getElementById("closeButton").textContent =
-            getText("closeButton")
 
         // Update settings modal elements
         document.getElementById("settingsTitle").textContent =
@@ -551,13 +547,8 @@
 
             // Set up event listeners
             const quickAddBtn = document.getElementById("quickAddBtn")
-            const closeBtn = document.getElementById("closeButton")
 
             quickAddBtn.addEventListener("click", handleQuickAdd)
-
-            closeBtn.addEventListener("click", () => {
-                window.close()
-            })
 
             // Load initial whitelist
             await loadWhitelist()
