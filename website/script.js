@@ -55,7 +55,8 @@
                     await navigator.clipboard.writeText(textToCopy)
                     const originalText = button.textContent
                     button.textContent = t.btnCopied
-                    button.style.background = "rgba(124, 58, 237, 0.3)"
+                    button.style.background =
+                        "color-mix(in srgb, var(--color-accent) 25%, transparent)"
 
                     setTimeout(() => {
                         button.textContent = originalText
@@ -285,7 +286,6 @@
     function initThemeSystem() {
         const STORAGE_KEY = "user-theme"
         const themeToggle = document.getElementById("themeToggle")
-        const themeIcon = themeToggle?.querySelector(".theme-icon")
 
         function getUserTheme() {
             const savedTheme = localStorage.getItem(STORAGE_KEY)
@@ -295,15 +295,9 @@
             return "dark" // Default to dark
         }
 
-        function updateIcon(theme) {
-            if (themeIcon) {
-                themeIcon.textContent = theme === "dark" ? "☀️" : "🌙"
-            }
-        }
-
+        // Icon swap is handled purely via [data-theme] CSS selectors.
         function applyTheme(theme) {
             document.documentElement.setAttribute("data-theme", theme)
-            updateIcon(theme)
         }
 
         function toggleTheme() {

@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+---
+
+# 官网与扩展 UI 设计哲学
+
+适用于 `website/`、`extension/` 任何样式与组件改动。改动前请先确认本规则与对应 README 的「Design Principles」段同步。
+
+## 五条原则
+
+1. **Restraint over flash** — 克制极简优先。参考 Linear / Resend / shadcn.com / 115-Console，**不允许**重新引入紫色渐变、多处光晕、彩色 SaaS 装饰。
+2. **One accent, many neutrals** — 单一品牌强调色 + 中性灰阶。当前 accent = teal（暗 `#2dd4bf` / 亮 `#0d9488`），通过 `--color-accent*` token 暴露，**禁止**在 CSS / HTML / JS 中硬编码 hex 色值。新增颜色必须先建 token。
+3. **Token, not literal** — 所有颜色、间距、圆角、过渡时长都走 `:root` / `[data-theme='light']` 的 CSS 变量。SVG 描边一律 `stroke="currentColor"`，由父级 `color` 控制；禁止 `<linearGradient>` / `url(#grad)` / 内联 `stroke="#xxx"`。
+4. **System first** — 字体走系统栈（不引入 Google Fonts 等远程字体）；主题切换尊重 `prefers-color-scheme`；图标统一 SVG（**不使用 emoji**）。
+5. **Minimal surface** — 一次只做一件事：不顺手改无关 DOM / 文案 / 间距 / 动效；删组件必须同步清理 CSS 类与 DOM 引用。
+
+## 配色对比度（WCAG）
+
+- 暗模式：`var(--color-accent)` 实色 + `var(--color-accent-fg)` 文字，对比度 ≥ 7:1
+- 亮模式：同上，对比度 ≥ 4.5:1（AA Normal）
+- 引入新 accent 必须先核查双模式对比度
+
+## 装饰与动效预算
+
+- 径向光晕（`::before` glow）：全站**最多 1 处**，仅在 Hero 顶部
+- 渐变（linear/radial gradient）：仅 `--gradient-glow` 一个 token；不再引入 `--gradient-brand*`
+- 入场动画：仅 Hero `fadeInUp` + `IntersectionObserver` 滚动渐入；不为已有静态元素新增
+
+## 兼容性
+
+- 允许使用 `color-mix(in srgb, ...)`（Chrome ≥111、Safari ≥16.4、FF ≥113）
+- 若收到旧浏览器反馈，先在 token 层降级为预算 `rgba()`，调用点不动
+
+## 跨端一致性
+
+- 官网与扩展（popup / options / welcome）应共用同一套语义 token 名 + 同一 accent；当前扩展端仍是历史绿色，属于已知 backlog
+- 同步改动后，必须同步更新 `website/README.md` 的 Design Principles 段

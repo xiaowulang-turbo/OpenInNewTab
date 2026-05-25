@@ -4,6 +4,16 @@ This is the official landing page for the Open In New Tab project, showcasing bo
 
 🌐 **[Live Website](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork Script](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub Repository](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
+## Design Principles
+
+Restrained, neutral-first aesthetic inspired by Linear / Resend / shadcn.com. Enforced for the agent via [`.cursor/rules/design.mdc`](../.cursor/rules/design.mdc).
+
+- **One accent, many neutrals** — single brand color (teal `#2dd4bf` dark / `#0d9488` light) exposed as `--color-accent*` tokens. No hard-coded hex values anywhere.
+- **No gradients, one glow** — purple/blue gradients fully removed; one low-saturation radial glow at the top of the Hero is the only decorative gradient.
+- **Token, not literal** — colors, spacing, radius, transitions live in `:root` / `[data-theme='light']`. SVG icons use `stroke="currentColor"` driven by parent `color`.
+- **System first** — system font stack, follows `prefers-color-scheme`, SVG icons only (no emoji in UI chrome).
+- **Minimal surface** — change one thing at a time; deleting a class must delete its DOM and CSS rule together.
+
 ## Features
 
 -   **Modern Design**: Clean, responsive layout with smooth animations
@@ -158,10 +168,10 @@ The website includes a complete dark mode system:
 
 ### Usage
 
--   **Toggle Switch**: Click the switch in navigation bar to toggle themes
-    -   **OFF (Left)**: Light mode with 🌙 moon icon
-    -   **ON (Right)**: Dark mode with ☀️ sun icon
-    -   **Visual Feedback**: Smooth sliding animation with gradient background
+-   **Toggle Button**: Click the icon button in the navigation bar to switch themes
+    -   **Light mode**: Sun icon shown
+    -   **Dark mode**: Moon icon shown
+    -   Icons swap automatically via `[data-theme]` CSS selectors — no JS text mutation
 -   **Automatic**: Works out of the box with system preferences
 -   **Persistent**: Choice remembered across sessions
 

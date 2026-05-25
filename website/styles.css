@@ -21,18 +21,14 @@
 	--color-surface: rgba(255, 255, 255, 0.03);
 	--color-surface-hover: rgba(255, 255, 255, 0.06);
 
-	/* Brand Gradient */
-	--gradient-brand: linear-gradient(135deg, #7c3aed, #2563eb);
-	--gradient-brand-text: linear-gradient(135deg, #a855f7, #3b82f6);
+	/* Brand · single accent (teal) */
+	--color-accent: #2dd4bf;
+	--color-accent-hover: #5eead4;
+	--color-accent-fg: #0a0a0a;
 	--gradient-glow: radial-gradient(
-		ellipse 80% 50% at 50% -20%,
-		rgba(124, 58, 237, 0.15),
-		transparent
-	);
-	--gradient-glow-subtle: radial-gradient(
-		ellipse 60% 40% at 50% 0%,
-		rgba(124, 58, 237, 0.08),
-		transparent
+		ellipse 60% 50% at 50% 0%,
+		color-mix(in srgb, var(--color-accent) 14%, transparent),
+		transparent 70%
 	);
 
 	/* Spacing */
@@ -77,15 +73,13 @@
 	--color-border-hover: rgba(0, 0, 0, 0.15);
 	--color-surface: rgba(0, 0, 0, 0.02);
 	--color-surface-hover: rgba(0, 0, 0, 0.04);
+	--color-accent: #0d9488;
+	--color-accent-hover: #0f766e;
+	--color-accent-fg: #ffffff;
 	--gradient-glow: radial-gradient(
-		ellipse 80% 50% at 50% -20%,
-		rgba(124, 58, 237, 0.08),
-		transparent
-	);
-	--gradient-glow-subtle: radial-gradient(
-		ellipse 60% 40% at 50% 0%,
-		rgba(124, 58, 237, 0.04),
-		transparent
+		ellipse 60% 50% at 50% 0%,
+		color-mix(in srgb, var(--color-accent) 10%, transparent),
+		transparent 70%
 	);
 	--nav-bg: rgba(250, 250, 250, 0.8);
 }
@@ -118,8 +112,8 @@ body {
 }
 
 ::selection {
-	background: rgba(124, 58, 237, 0.3);
-	color: #fff;
+	background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+	color: var(--color-accent-fg);
 }
 
 /* ============================================
@@ -310,19 +304,39 @@ a:hover {
    Theme Toggle (Single Icon)
    ============================================ */
 .theme-toggle {
-	padding: 0.25rem;
+	display: inline-grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
 	background: transparent;
 	border: none;
-	font-size: 0.9rem;
+	color: var(--color-text-secondary);
 	cursor: pointer;
-	transition: all var(--transition-fast);
+	transition: color var(--transition-fast), background var(--transition-fast);
 	border-radius: var(--radius-sm);
-	line-height: 1;
 }
 
 .theme-toggle:hover {
+	color: var(--color-text);
 	background: var(--color-surface-hover);
-	transform: scale(1.1);
+}
+
+.theme-toggle svg {
+	width: 16px;
+	height: 16px;
+}
+
+.theme-toggle .icon-moon {
+	display: none;
+}
+
+[data-theme='dark'] .theme-toggle .icon-sun {
+	display: none;
+}
+
+[data-theme='dark'] .theme-toggle .icon-moon {
+	display: block;
 }
 
 /* ============================================
@@ -456,12 +470,7 @@ a:hover {
 	transform: translateX(-50%);
 	width: 800px;
 	height: 600px;
-	background: radial-gradient(
-		ellipse,
-		rgba(124, 58, 237, 0.12) 0%,
-		rgba(37, 99, 235, 0.06) 40%,
-		transparent 70%
-	);
+	background: var(--gradient-glow);
 	pointer-events: none;
 	z-index: 0;
 }
@@ -481,10 +490,7 @@ a:hover {
 }
 
 .gradient-text {
-	background: var(--gradient-brand-text);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	background-clip: text;
+	color: var(--color-accent);
 }
 
 .hero-subtitle {
@@ -555,6 +561,7 @@ a:hover {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	color: var(--color-accent);
 }
 
 .feature-icon svg {
@@ -607,19 +614,19 @@ a:hover {
 }
 
 .version-card-featured {
-	border-color: rgba(124, 58, 237, 0.3);
+	border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .version-card-featured:hover {
-	border-color: rgba(124, 58, 237, 0.5);
+	border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
 }
 
 .featured-badge {
 	position: absolute;
 	top: -11px;
 	right: 1.5rem;
-	background: var(--gradient-brand);
-	color: #fff;
+	background: var(--color-accent);
+	color: var(--color-accent-fg);
 	padding: 0.25rem 0.85rem;
 	border-radius: var(--radius-full);
 	font-size: 0.75rem;
@@ -633,6 +640,7 @@ a:hover {
 .version-icon {
 	font-size: 1.75rem;
 	margin-bottom: 0.75rem;
+	color: var(--color-accent);
 }
 
 .version-header h3 {
@@ -652,9 +660,9 @@ a:hover {
 }
 
 .version-badge-primary {
-	background: rgba(124, 58, 237, 0.15);
-	border-color: rgba(124, 58, 237, 0.3);
-	color: #a855f7;
+	background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+	border-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+	color: var(--color-accent);
 }
 
 .version-description {
@@ -694,6 +702,7 @@ a:hover {
 	width: 16px;
 	height: 16px;
 	flex-shrink: 0;
+	color: var(--color-accent);
 }
 
 .version-features li .check-icon svg {
@@ -801,8 +810,8 @@ a:hover {
 }
 
 .install-tab.active {
-	background: var(--gradient-brand);
-	color: #fff;
+	background: var(--color-accent);
+	color: var(--color-accent-fg);
 	border-color: transparent;
 }
 
@@ -841,8 +850,8 @@ a:hover {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--gradient-brand);
-	color: #fff;
+	background: var(--color-accent);
+	color: var(--color-accent-fg);
 	border-radius: 50%;
 	font-weight: 700;
 	font-size: 0.9rem;
@@ -861,11 +870,11 @@ a:hover {
 }
 
 .step-content a {
-	color: #a855f7;
+	color: var(--color-accent);
 }
 
 .step-content a:hover {
-	color: #c084fc;
+	color: var(--color-accent-hover);
 }
 
 /* Code block */
@@ -914,7 +923,7 @@ a:hover {
 
 .install-note {
 	background: var(--color-surface);
-	border-left: 3px solid rgba(124, 58, 237, 0.5);
+	border-left: 3px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
 	padding: 0.85rem 1.25rem;
 	border-radius: 0 var(--radius-md) var(--radius-md) 0;
 	margin-top: 1rem;
@@ -947,11 +956,7 @@ a:hover {
 
 .screenshot-placeholder {
 	flex: 1;
-	background: linear-gradient(
-		135deg,
-		rgba(124, 58, 237, 0.08) 0%,
-		rgba(37, 99, 235, 0.05) 100%
-	);
+	background: var(--color-surface);
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-lg);
 	padding: var(--spacing-2xl) var(--spacing-lg);
@@ -967,14 +972,6 @@ a:hover {
 	border-color: var(--color-border-hover);
 }
 
-.screenshot-dark {
-	background: linear-gradient(
-		135deg,
-		rgba(255, 255, 255, 0.03) 0%,
-		rgba(255, 255, 255, 0.01) 100%
-	);
-}
-
 .placeholder-content {
 	text-align: center;
 }
@@ -982,6 +979,7 @@ a:hover {
 .placeholder-icon {
 	font-size: 2.5rem;
 	margin-bottom: 0.75rem;
+	color: var(--color-accent);
 }
 
 .placeholder-content p {
@@ -1008,29 +1006,10 @@ a:hover {
 .cta {
 	background: var(--color-bg);
 	text-align: center;
-	position: relative;
-	overflow: hidden;
-}
-
-.cta::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 700px;
-	height: 500px;
-	background: radial-gradient(
-		ellipse,
-		rgba(124, 58, 237, 0.06) 0%,
-		transparent 70%
-	);
-	pointer-events: none;
 }
 
 .cta-content {
 	position: relative;
-	z-index: 1;
 }
 
 .cta-content h2 {
@@ -1197,11 +1176,11 @@ a:hover {
 }
 
 .privacy-policy-content a {
-	color: #a855f7;
+	color: var(--color-accent);
 }
 
 .privacy-policy-content a:hover {
-	color: #c084fc;
+	color: var(--color-accent-hover);
 }
 
 .policy-section {
