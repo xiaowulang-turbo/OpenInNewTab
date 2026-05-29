@@ -43,6 +43,7 @@ You can also manually add domains by typing them in the input field (e.g., `stac
 -   **Modern UI**: Clean, responsive design with smooth animations and hover effects
 -   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
 -   **Open in background** (optional): New tabs open without stealing focus from the current page
+-   **Onboarding**: A welcome page opens on first install to explain whitelist mode and guide first-time setup
 
 ## Installation
 
@@ -118,8 +119,8 @@ Click the extension icon in the browser toolbar to open the popup interface.
 
 **Via Options Page:**
 
-1. Click the settings icon (⚙️) in the popup
-2. Click "More Options" button at the bottom
+1. Click the settings (gear) icon in the popup
+2. Click "More settings" at the bottom of the settings panel
 3. Access the full configuration page with:
     - Theme settings (Light/Dark/Auto)
     - Language settings (English/中文)
@@ -154,6 +155,12 @@ The extension supports both exact domain matching and subdomain matching:
 ├── popup.html             # Popup interface
 ├── popup.js               # Popup functionality
 ├── popup.css              # Popup styling with dark mode support
+├── options.html           # Options page
+├── options.js             # Options functionality
+├── options.css            # Options styling
+├── welcome.html           # First-run welcome / onboarding page
+├── welcome.js             # Welcome page functionality
+├── welcome.css            # Welcome page styling
 └── icons/                 # Extension icons (16x16, 24x24, 32x32, 64x64, 128x128)
     ├── icon16.png
     ├── icon24.png
@@ -168,6 +175,8 @@ The extension supports both exact domain matching and subdomain matching:
 -   **background.js**: Service worker for extension lifecycle management
 -   **content.js**: Injected into web pages to modify link behavior
 -   **popup.html/js/css**: User interface for whitelist management
+-   **options.html/js/css**: Full settings and configuration page
+-   **welcome.html/js/css**: First-run onboarding shown once after install
 -   **icons/**: Extension icons for different sizes
 
 ## Language Support

@@ -46,6 +46,7 @@
 │   ├── styles.css
 │   ├── script.js
 │   └── README.md
+├── shared/icons/            # Lucide 来源的 SVG 图标（官网 + 扩展共用）
 ├── README.md                # 英文说明文档
 ├── README.zh-CN.md          # 本文件（中文说明文档）
 └── LICENSE                  # MIT 许可证

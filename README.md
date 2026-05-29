@@ -44,6 +44,7 @@ The whitelist-based approach means:
 │   ├── styles.css
 │   ├── script.js
 │   └── README.md
+├── shared/icons/            # Lucide-sourced SVG icons (website + extension)
 ├── scripts/                 # Repo tooling (version sync, extension zip)
 ├── README.md                # This file
 └── LICENSE                  # MIT License

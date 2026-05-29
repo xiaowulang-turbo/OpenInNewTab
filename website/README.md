@@ -11,7 +11,7 @@ Restrained, neutral-first aesthetic inspired by Linear / Resend / shadcn.com. En
 - **One accent, many neutrals** — single brand color (teal `#2dd4bf` dark / `#0d9488` light) exposed as `--color-accent*` tokens. No hard-coded hex values anywhere.
 - **No gradients, one glow** — purple/blue gradients fully removed; one low-saturation radial glow at the top of the Hero is the only decorative gradient.
 - **Token, not literal** — colors, spacing, radius, transitions live in `:root` / `[data-theme='light']`. SVG icons use `stroke="currentColor"` driven by parent `color`.
-- **System first** — system font stack, follows `prefers-color-scheme`, SVG icons only (no emoji in UI chrome).
+- **System first** — system font stack, follows `prefers-color-scheme`, SVG icons only (no emoji in UI chrome). Icons come from [Lucide](https://lucide.dev) with a canonical copy in [`shared/icons/`](../shared/icons/README.md) shared with the extension.
 - **Minimal surface** — change one thing at a time; deleting a class must delete its DOM and CSS rule together.
 
 ## Features

@@ -26,6 +26,14 @@ alwaysApply: true
 - 渐变（linear/radial gradient）：仅 `--gradient-glow` 一个 token；不再引入 `--gradient-brand*`
 - 入场动画：仅 Hero `fadeInUp` + `IntersectionObserver` 滚动渐入；不为已有静态元素新增
 
+## 图标
+
+- 图标来源统一 [Lucide](https://lucide.dev)（ISC 许可，兼容 MIT）；规范副本存于 `shared/icons/`，作为官网与扩展的单一事实来源。
+- **禁止** emoji / HTML 实体（如 `⚙️` `☀️` `&times;`）充当 UI 图标；一律内联 `<svg>`。
+- 内联模板：`viewBox="0 0 24 24"` + `stroke="currentColor"` + `stroke-width="2"` + 圆角端点，统一加 `class="icon"`，颜色由父级 `color` 驱动。
+- 交互按钮自带 `title` / `aria-label`，图标 `aria-hidden="true"`。
+- 新增 / 替换图标：先把 Lucide 原始 SVG 落到 `shared/icons/`，再内联到调用点；删除图标须同步清理 `shared/icons/` 与 DOM/CSS。
+
 ## 兼容性
 
 - 允许使用 `color-mix(in srgb, ...)`（Chrome ≥111、Safari ≥16.4、FF ≥113）
@@ -33,5 +41,5 @@ alwaysApply: true
 
 ## 跨端一致性
 
-- 官网与扩展（popup / options / welcome）应共用同一套语义 token 名 + 同一 accent；当前扩展端仍是历史绿色，属于已知 backlog
+- 官网与扩展（popup / options / welcome）应共用同一套语义 token 名 + 同一 accent；扩展端已统一为 teal accent（暗 `#2dd4bf` / 亮 `#0d9488`，详见 `extension/STYLE_GUIDE.md`），token 仍沿用 `--btn-primary*` 命名，向官网 `--color-accent*` 收敛为后续 backlog
 - 同步改动后，必须同步更新 `website/README.md` 的 Design Principles 段

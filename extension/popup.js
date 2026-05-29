@@ -32,6 +32,7 @@
             openInBackgroundLabel: "Open in background",
             openInBackgroundDesc:
                 "Keep focus on the current tab when opening links",
+            moreSettings: "More settings",
             cannotDetectCurrentDomain: "Cannot detect current domain",
         },
         zh: {
@@ -55,6 +56,7 @@
             languageLabel: "语言",
             openInBackgroundLabel: "在后台打开新标签",
             openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
+            moreSettings: "更多设置",
             cannotDetectCurrentDomain: "无法识别当前域名",
         },
     }
@@ -232,6 +234,8 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        document.getElementById("moreOptionsText").textContent =
+            getText("moreSettings")
 
         // Update language select value
         document.getElementById("languageSelect").value = currentLanguage
@@ -374,8 +378,8 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #4CAF50;
-            color: white;
+            background: var(--btn-primary);
+            color: var(--btn-primary-fg);
             padding: 12px 20px;
             border-radius: 4px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -574,6 +578,14 @@
             await setOpenInBackgroundPreference(openInBackgroundToggle.checked)
             await reloadCurrentTab()
         })
+
+        // Open the full options page
+        document
+            .getElementById("moreOptionsBtn")
+            .addEventListener("click", () => {
+                chrome.runtime.openOptionsPage()
+                window.close()
+            })
     }
 
     /**

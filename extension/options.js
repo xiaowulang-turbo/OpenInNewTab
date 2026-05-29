@@ -322,8 +322,8 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #4CAF50;
-            color: white;
+            background: var(--btn-primary);
+            color: var(--btn-primary-fg);
             padding: 12px 20px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);

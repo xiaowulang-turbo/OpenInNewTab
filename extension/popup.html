@@ -16,7 +16,10 @@
                         class="settings-btn"
                         title="Settings"
                     >
-                        ⚙️
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
                     </button>
                 </div>
             </header>
@@ -60,7 +63,9 @@
                 <div class="modal-header">
                     <h2 id="settingsTitle">Settings</h2>
                     <button id="modalCloseBtn" class="modal-close-btn">
-                        &times;
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M18 6 6 18M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -75,7 +80,10 @@
                                 data-theme="light"
                                 id="themeLightBtn"
                             >
-                                <span class="theme-icon">☀️</span>
+                                <svg class="icon theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="4" />
+                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                                </svg>
                                 <span class="theme-text" id="themeLightText"
                                     >Light</span
                                 >
@@ -85,7 +93,9 @@
                                 data-theme="dark"
                                 id="themeDarkBtn"
                             >
-                                <span class="theme-icon">🌙</span>
+                                <svg class="icon theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                </svg>
                                 <span class="theme-text" id="themeDarkText"
                                     >Dark</span
                                 >
@@ -95,7 +105,10 @@
                                 data-theme="auto"
                                 id="themeAutoBtn"
                             >
-                                <span class="theme-icon">🔄</span>
+                                <svg class="icon theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect width="20" height="14" x="2" y="3" rx="2" />
+                                    <path d="M8 21h8M12 17v4" />
+                                </svg>
                                 <span class="theme-text" id="themeAutoText"
                                     >Auto</span
                                 >
@@ -137,6 +150,14 @@
                             <span class="toggle-slider" aria-hidden="true"></span>
                         </label>
                     </div>
+
+                    <!-- Entry to the full options page -->
+                    <button id="moreOptionsBtn" class="more-options-row">
+                        <span id="moreOptionsText">More settings</span>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>

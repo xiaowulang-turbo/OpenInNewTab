@@ -42,8 +42,9 @@ The extension uses the `prefers-color-scheme` CSS media query to automatically d
 | Primary Text | `#333333` | `#ffffff` |
 | Secondary Text | `#666666` | `#cccccc` |
 | Border | `#dddddd` | `#404040` |
-| Primary Button | `#4caf50` | `#66bb6a` |
-| Danger Button | `#f44336` | `#ef5350` |
+| Accent (Primary Button) | `#0d9488` | `#2dd4bf` |
+| Accent foreground | `#ffffff` | `#0a0a0a` |
+| Secondary / Remove | neutral ghost | neutral ghost |
 
 #### Shadows
 - Light mode: `rgba(0, 0, 0, 0.1)` for subtle shadows
@@ -81,7 +82,7 @@ Scrollbars are styled to match the current theme:
 
 ### 🎨 Theme-Adaptive Components
 1. **Header**: Background and text adapt to theme
-2. **Buttons**: Primary (green) and danger (red) buttons have theme-specific colors
+2. **Buttons**: Primary buttons use the flat teal accent (with a theme-aware foreground); secondary/remove actions are neutral ghost buttons. No gradients or colored shadows (see `STYLE_GUIDE.md`).
 3. **Input Fields**: Background, border, and text colors adapt
 4. **Domain Cards**: Background gradient adapts to theme
 5. **Scrollbar**: Track and thumb colors match theme
@@ -131,7 +132,7 @@ Scrollbars are styled to match the current theme:
 ## Accessibility
 
 - **High Contrast**: All text meets WCAG AA contrast requirements in both themes
-- **Color Blindness**: Green/red button distinction maintained through positioning and labels
+- **Color Blindness**: Primary vs. remove actions are distinguished by fill style (solid accent vs. neutral ghost), position, and labels — not by hue alone
 - **Screen Readers**: Theme changes don't affect screen reader navigation
 - **Keyboard Navigation**: Focus states visible in both themes
 

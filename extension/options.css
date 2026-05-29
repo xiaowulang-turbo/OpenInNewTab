@@ -131,8 +131,7 @@ body {
 .action-btn:hover {
     border-color: var(--btn-primary);
     background: var(--btn-primary);
-    color: white;
-    transform: translateY(-1px);
+    color: var(--btn-primary-fg);
 }
 
 /* Input with Button */
@@ -161,25 +160,19 @@ body {
 
 .input-with-button .add-btn {
     padding: 10px 20px;
-    background: linear-gradient(
-        135deg,
-        var(--btn-primary),
-        var(--btn-primary-dark)
-    );
-    color: white;
+    background: var(--btn-primary);
+    color: var(--btn-primary-fg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px var(--btn-primary-shadow);
     white-space: nowrap;
 }
 
 .input-with-button .add-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--btn-primary-shadow-hover);
+    background: var(--btn-primary-hover);
 }
 
 /* Domains Container */
@@ -222,7 +215,6 @@ body {
 }
 
 .domain-item:hover {
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px var(--shadow-color);
 }
 
@@ -235,27 +227,22 @@ body {
 }
 
 .remove-btn {
-    background: linear-gradient(
-        135deg,
-        var(--btn-danger),
-        var(--btn-danger-dark)
-    );
-    color: white;
-    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 8px 16px;
     cursor: pointer;
     font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px var(--btn-danger-shadow);
     margin-left: 12px;
     flex-shrink: 0;
 }
 
 .remove-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px var(--btn-danger-shadow-hover);
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    color: var(--text-primary);
 }
 
 /* Empty State */
