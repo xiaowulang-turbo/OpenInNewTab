@@ -6,15 +6,12 @@
 ;(function () {
     "use strict"
 
-    /**
-     * Default whitelisted domains
-     */
+    const MSG_OPEN_TAB = "OPEN_TAB"
+    const PATCHED_ATTR = "data-oint-patched"
     const DEFAULT_DOMAINS = []
 
-    /**
-     * Get user whitelist from chrome storage
-     * @returns {Promise<Array>} Array of whitelisted domains
-     */
+    let targetBlankObserver = null
+
     async function getUserWhitelist() {
         try {
             const result = await chrome.storage.sync.get(["userWhitelist"])
@@ -26,10 +23,16 @@
         }
     }
 
-    /**
-     * Check if current domain is in whitelist
-     * @returns {Promise<boolean>} True if domain is whitelisted
-     */
+    async function getOpenInBackground() {
+        try {
+            const result = await chrome.storage.sync.get(["openInBackground"])
+            return !!result.openInBackground
+        } catch (error) {
+            console.error("Error getting openInBackground:", error)
+            return false
+        }
+    }
+
     async function isWhitelisted() {
         try {
             const currentDomain = window.location.hostname
@@ -45,112 +48,159 @@
         }
     }
 
-    /**
-     * Handle link click in capture phase to intercept framework routing
-     * @param {MouseEvent} event Click event
-     */
-    function handleLinkClick(event) {
-        // Find closest anchor element
-        const link = event.target.closest("a[href]")
-        if (!link) return
+    function shouldSkipLinkClick(event, link) {
+        if (link.hasAttribute("download")) {
+            return true
+        }
 
-        // Skip download links
-        if (link.hasAttribute("download")) return
-
-        // Skip if user is holding modifier keys (Ctrl/Cmd/Shift) or middle click
         if (
             event.ctrlKey ||
             event.metaKey ||
             event.shiftKey ||
             event.button === 1
-        )
-            return
+        ) {
+            return true
+        }
 
-        // Skip javascript: and mailto: links
         const href = link.getAttribute("href")
         if (
             !href ||
             href.startsWith("javascript:") ||
             href.startsWith("mailto:")
-        )
+        ) {
+            return true
+        }
+
+        if (href.startsWith("#")) {
+            return true
+        }
+
+        return false
+    }
+
+    function patchLinkTarget(link) {
+        if (link.target || link.hasAttribute("download") || link.hasAttribute(PATCHED_ATTR)) {
             return
+        }
+        link.target = "_blank"
+        link.rel = "noopener noreferrer"
+        link.setAttribute(PATCHED_ATTR, "1")
+    }
 
-        // Skip anchor links (same page)
-        if (href.startsWith("#")) return
+    function patchLinksUnder(root) {
+        if (root.nodeType === Node.ELEMENT_NODE) {
+            if (root.matches?.("a[href]")) {
+                patchLinkTarget(root)
+            }
+            root.querySelectorAll?.("a[href]").forEach(patchLinkTarget)
+        }
+    }
 
-        // Intercept and force open in new tab
+    function removePatchedTargets() {
+        document.querySelectorAll(`a[${PATCHED_ATTR}]`).forEach((link) => {
+            link.removeAttribute("target")
+            link.removeAttribute("rel")
+            link.removeAttribute(PATCHED_ATTR)
+        })
+    }
+
+    function enableTargetBlankPatching() {
+        if (!document.body) {
+            return
+        }
+
+        patchLinksUnder(document.body)
+
+        if (targetBlankObserver) {
+            return
+        }
+
+        targetBlankObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    patchLinksUnder(node)
+                })
+            })
+        })
+
+        targetBlankObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+        })
+    }
+
+    function disableTargetBlankPatching() {
+        if (targetBlankObserver) {
+            targetBlankObserver.disconnect()
+            targetBlankObserver = null
+        }
+        removePatchedTargets()
+    }
+
+    async function syncTargetBlankPatching() {
+        if (await getOpenInBackground()) {
+            disableTargetBlankPatching()
+        } else {
+            enableTargetBlankPatching()
+        }
+    }
+
+    async function openLinkInNewTab(url, inBackground) {
+        if (inBackground) {
+            try {
+                await chrome.runtime.sendMessage({
+                    type: MSG_OPEN_TAB,
+                    url,
+                    active: false,
+                })
+                return
+            } catch (error) {
+                console.error("Error opening tab in background:", error)
+            }
+        }
+
+        window.open(url, "_blank", "noopener,noreferrer")
+    }
+
+    async function handleLinkClick(event) {
+        const link = event.target.closest("a[href]")
+        if (!link || shouldSkipLinkClick(event, link)) {
+            return
+        }
+
         event.preventDefault()
         event.stopPropagation()
         event.stopImmediatePropagation()
 
-        // Open in new tab
-        window.open(link.href, "_blank", "noopener,noreferrer")
+        await openLinkInNewTab(link.href, await getOpenInBackground())
     }
 
-    /**
-     * Force all links to open in new tabs
-     */
-    async function forceNewTabs() {
-        try {
-            const whitelisted = await isWhitelisted()
-            if (!whitelisted) {
-                return
-            }
-
-            // Add click listener in capture phase to intercept before frameworks
-            document.addEventListener("click", handleLinkClick, true)
-
-            // Wait for body to exist before setting up observer
-            if (!document.body) {
-                return
-            }
-
-            // Backup strategy: Set target attribute for links
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            const links = node.querySelectorAll("a[href]")
-                            links.forEach((link) => {
-                                if (
-                                    !link.target &&
-                                    !link.hasAttribute("download")
-                                ) {
-                                    link.target = "_blank"
-                                    link.rel = "noopener noreferrer"
-                                }
-                            })
-                        }
-                    })
-                })
-            })
-
-            // Observe the entire document for changes
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-            })
-
-            // Handle existing links immediately
-            document.querySelectorAll("a[href]").forEach((link) => {
-                if (!link.target && !link.hasAttribute("download")) {
-                    link.target = "_blank"
-                    link.rel = "noopener noreferrer"
-                }
-            })
-        } catch (error) {
-            console.error("Error in forceNewTabs:", error)
-        }
+    async function activateOnWhitelistedSite() {
+        document.addEventListener("click", handleLinkClick, true)
+        await syncTargetBlankPatching()
     }
 
-    // Initialize when DOM is ready
     async function initialize() {
         try {
-            await forceNewTabs()
+            if (!(await isWhitelisted())) {
+                return
+            }
+            await activateOnWhitelistedSite()
         } catch (error) {
             console.error("Error initializing content script:", error)
         }
     }
+
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area !== "sync" || !changes.openInBackground) {
+            return
+        }
+        isWhitelisted().then((whitelisted) => {
+            if (whitelisted) {
+                syncTargetBlankPatching()
+            }
+        })
+    })
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initialize)

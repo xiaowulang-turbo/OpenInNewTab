@@ -29,6 +29,9 @@
             themeDarkText: "Dark",
             themeAutoText: "Auto",
             languageLabel: "Language",
+            openInBackgroundLabel: "Open in background",
+            openInBackgroundDesc:
+                "Keep focus on the current tab when opening links",
             cannotDetectCurrentDomain: "Cannot detect current domain",
         },
         zh: {
@@ -50,6 +53,8 @@
             themeDarkText: "暗色",
             themeAutoText: "自动",
             languageLabel: "语言",
+            openInBackgroundLabel: "在后台打开新标签",
+            openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
             cannotDetectCurrentDomain: "无法识别当前域名",
         },
     }
@@ -145,6 +150,32 @@
     }
 
     /**
+     * Get open-in-background preference from storage
+     * @returns {Promise<boolean>}
+     */
+    async function getOpenInBackgroundPreference() {
+        try {
+            const result = await chrome.storage.sync.get(["openInBackground"])
+            return !!result.openInBackground
+        } catch (error) {
+            console.error("Error getting openInBackground:", error)
+            return false
+        }
+    }
+
+    /**
+     * Set open-in-background preference to storage
+     * @param {boolean} enabled
+     */
+    async function setOpenInBackgroundPreference(enabled) {
+        try {
+            await chrome.storage.sync.set({ openInBackground: enabled })
+        } catch (error) {
+            console.error("Error saving openInBackground:", error)
+        }
+    }
+
+    /**
      * Detect browser language setting
      * @returns {string} Language code ('en' or 'zh')
      */
@@ -197,6 +228,10 @@
             getText("themeAutoText")
         document.getElementById("languageLabel").textContent =
             getText("languageLabel")
+        document.getElementById("openInBackgroundLabel").textContent =
+            getText("openInBackgroundLabel")
+        document.getElementById("openInBackgroundDesc").textContent =
+            getText("openInBackgroundDesc")
 
         // Update language select value
         document.getElementById("languageSelect").value = currentLanguage
@@ -488,15 +523,26 @@
     /**
      * Initialize settings modal
      */
+    async function syncOpenInBackgroundToggle() {
+        const toggle = document.getElementById("openInBackgroundToggle")
+        toggle.checked = await getOpenInBackgroundPreference()
+    }
+
     function initializeSettingsModal() {
         const settingsBtn = document.getElementById("settingsButton")
         const modalCloseBtn = document.getElementById("modalCloseBtn")
         const modal = document.getElementById("settingsModal")
         const themeButtons = document.querySelectorAll(".theme-option")
         const languageSelect = document.getElementById("languageSelect")
+        const openInBackgroundToggle = document.getElementById(
+            "openInBackgroundToggle"
+        )
 
         // Open modal
-        settingsBtn.addEventListener("click", openSettingsModal)
+        settingsBtn.addEventListener("click", async () => {
+            await syncOpenInBackgroundToggle()
+            openSettingsModal()
+        })
 
         // Close modal
         modalCloseBtn.addEventListener("click", closeSettingsModal)
@@ -522,6 +568,11 @@
             const lang = e.target.value
             await setLanguagePreference(lang)
             await updateLanguage(lang)
+        })
+
+        openInBackgroundToggle.addEventListener("change", async () => {
+            await setOpenInBackgroundPreference(openInBackgroundToggle.checked)
+            await reloadCurrentTab()
         })
     }
 

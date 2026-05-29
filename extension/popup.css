@@ -562,3 +562,83 @@ body {
 .language-select:focus {
     border-color: var(--btn-primary);
 }
+
+/* Setting row with toggle (popup modal) */
+.setting-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.setting-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.setting-label-inline {
+    margin-bottom: 4px;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.setting-description {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: 1.4;
+}
+
+/* Toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--input-border);
+    border-radius: 24px;
+    transition: background 0.2s ease;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    background: var(--bg-primary);
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--btn-primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+}
+
+.toggle-switch input:focus-visible + .toggle-slider {
+    outline: 2px solid var(--btn-primary);
+    outline-offset: 2px;
+}

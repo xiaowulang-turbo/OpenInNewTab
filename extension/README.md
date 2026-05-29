@@ -42,6 +42,7 @@ You can also manually add domains by typing them in the input field (e.g., `stac
 -   **Dark Mode Support**: Automatically adapts to system dark/light mode preferences
 -   **Modern UI**: Clean, responsive design with smooth animations and hover effects
 -   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
+-   **Open in background** (optional): New tabs open without stealing focus from the current page
 
 ## Installation
 
@@ -83,6 +84,15 @@ The extension will be available on Chrome Web Store soon. Stay tuned!
 ### Initial Setup
 
 The extension comes with an empty default whitelist. Users can add domains through the popup interface.
+
+### Open in background
+
+In the popup **Settings** (gear icon) or on the **Options** page, enable **Open in background**. On whitelisted sites, ordinary left-clicks on links open a new tab without switching focus. Modifier clicks (Ctrl/Cmd/Shift) and middle-click are not intercepted.
+
+### Local testing
+
+1. Serve the fixture page, e.g. `npx http-server dev -p 8765` from the repo root.
+2. Open `http://127.0.0.1:8765/fixture.html`, add `127.0.0.1` to the whitelist, toggle the setting, and click the sample links.
 
 ### User Management
 

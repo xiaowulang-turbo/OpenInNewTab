@@ -21,6 +21,10 @@
             themeAutoText: "Auto",
             languageLabel: "Language",
             languageDesc: "Select your language",
+            linkBehaviorHeading: "Link behavior",
+            openInBackgroundLabel: "Open in background",
+            openInBackgroundDesc:
+                "Keep focus on the current tab when opening links",
             whitelistHeading: "Whitelist Management",
             importExportLabel: "Import / Export",
             importExportDesc: "Backup or restore your whitelist",
@@ -52,6 +56,9 @@
             themeAutoText: "自动",
             languageLabel: "语言",
             languageDesc: "选择您的语言",
+            linkBehaviorHeading: "链接行为",
+            openInBackgroundLabel: "在后台打开新标签",
+            openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
             whitelistHeading: "白名单管理",
             importExportLabel: "导入 / 导出",
             importExportDesc: "备份或恢复您的白名单",
@@ -158,6 +165,24 @@
         }
     }
 
+    async function getOpenInBackgroundPreference() {
+        try {
+            const result = await chrome.storage.sync.get(["openInBackground"])
+            return !!result.openInBackground
+        } catch (error) {
+            console.error("Error getting openInBackground:", error)
+            return false
+        }
+    }
+
+    async function setOpenInBackgroundPreference(enabled) {
+        try {
+            await chrome.storage.sync.set({ openInBackground: enabled })
+        } catch (error) {
+            console.error("Error saving openInBackground:", error)
+        }
+    }
+
     /**
      * Detect browser language setting
      * @returns {string} Language code ('en' or 'zh')
@@ -215,6 +240,12 @@
             getText("languageLabel")
         document.getElementById("languageDesc").textContent =
             getText("languageDesc")
+        document.getElementById("linkBehaviorHeading").textContent =
+            getText("linkBehaviorHeading")
+        document.getElementById("openInBackgroundLabel").textContent =
+            getText("openInBackgroundLabel")
+        document.getElementById("openInBackgroundDesc").textContent =
+            getText("openInBackgroundDesc")
         document.getElementById("whitelistHeading").textContent =
             getText("whitelistHeading")
         document.getElementById("importExportLabel").textContent =
@@ -521,6 +552,17 @@
                 const lang = e.target.value
                 await setLanguagePreference(lang)
                 await updateLanguage(lang)
+            })
+
+            const openInBackgroundToggle = document.getElementById(
+                "openInBackgroundToggle"
+            )
+            openInBackgroundToggle.checked =
+                await getOpenInBackgroundPreference()
+            openInBackgroundToggle.addEventListener("change", async () => {
+                await setOpenInBackgroundPreference(
+                    openInBackgroundToggle.checked
+                )
             })
 
             const addBtn = document.getElementById("addDomainBtn")

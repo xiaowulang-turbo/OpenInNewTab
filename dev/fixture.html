@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open In New Tab – Extension test fixture</title>
+        <style>
+            :root {
+                color-scheme: light dark;
+                font-family: system-ui, sans-serif;
+                line-height: 1.5;
+            }
+            body {
+                max-width: 40rem;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            h1 {
+                font-size: 1.25rem;
+            }
+            ul {
+                padding-left: 1.25rem;
+            }
+            a {
+                color: inherit;
+            }
+            .hint {
+                font-size: 0.875rem;
+                opacity: 0.8;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Extension test fixture</h1>
+        <p class="hint">
+            Add <strong>127.0.0.1</strong> or <strong>localhost</strong> to the
+            whitelist, then toggle “Open in background” in extension settings.
+        </p>
+        <ul>
+            <li>
+                <a href="https://example.com/">External link (example.com)</a>
+            </li>
+            <li>
+                <a href="https://www.example.org/">Another external link</a>
+            </li>
+            <li><a href="#section">Same-page anchor (should not intercept)</a></li>
+        </ul>
+        <p id="section" class="hint">
+            With background mode on: left-click external links should open a new
+            tab without switching focus. Ctrl/Cmd+click is left to the browser.
+        </p>
+    </body>
+</html>
