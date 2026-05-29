@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Open In New Tab
 // @namespace    https://github.com/xiaowulang-turbo/OpenInNewTab
-// @version      1.4.4
+// @version      1.4.5
 // @description  Force all links to open in new tab using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
