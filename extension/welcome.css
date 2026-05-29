@@ -1,0 +1,174 @@
+/**
+ * Welcome Page Styles - Open In New Tab Extension
+ * Reuses options.css layout (which imports popup.css tokens) and only adds
+ * welcome-specific hero, steps and call-to-action styles.
+ */
+
+@import url("./options.css");
+
+/* Hero */
+.welcome-hero {
+    padding: 56px 24px 32px;
+    text-align: center;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    margin-bottom: 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--btn-primary);
+    background: color-mix(in srgb, var(--btn-primary) 12%, transparent);
+}
+
+.hero-badge .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.welcome-hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 12px 0;
+}
+
+.welcome-hero .subtitle {
+    max-width: 520px;
+    margin: 0 auto;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* How it works copy */
+.welcome-copy {
+    padding: 24px;
+}
+
+.welcome-copy p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+/* Steps */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.step-card {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.step-index {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.step-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    color: var(--btn-primary);
+    background: color-mix(in srgb, var(--btn-primary) 12%, transparent);
+}
+
+.step-icon .icon {
+    width: 22px;
+    height: 22px;
+}
+
+.step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 8px 0;
+}
+
+.step-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Call to action */
+.cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.cta-btn .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.cta-primary {
+    color: var(--btn-primary-fg);
+    border: none;
+    background: var(--btn-primary);
+}
+
+.cta-primary:hover {
+    background: var(--btn-primary-hover);
+}
+
+.cta-secondary {
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+}
+
+.cta-secondary:hover {
+    border-color: var(--btn-primary);
+    color: var(--btn-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .welcome-hero {
+        padding: 40px 16px 24px;
+    }
+
+    .welcome-hero h1 {
+        font-size: 26px;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Open In New Tab - Welcome</title>
+        <link rel="stylesheet" href="welcome.css" />
+    </head>
+    <body>
+        <div class="options-container">
+            <header class="welcome-hero">
+                <span class="hero-badge">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span id="heroBadge">Installed</span>
+                </span>
+                <h1 id="welcomeTitle">Welcome to Open In New Tab</h1>
+                <p id="welcomeSubtitle" class="subtitle">
+                    Force links to open in new tabs — only on the sites you choose.
+                </p>
+            </header>
+
+            <main class="options-main">
+                <!-- How it works -->
+                <section class="settings-section">
+                    <h2 class="section-heading" id="howItWorksHeading">
+                        How it works
+                    </h2>
+                    <div class="settings-card">
+                        <div class="welcome-copy">
+                            <p id="howItWorksDesc">
+                                This extension uses a whitelist. By default it
+                                does nothing — links behave normally everywhere.
+                                Add a domain to your whitelist and every link on
+                                that site will open in a new tab.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Get started -->
+                <section class="settings-section">
+                    <h2 class="section-heading" id="getStartedHeading">
+                        Get started in 3 steps
+                    </h2>
+                    <div class="steps-grid">
+                        <div class="step-card">
+                            <span class="step-index">1</span>
+                            <span class="step-icon">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M12 17v5" />
+                                    <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+                                </svg>
+                            </span>
+                            <h3 class="step-title" id="step1Title">
+                                Pin the extension
+                            </h3>
+                            <p class="step-desc" id="step1Desc">
+                                Click the puzzle icon in the toolbar and pin
+                                Open In New Tab for quick access.
+                            </p>
+                        </div>
+
+                        <div class="step-card">
+                            <span class="step-index">2</span>
+                            <span class="step-icon">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M14 4.1 12 6" />
+                                    <path d="m5.1 8-2.9-.8" />
+                                    <path d="m6 12-1.9 2" />
+                                    <path d="M7.2 2.2 8 5.1" />
+                                    <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+                                </svg>
+                            </span>
+                            <h3 class="step-title" id="step2Title">
+                                Add a website
+                            </h3>
+                            <p class="step-desc" id="step2Desc">
+                                Open any site, click the extension icon, then
+                                press Add to whitelist the current domain.
+                            </p>
+                        </div>
+
+                        <div class="step-card">
+                            <span class="step-index">3</span>
+                            <span class="step-icon">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M15 3h6v6" />
+                                    <path d="M10 14 21 3" />
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                </svg>
+                            </span>
+                            <h3 class="step-title" id="step3Title">
+                                Enjoy new tabs
+                            </h3>
+                            <p class="step-desc" id="step3Desc">
+                                Every link on whitelisted sites now opens in a
+                                new tab. Manage sites anytime from Settings.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Call to action -->
+                <section class="settings-section">
+                    <div class="cta-row">
+                        <button id="openOptionsBtn" class="cta-btn cta-primary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <span id="openOptionsBtnText">Open Settings</span>
+                        </button>
+                        <a
+                            id="visitSiteBtn"
+                            class="cta-btn cta-secondary"
+                            href="https://open-in-new-tab.vercel.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M15 3h6v6" />
+                                <path d="M10 14 21 3" />
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                            </svg>
+                            <span id="visitSiteBtnText">Visit Website</span>
+                        </a>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="options-footer">
+                <div class="footer-content">
+                    <span id="footerText"></span>
+                </div>
+            </footer>
+        </div>
+
+        <script src="welcome.js"></script>
+    </body>
+</html>
