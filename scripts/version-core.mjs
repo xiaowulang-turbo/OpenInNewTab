@@ -68,17 +68,17 @@ const META_APP_VERSION_RE =
  * @param {string} version
  */
 export function syncVersion(version) {
-    let us = fs.readFileSync(USERSCRIPT_PATH, "utf8")
-    const usNext = us.replace(
-        /^(\/\/ @version\s+)([\d.]+)/m,
-        `$1${version}`
-    )
-    if (usNext === us) {
+    const us = fs.readFileSync(USERSCRIPT_PATH, "utf8")
+    const usVersionRe = /^(\/\/ @version\s+)([\d.]+)/m
+    if (!usVersionRe.test(us)) {
         throw new Error(
-            `Could not update // @version line in ${USERSCRIPT_PATH}`
+            `Could not find // @version line in ${USERSCRIPT_PATH}`
         )
     }
-    fs.writeFileSync(USERSCRIPT_PATH, usNext, "utf8")
+    const usNext = us.replace(usVersionRe, `$1${version}`)
+    if (usNext !== us) {
+        fs.writeFileSync(USERSCRIPT_PATH, usNext, "utf8")
+    }
 
     for (const htmlPath of HTML_PATHS) {
         let html = fs.readFileSync(htmlPath, "utf8")

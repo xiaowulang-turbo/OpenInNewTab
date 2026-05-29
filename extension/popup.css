@@ -87,12 +87,13 @@ body {
         sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    transition: all 0.3s ease;
 }
 
 .container {
     padding: 0;
     min-height: 550px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -149,25 +150,28 @@ body {
 /* Main Content */
 .main-content {
     padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* Quick Add Section */
 .quick-add-section {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .current-domain-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    padding: 12px 16px;
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
-.current-domain-card:hover {
+.current-domain-card:focus-within {
     border-color: var(--btn-primary);
 }
 
@@ -180,11 +184,9 @@ body {
 }
 
 .domain-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .domain-value {
@@ -233,39 +235,49 @@ body {
 
 /* Section Title */
 .section-title {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 /* Domains Section */
 .domains-section {
-    max-height: 300px;
+    flex: 1;
+    min-height: 0;
     overflow-y: auto;
 }
 
 .domains-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .domain-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+.domain-item:last-child {
+    border-bottom: none;
 }
 
 .domain-item:hover {
-    box-shadow: 0 4px 12px var(--shadow-color);
+    background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+}
+
+.domains-list .empty-state {
+    padding: 24px 16px;
 }
 
 .domain-name {
@@ -279,13 +291,12 @@ body {
 .remove-btn {
     background: transparent;
     color: var(--text-secondary);
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 6px 12px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
-    transition: all 0.2s ease;
     margin-left: 12px;
     flex-shrink: 0;
 }
@@ -323,10 +334,17 @@ body {
     }
 }
 
-/* Smooth transitions for theme switching */
-* {
-    transition: background-color 0.3s ease, color 0.3s ease,
-        border-color 0.3s ease;
+/* Theme transitions (scoped — avoid global * sluggishness) */
+body,
+button,
+input,
+select,
+.domain-item,
+.current-domain-card,
+.theme-option,
+.more-options-row {
+    transition: background-color 0.2s ease, color 0.2s ease,
+        border-color 0.2s ease;
 }
 
 /* Scrollbar styling for better dark mode support */
@@ -447,8 +465,6 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 /* Theme Toggle Group */
@@ -465,10 +481,9 @@ body {
     gap: 6px;
     padding: 12px 8px;
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
     font-size: 12px;
     color: var(--text-secondary);
 }
@@ -504,13 +519,12 @@ body {
     padding: 12px 6px;
     background: var(--input-bg);
     color: var(--input-text);
-    border: 2px solid var(--input-border);
+    border: 1px solid var(--input-border);
     border-radius: 8px;
     font-size: 14px;
     font-family: inherit;
     cursor: pointer;
     outline: none;
-    transition: border-color 0.2s ease;
 }
 
 .language-select:hover {
@@ -627,4 +641,11 @@ body {
 .more-options-row .icon {
     width: 18px;
     height: 18px;
+}
+
+/* Card section divider (options page) */
+.divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 0;
 }
