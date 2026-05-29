@@ -1,21 +1,26 @@
 // ==UserScript==
-// @name         Open In New Tab
-// @namespace    https://github.com/xiaowulang-turbo/OpenInNewTab
-// @version      1.6.0
-// @description  Force all links to open in new tab using whitelist mode
-// @author       Xiaowu
-// @match        *://*/*
+// @name              Open In New Tab
+// @name:zh-CN        Open In New Tab - 链接强制新标签页打开
+// @namespace         https://github.com/xiaowulang-turbo/OpenInNewTab
+// @version           1.6.1
+// @description       Force links to open in a new tab on whitelisted sites only. One-click add or remove the current domain from the Tampermonkey menu, with subdomain matching, dynamic-content support, dark mode, and English/Chinese UI. Other sites stay untouched.
+// @description:zh-CN 基于白名单的链接拦截脚本：仅在你勾选的网站把链接强制改为新标签页打开，其它网站完全不受影响。油猴菜单一键加入/移出当前域名，支持子域名匹配、深色模式与中英文界面。
+// @author            Xiaowu
+// @match             *://*/*
 // @noframes
-// @updateURL    https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
-// @downloadURL  https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
-// @license      MIT
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        GM_registerMenuCommand
-// @grant        GM_unregisterMenuCommand
-// @grant        GM_addValueChangeListener
-// @grant        GM_removeValueChangeListener
-// @run-at       document-start
+// @homepageURL       https://github.com/xiaowulang-turbo/OpenInNewTab
+// @supportURL        https://github.com/xiaowulang-turbo/OpenInNewTab/issues
+// @icon              https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/extension/icons/icon128.png
+// @updateURL         https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
+// @downloadURL       https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
+// @license           MIT
+// @grant             GM_setValue
+// @grant             GM_getValue
+// @grant             GM_registerMenuCommand
+// @grant             GM_unregisterMenuCommand
+// @grant             GM_addValueChangeListener
+// @grant             GM_removeValueChangeListener
+// @run-at            document-start
 // ==/UserScript==
 
 ;(function () {
