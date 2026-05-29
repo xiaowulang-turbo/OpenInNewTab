@@ -1,21 +1,41 @@
 // ==UserScript==
 // @name         Open In New Tab
 // @namespace    https://github.com/xiaowulang-turbo/OpenInNewTab
-// @version      1.5.0
+// @version      1.6.0
 // @description  Force all links to open in new tab using whitelist mode
 // @author       Xiaowu
 // @match        *://*/*
-// @updateUrl    https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js
-// @downloadURL  https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js
+// @noframes
+// @updateURL    https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
+// @downloadURL  https://raw.githubusercontent.com/xiaowulang-turbo/OpenInNewTab/main/userscript/OpenInNewTab.user.js
 // @license      MIT
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
+// @grant        GM_addValueChangeListener
+// @grant        GM_removeValueChangeListener
 // @run-at       document-start
 // ==/UserScript==
 
 ;(function () {
     "use strict"
+
+    // ─────────────────────────────────────────────────────────────
+    // Constants & module state (mirrored from extension/content.js)
+    // ─────────────────────────────────────────────────────────────
+    const STORAGE_KEY_WHITELIST = "userWhitelist"
+    const PATCHED_ATTR = "data-oint-patched"
+
+    /** @type {{ isApplied: boolean, observer: MutationObserver|null, menuIds: any[], pendingNodes: Node[], scheduled: boolean, listenerId: any }} */
+    const state = {
+        isApplied: false,
+        observer: null,
+        menuIds: [],
+        pendingNodes: [],
+        scheduled: false,
+        listenerId: null,
+    }
 
     /**
      * Default whitelisted domains
@@ -71,6 +91,26 @@
     }
 
     /**
+     * Remove current domain from whitelist (exact host match only).
+     * Note: matches domain in storage exactly equal to hostname; will not
+     * remove a parent-domain entry that current page inherited via suffix match.
+     */
+    function removeCurrentDomainFromWhitelist() {
+        const currentDomain = window.location.hostname
+        const userWhitelist = getUserWhitelist()
+        const lang = detectLanguage()
+        const idx = userWhitelist.indexOf(currentDomain)
+
+        if (idx > -1) {
+            userWhitelist.splice(idx, 1)
+            saveUserWhitelist(userWhitelist)
+            alert(`${currentDomain} ${getText("removedFromWhitelist", lang)}`)
+        } else {
+            alert(`${currentDomain} ${getText("notInWhitelist", lang)}`)
+        }
+    }
+
+    /**
      * Detect browser language setting
      * @returns {string} Language code ('en' or 'zh')
      */
@@ -92,8 +132,10 @@
             addedToWhitelist: "Added to whitelist!",
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
+            notInWhitelist: "Not in whitelist",
             noDomains: "No domains in whitelist",
             addToWhitelist: "Add to Whitelist",
+            removeFromWhitelist: "Remove from Whitelist",
             manageWhitelist: "Manage Whitelist",
         },
         zh: {
@@ -105,8 +147,10 @@
             addedToWhitelist: "已添加到白名单！",
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
+            notInWhitelist: "不在白名单中",
             noDomains: "白名单中没有域名",
             addToWhitelist: "添加白名单",
+            removeFromWhitelist: "移出白名单",
             manageWhitelist: "管理白名单",
         },
     }
@@ -502,72 +546,294 @@
         updateWhitelistDisplay()
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // Core: link interception + target patching + page lifecycle
+    // MIRROR: extension/content.js
+    //   Diffs vs extension:
+    //     - openInBackground 不支持，统一走 window.open
+    //     - 用 GM_* 替代 chrome.storage / chrome.runtime
+    //     - 跨 tab reload 不可行，由 GM_addValueChangeListener 在每页本地等价
+    // Keep in sync when extension version changes.
+    // ─────────────────────────────────────────────────────────────
+
     /**
-     * Force all links to open in new tab
+     * Decide whether a click should bypass our interception.
+     * MIRROR: extension/content.js#shouldSkipLinkClick
+     * @param {MouseEvent} event
+     * @param {HTMLAnchorElement} link
+     * @returns {boolean}
      */
-    function forceNewTab() {
-        if (!isWhitelisted()) {
+    function shouldSkipLinkClick(event, link) {
+        if (link.hasAttribute("download")) return true
+
+        if (
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey ||
+            event.button === 1
+        ) {
+            return true
+        }
+
+        const href = link.getAttribute("href")
+        if (
+            !href ||
+            href.startsWith("javascript:") ||
+            href.startsWith("mailto:") ||
+            href.startsWith("tel:") ||
+            href.startsWith("#")
+        ) {
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * Capture-phase click handler. Synchronous so window.open stays in the
+     * user-gesture stack (popup blockers won't fire).
+     * @param {MouseEvent} event
+     */
+    function handleLinkClick(event) {
+        const target = event.target
+        if (!target || typeof target.closest !== "function") return
+        const link = target.closest("a[href]")
+        if (!link || shouldSkipLinkClick(event, link)) return
+
+        event.preventDefault()
+        event.stopPropagation()
+        event.stopImmediatePropagation()
+
+        window.open(link.href, "_blank", "noopener,noreferrer")
+    }
+
+    /**
+     * Patch a single anchor with target=_blank + safe rel, marked for rollback.
+     * MIRROR: extension/content.js#patchLinkTarget
+     * @param {HTMLAnchorElement} link
+     */
+    function patchLinkTarget(link) {
+        if (
+            link.target ||
+            link.hasAttribute("download") ||
+            link.hasAttribute(PATCHED_ATTR)
+        ) {
+            return
+        }
+        link.target = "_blank"
+        link.rel = "noopener noreferrer"
+        link.setAttribute(PATCHED_ATTR, "1")
+    }
+
+    /**
+     * Walk a subtree and patch every anchor descendant.
+     * @param {Node} root
+     */
+    function patchLinksUnder(root) {
+        if (!root || root.nodeType !== Node.ELEMENT_NODE) return
+        if (root.matches?.("a[href]")) patchLinkTarget(root)
+        root.querySelectorAll?.("a[href]").forEach(patchLinkTarget)
+    }
+
+    /**
+     * Roll back all anchors we previously patched.
+     * MIRROR: extension/content.js#removePatchedTargets
+     */
+    function removePatchedTargets() {
+        document.querySelectorAll(`a[${PATCHED_ATTR}]`).forEach((link) => {
+            link.removeAttribute("target")
+            link.removeAttribute("rel")
+            link.removeAttribute(PATCHED_ATTR)
+        })
+    }
+
+    /** Idle-batched flush for collected mutations. */
+    function flushPendingPatches() {
+        state.scheduled = false
+        const batch = state.pendingNodes
+        state.pendingNodes = []
+        for (const node of batch) patchLinksUnder(node)
+    }
+
+    function schedulePatchFlush() {
+        if (state.scheduled) return
+        state.scheduled = true
+        if (typeof requestIdleCallback === "function") {
+            requestIdleCallback(flushPendingPatches, { timeout: 200 })
+        } else {
+            setTimeout(flushPendingPatches, 0)
+        }
+    }
+
+    function startObserver() {
+        if (state.observer || !document.body) return
+        state.observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                if (m.type === "childList") {
+                    m.addedNodes.forEach((n) => state.pendingNodes.push(n))
+                } else if (
+                    m.type === "attributes" &&
+                    m.target.nodeType === Node.ELEMENT_NODE &&
+                    m.target.matches?.("a[href]")
+                ) {
+                    state.pendingNodes.push(m.target)
+                }
+            }
+            schedulePatchFlush()
+        })
+        state.observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["href"],
+        })
+    }
+
+    function stopObserver() {
+        if (state.observer) {
+            state.observer.disconnect()
+            state.observer = null
+        }
+        state.pendingNodes = []
+        state.scheduled = false
+    }
+
+    /**
+     * Mount or unmount the page-level integration based on current whitelist hit.
+     * Idempotent — safe to call repeatedly (init, storage change, menu action).
+     */
+    function applyToCurrentPage() {
+        const shouldApply = isWhitelisted()
+
+        if (shouldApply && !state.isApplied) {
+            // Click capture works without DOM ready, bind ASAP.
+            document.addEventListener("click", handleLinkClick, true)
+
+            const onBodyReady = () => {
+                if (!state.isApplied) return
+                patchLinksUnder(document.body)
+                startObserver()
+            }
+            if (document.body) {
+                onBodyReady()
+            } else {
+                document.addEventListener("DOMContentLoaded", onBodyReady, {
+                    once: true,
+                })
+            }
+
+            state.isApplied = true
             return
         }
 
-        // Handle dynamically added elements
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        const links = node.querySelectorAll("a[href]")
-                        links.forEach((link) => {
-                            if (
-                                !link.target &&
-                                !link.hasAttribute("download")
-                            ) {
-                                link.target = "_blank"
-                                link.rel = "noopener noreferrer"
-                            }
-                        })
-                    }
-                })
-            })
-        })
-
-        // Observe the entire document for changes
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-        })
-
-        // Handle existing links immediately
-        document.querySelectorAll("a[href]").forEach((link) => {
-            if (!link.target && !link.hasAttribute("download")) {
-                link.target = "_blank"
-                link.rel = "noopener noreferrer"
-            }
-        })
+        if (!shouldApply && state.isApplied) {
+            document.removeEventListener("click", handleLinkClick, true)
+            stopObserver()
+            removePatchedTargets()
+            state.isApplied = false
+        }
     }
 
-    // Initialize when DOM is ready
-    function initialize() {
+    /**
+     * Re-register tampermonkey menu commands so the visible label reflects
+     * current whitelist status. Falls back gracefully when
+     * GM_unregisterMenuCommand is unavailable (registers both add+remove).
+     */
+    function refreshMenu() {
         const lang = detectLanguage()
+        const canUnregister = typeof GM_unregisterMenuCommand === "function"
+        const inWhitelist = isWhitelisted()
 
-        // Register menu command for adding current domain to whitelist
-        GM_registerMenuCommand(
-            getText("addToWhitelist", lang),
-            addCurrentDomainToWhitelist
-        )
+        if (canUnregister) {
+            for (const id of state.menuIds) {
+                try {
+                    GM_unregisterMenuCommand(id)
+                } catch (_e) {
+                    /* ignore: menu may already be cleared */
+                }
+            }
+            state.menuIds = []
 
-        // Register menu command for whitelist management
-        GM_registerMenuCommand(
-            getText("manageWhitelist", lang),
-            openWhitelistManager
-        )
+            if (inWhitelist) {
+                state.menuIds.push(
+                    GM_registerMenuCommand(
+                        getText("removeFromWhitelist", lang),
+                        removeCurrentDomainFromWhitelist
+                    )
+                )
+            } else {
+                state.menuIds.push(
+                    GM_registerMenuCommand(
+                        getText("addToWhitelist", lang),
+                        addCurrentDomainToWhitelist
+                    )
+                )
+            }
+            state.menuIds.push(
+                GM_registerMenuCommand(
+                    getText("manageWhitelist", lang),
+                    openWhitelistManager
+                )
+            )
+            return
+        }
 
-        // Start forcing new tab
-        forceNewTab()
+        // Fallback: legacy managers without unregister support — set once.
+        if (state.menuIds.length === 0) {
+            state.menuIds.push(
+                GM_registerMenuCommand(
+                    getText("addToWhitelist", lang),
+                    addCurrentDomainToWhitelist
+                ),
+                GM_registerMenuCommand(
+                    getText("removeFromWhitelist", lang),
+                    removeCurrentDomainFromWhitelist
+                ),
+                GM_registerMenuCommand(
+                    getText("manageWhitelist", lang),
+                    openWhitelistManager
+                )
+            )
+        }
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initialize)
-    } else {
-        initialize()
+    /**
+     * Bridge GM storage changes to in-page reactions.
+     * Cross-tab updates arrive with `remote === true`; same-tab saves arrive
+     * with `remote === false`. Both should re-evaluate page state and menu.
+     */
+    function setupStorageListener() {
+        if (typeof GM_addValueChangeListener !== "function") return
+        try {
+            state.listenerId = GM_addValueChangeListener(
+                STORAGE_KEY_WHITELIST,
+                () => {
+                    applyToCurrentPage()
+                    refreshMenu()
+                    const modal = document.querySelector(
+                        ".openinnewtabs-modal"
+                    )
+                    if (modal && modal.style.display !== "none") {
+                        updateWhitelistDisplay()
+                    }
+                }
+            )
+        } catch (e) {
+            console.warn("[OpenInNewTab] storage listener unavailable:", e)
+        }
     }
+
+    /** Entry point. */
+    function initialize() {
+        try {
+            refreshMenu()
+            applyToCurrentPage()
+            setupStorageListener()
+        } catch (e) {
+            console.error("[OpenInNewTab] init failed:", e)
+        }
+    }
+
+    // Bind ASAP — initialize is safe to call before DOMContentLoaded.
+    initialize()
 })()

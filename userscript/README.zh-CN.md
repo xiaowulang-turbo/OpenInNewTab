@@ -125,6 +125,28 @@
 -   Safari（配合 Tampermonkey）
 -   Edge（配合 Tampermonkey）
 
+> 白名单实时联动与菜单项动态切换依赖 `GM_addValueChangeListener` 与 `GM_unregisterMenuCommand`，需要 Tampermonkey 4.13+。在更老的脚本管理器（如 Greasemonkey 4）上脚本会自动降级——白名单变更需要刷新页面才能生效，并且"加入 / 移出"两个菜单项会同时常驻。
+
+## 与扩展的已知差异
+
+油猴脚本和 Chrome 扩展共享同一套白名单逻辑与链接拦截行为，但因为运行平台差异，少量能力对不齐：
+
+| 能力 | 扩展 | 脚本 |
+|---|---|---|
+| 点击拦截（capture 阶段 `preventDefault` + `window.open`） | ✅ | ✅ |
+| 跳过规则（download / 修饰键 / 中键 / `javascript:` / `mailto:` / `tel:` / `#anchor`） | ✅ | ✅ |
+| 白名单变更免刷新生效 | ✅ via `chrome.storage.onChanged` | ✅ via `GM_addValueChangeListener`（TM 4.13+） |
+| 菜单标签动态切换（当前域名 加入 ↔ 移出） | ✅ popup 切换 | ✅ 菜单重注册 |
+| 后台打开（`active: false`，不抢焦点） | ✅ | ❌ 浏览器安全模型限制，`window.open` 无法控制前后台 |
+| 新 tab 插入到原 tab 右侧 | ✅ via `chrome.tabs.create({ index })` | ❌ 总是追加到最后 |
+| 主题 / 语言手动覆盖 | ✅ | ❌ 仅跟随系统 / 浏览器（规划中） |
+| JSON 白名单 导入 / 导出 | ✅ | ❌（规划中） |
+| 设置变更后自动 reload 其他 tab | ✅ via `chrome.tabs.reload` | ❌ 各 tab 通过 storage 监听器各自更新 |
+| 欢迎页 / 引导 | ✅ 安装时打开 | ❌（规划中） |
+| iframe 覆盖 | 仅顶层 | 仅顶层（`@noframes`） |
+
+脚本以"**链接拦截行为对齐**"为首要目标（这是用户感知最强的核心）；表中标 "❌（规划中）" 的能力已记录在 [TODO](../TODO.md) 中。
+
 ## 许可证
 
 MIT License - 详见 LICENSE 文件

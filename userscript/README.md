@@ -125,6 +125,28 @@ The whitelist management interface automatically adapts to your system's dark/li
 -   Safari (with Tampermonkey)
 -   Edge (with Tampermonkey)
 
+> Live whitelist updates and dynamic menu labels rely on `GM_addValueChangeListener` and `GM_unregisterMenuCommand`, available in Tampermonkey 4.13+. On older managers (e.g. Greasemonkey 4) the script falls back gracefully — the page must be reloaded for whitelist changes to take effect, and both "Add" and "Remove" menu items stay visible at all times.
+
+## Known Differences from the Extension
+
+The userscript and the Chrome extension share the same core whitelist logic and link-interception behavior, but a few capabilities differ due to the platforms:
+
+| Capability | Extension | Userscript |
+|---|---|---|
+| Click interception (capture phase, `preventDefault` + `window.open`) | ✅ | ✅ |
+| Skip rules (download / modifier keys / middle-click / `javascript:` / `mailto:` / `tel:` / `#anchor`) | ✅ | ✅ |
+| Live whitelist updates without reload | ✅ via `chrome.storage.onChanged` | ✅ via `GM_addValueChangeListener` (TM 4.13+) |
+| Dynamic menu label (Add ↔ Remove for current domain) | ✅ popup toggle | ✅ menu re-register |
+| Background open (`active: false`, no focus steal) | ✅ | ❌ Browser security model prevents `window.open` from opening in background |
+| New tab inserted right next to the source tab | ✅ via `chrome.tabs.create({ index })` | ❌ Always appended at the end |
+| Theme / language manual override | ✅ | ❌ Follows system / browser only (planned) |
+| JSON whitelist import / export | ✅ | ❌ (planned) |
+| Auto-reload other tabs after settings change | ✅ via `chrome.tabs.reload` | ❌ Each tab self-updates via the storage listener |
+| Welcome / onboarding page | ✅ on install | ❌ (planned) |
+| iframe coverage | Top frame only | Top frame only (`@noframes`) |
+
+The script targets feature parity for **link-interception behavior** (the user-visible core); features in the "❌ planned" rows are tracked in [TODO](../TODO.md).
+
 ## License
 
 MIT License - see LICENSE file for details
