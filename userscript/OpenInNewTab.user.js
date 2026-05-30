@@ -2,7 +2,7 @@
 // @name              Open In New Tab
 // @name:zh-CN        Open In New Tab - 链接强制新标签页打开
 // @namespace         https://github.com/xiaowulang-turbo/OpenInNewTab
-// @version           1.7.0
+// @version           1.7.1
 // @description       Force links to open in a new tab on whitelisted sites only. One-click add or remove the current domain from the Tampermonkey menu, with subdomain matching, dynamic-content support, dark mode, and English/Chinese UI. Other sites stay untouched.
 // @description:zh-CN 基于白名单的链接拦截脚本：仅在你勾选的网站把链接强制改为新标签页打开，其它网站完全不受影响。油猴菜单一键加入/移出当前域名，支持子域名匹配、深色模式与中英文界面。
 // @author            Xiaowu
@@ -49,7 +49,7 @@
         openInBackground: false,
     })
 
-    const SCRIPT_VERSION = "1.7.0"
+    const SCRIPT_VERSION = "1.7.1"
     const PROJECT_HOME = "https://github.com/xiaowulang-turbo/OpenInNewTab"
     const GREASY_FORK_URL =
         "https://greasyfork.org/en/scripts/551033-open-in-new-tab"
@@ -416,24 +416,52 @@
     }
 
     /**
-     * Get CSS color variables based on the user-effective theme.
-     * @returns {Object} CSS color variables
+     * Get theme color tokens for the user-effective theme.
+     *
+     * MIRROR: shared/STYLE_TOKENS.md — the values below are kept in sync with
+     * `extension/popup.css`'s three theme blocks (`:root`,
+     * `@media (prefers-color-scheme: dark)`, and the two manual
+     * `body[style*="color-scheme: …"]` overrides). Keys are the camelCase
+     * forms of the CSS variable names so a future shared/core extraction is
+     * a mechanical rename. When changing a value here, update STYLE_TOKENS.md
+     * and popup.css in the same commit.
+     *
+     * @returns {{
+     *   colorScheme: "light" | "dark",
+     *   bgPrimary: string, bgSecondary: string,
+     *   textPrimary: string, textSecondary: string,
+     *   borderColor: string, shadowColor: string, shadowHover: string,
+     *   inputBg: string, inputBorder: string, inputText: string,
+     *   accent: string, accentHover: string, accentFg: string,
+     *   danger: string, dangerFg: string,
+     * }}
      */
     function getThemeColors() {
         const isDark = getEffectiveTheme() === "dark"
         return {
+            // Hint native form widgets (radios, checkboxes, scrollbars) which
+            // theme to render in. Without this the host page's `color-scheme`
+            // bleeds through and unselected radios show as solid black dots
+            // on a light modal (or white on dark).
+            colorScheme: isDark ? "dark" : "light",
+            // Neutrals
             bgPrimary: isDark ? "#1a1a1a" : "#ffffff",
             bgSecondary: isDark ? "#2d2d2d" : "#f8f9fa",
             textPrimary: isDark ? "#ffffff" : "#333333",
             textSecondary: isDark ? "#cccccc" : "#666666",
             borderColor: isDark ? "#404040" : "#dddddd",
-            shadowColor: isDark ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.3)",
+            shadowColor: isDark ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.1)",
+            shadowHover: isDark ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.15)",
             inputBg: isDark ? "#333333" : "#ffffff",
             inputBorder: isDark ? "#555555" : "#dddddd",
             inputText: isDark ? "#ffffff" : "#333333",
-            accent: "#4caf50",
-            danger: "#f44336",
-            warning: "#ff9800",
+            // Accent · single teal, shared with extension and website
+            accent: isDark ? "#2dd4bf" : "#0d9488",
+            accentHover: isDark ? "#5eead4" : "#0f766e",
+            accentFg: isDark ? "#0a0a0a" : "#ffffff",
+            // Danger · only consumed by toast.error
+            danger: isDark ? "#ef4444" : "#dc2626",
+            dangerFg: "#ffffff",
         }
     }
 
@@ -510,12 +538,16 @@
         }
 
         const colors = getThemeColors()
+        // Map toast type → accent stripe colour. Mirrors the extension's
+        // popup.js notification semantics: success uses the brand accent,
+        // info stays neutral (no orange "warning" tint), error uses the
+        // restrained danger red defined in shared/STYLE_TOKENS.md.
         const accent =
             type === "success"
                 ? colors.accent
                 : type === "error"
                 ? colors.danger
-                : colors.warning
+                : colors.textSecondary
 
         const toast = document.createElement("div")
         toast.className = `oint-toast oint-toast--${type}`
@@ -664,6 +696,8 @@
             border-radius: 12px;
             box-shadow: 0 8px 32px ${colors.shadowColor};
             border: 1px solid ${colors.borderColor};
+            color-scheme: ${colors.colorScheme};
+            accent-color: ${colors.accent};
         `
 
         const header = modal.querySelector(".openinnewtabs-modal-header")
@@ -720,10 +754,14 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
         `
+        // Inline style snippets — kept declarative + theme-aware. All values
+        // come from `colors` so the modal re-skins on every theme/language
+        // change. No gradients, no colour-tinted shadows, no transform-based
+        // hover (per shared/STYLE_TOKENS.md and extension/STYLE_GUIDE.md).
         const inputStyle = `
             flex: 1;
             padding: 10px 14px;
-            border: 1.5px solid ${colors.inputBorder};
+            border: 1px solid ${colors.inputBorder};
             border-radius: 8px;
             font-size: 14px;
             background: ${colors.inputBg};
@@ -731,28 +769,31 @@
             outline: none;
             transition: border-color 0.2s ease;
         `
+        // Primary action: flat accent fill; foreground is accent-fg (NOT
+        // hardcoded white, see STYLE_TOKENS.md §1.1 critical note).
         const primaryBtnStyle = `
             padding: 10px 18px;
-            background: linear-gradient(135deg, #4caf50, #45a049);
-            color: white;
+            background: ${colors.accent};
+            color: ${colors.accentFg};
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
-            font-weight: 500;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+            font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease;
         `
+        // Secondary action (Import / Export): ghost — transparent fill,
+        // 1px neutral border, secondary text colour.
         const secondaryBtnStyle = `
             padding: 8px 14px;
-            background: ${colors.bgSecondary};
-            color: ${colors.textPrimary};
+            background: transparent;
+            color: ${colors.textSecondary};
             border: 1px solid ${colors.borderColor};
             border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
-            transition: background 0.15s ease;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         `
         const prefRowStyle = `
             display: flex;
@@ -931,7 +972,6 @@
                 margin-bottom: 6px;
                 border-radius: 8px;
                 background: ${colors.bgSecondary};
-                transition: transform 0.15s ease, box-shadow 0.15s ease;
             ">
                 <span style="color:${
                     colors.textPrimary
@@ -941,16 +981,15 @@
                 <button class="openinnewtabs-remove-domain" data-domain="${escapeHtml(
                     domain
                 )}" type="button" style="
-                    background: linear-gradient(135deg, #f44336, #d32f2f);
-                    color: white;
-                    border: none;
+                    background: transparent;
+                    color: ${colors.textSecondary};
+                    border: 1px solid ${colors.borderColor};
                     border-radius: 6px;
                     padding: 6px 14px;
                     cursor: pointer;
                     font-size: 12px;
                     font-weight: 500;
-                    transition: transform 0.15s ease, box-shadow 0.15s ease;
-                    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
+                    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
                 ">${escapeHtml(getText("removeButton", lang))}</button>
             </div>
         `
