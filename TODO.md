@@ -2,6 +2,14 @@
 
 ## ✅ Done
 
+- 油猴脚本 v1.7.1（P0）样式对齐 + 工程解耦
+  - 建立 `shared/STYLE_TOKENS.md` 作为双端颜色 SSoT，扩展 CSS / 脚本 JS 双向 MIRROR
+  - 扩展端 `--btn-primary*` → `--color-accent*` 全量改名清债（`popup.css` / `options.css` / `welcome.css` / `popup.js` / `options.js`）；同步引入 `--color-danger*`
+  - 脚本设置中心皮肤化对齐 `extension/STYLE_GUIDE.md`：去 gradient、彩色 shadow、Material 红绿；Remove 改 ghost；toast 颜色 `success/info/error` 与扩展语义一致
+  - 版本号解耦：扩展 (`extension/manifest.json`) 与脚本 (`// @version` + `SCRIPT_VERSION`) 各自独立 SemVer；`scripts/version-core.mjs` 双轨化；`bump-extension.mjs` / `bump-userscript.mjs` 取代旧 `bump-patch.mjs` 与 `sync-version.mjs`；`version:verify` 缩范围到 website ↔ manifest + userscript 自一致
+  - pre-commit 钩子从"自动 bump"改为"仅 verify"，把版本号控制权交还给开发者
+  - `CHANGELOG.md` 起步（双轨：Userscript / Extension 各自时间线）
+
 - 油猴脚本 v1.7.0（P1）设置中心对齐扩展
   - 抽象层：`state.settings` / `state.caps` / `getEffectiveTheme` / `getEffectiveLanguage`，`getThemeColors` / `getText` / `handleLinkClick` 全部切换到新数据源
   - i18n 字典扩展（约 25 keys × 2 lang）+ Toast 单例容器（success/info/error，最多同屏 3 条，3s 自动消失），全量替换 `alert`
@@ -24,18 +32,21 @@
 ## 🎯 P1（通用，仍待办）
 
 - 插件更新横幅
-- 官网 changelog 页面
+- 官网 changelog 页面（指向 `CHANGELOG.md`）
 - 官网 docs 页面
 
-## 🧱 P2（工程化）
+## 🧱 P2（工程化，下一个大版本）
 
 - 抽 `shared/core/`：白名单匹配 / 跳过规则 / 链接 patch（统一脚本与扩展的同构核心）
 - `scripts/build-userscript.mjs`：把 `shared/core` inline 进 `.user.js`，发布前自动跑
+- `shared/STYLE_TOKENS.md` 机械翻译为 `shared/core/style-tokens.{json,css,js}`，由扩展 CSS 与脚本 build 各自消费（命名已 1:1，迁移成本机械）
 - 域名规范化：去 `www.` / 小写 / IDN（`new URL(...).hostname`）
 - `extension/web_accessible_resources` 收紧：popup 资源不需要暴露给 `*://*/*`
-- CHANGELOG.md 维护规范（手写或自动生成）
 
-## 🧊 Backlog（暂不做）
+## 🧊 Backlog（暂不做，等用户反馈再启动）
 
 - 跨 tab 主动 reload —— 油猴端无 `tabs` 权限，不可行；现有方案（每页通过 storage 监听器自更新）已等价
-- 脚本独立版本号 —— 需重构 `scripts/version-core.mjs`，ROI 低，暂搁置
+- 在本站临时禁用（`sessionStorage` per-tab 暂停）—— v1.8.0 评估时砍掉，与扩展端能力对齐原则相悖
+- 键盘快捷键（Alt+Shift+W/S/D）—— 同上，扩展端也未提供
+- 域名规范化迁移（normalize + matchHost + 一次性写回白名单）—— 等扩展端先做，再双端同步
+- 导出 schema v2（含偏好快照）—— 等扩展端先做

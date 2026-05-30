@@ -119,14 +119,22 @@ MIT License - 详见 LICENSE 文件
 
 ## 版本与发布号
 
-扩展、用户脚本与官网展示的版本号以 **`extension/manifest.json`** 的 `version` 为准；`// @version` 与官网 `<meta name="app-version">` 由脚本同步。根目录可用：`npm run version:sync`、`npm run version:verify`、`npm run version:bump`。当暂存区包含 `extension/`、`userscript/` 或 `website/` 下文件时，pre-commit 会自动 patch+1 并同步（若已单独暂存 `extension/manifest.json` 则只同步、不自动 bump）。详见主 [README.md](README.md) 英文版 **Versioning** 小节。
+扩展与脚本是**两个独立的产品，分别走各自的 SemVer 节奏**，不再共享同一个版本号。
+
+| 产品 | 版本来源 | Bump 命令 |
+| --- | --- | --- |
+| Chrome 扩展 | `extension/manifest.json`；官网 `<meta name="app-version" />` 跟随该值 | `npm run version:bump:ext` |
+| 油猴脚本 | `userscript/OpenInNewTab.user.js`：`// @version` 行与 `SCRIPT_VERSION` 常量必须一致 | `npm run version:bump:us` |
+
+- `npm run version:verify` —— 当（a）官网 meta 与 manifest 不一致，或（b）脚本两处版本号自身不一致时报错退出。**不再**比较扩展与脚本的版本号。
+
+**Git 钩子**：暂存区包含 `extension/`、`userscript/` 或 `website/` 下文件时，pre-commit 会跑 `version:verify`；暂存了 `extension/` 还会跑 `npm run pack:extension`。**钩子不再自动 bump 版本号**——major / minor / patch 由开发者手动设置或显式运行对应的 `version:bump:*` 命令。
+
+详见 [`CHANGELOG.md`](./CHANGELOG.md)（按产品分两栏维护）。
 
 ## 更新日志
 
--   **v1.4.2**: 版本号统一由 manifest 维护；官网页脚展示发布版本；条件性 pre-commit 自动 patch
--   **v1.3.0** (Extension): 添加选项页面、主题设置、完整的国际化支持
--   **v1.1.5** (Userscript): 优化白名单管理界面、暗色模式支持
--   更多历史版本请查看各子项目的 README
+详见仓库根目录的 [`CHANGELOG.md`](./CHANGELOG.md)。
 
 ## 致谢
 

@@ -34,7 +34,7 @@ website/
 └── README.md           # This file
 ```
 
-Release version shown in the footer is read from `app-version`; update it via the repo root `npm run version:sync` / manifest (see main [README.md](../README.md#versioning)).
+Release version shown in the footer is read from `app-version`; bump via `npm run version:bump:ext` (which also syncs the website meta tags). See main [README.md](../README.md#versioning).
 
 ## Local Development
 

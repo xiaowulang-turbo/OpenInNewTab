@@ -77,13 +77,19 @@ Both versions share the same core functionality and features, but have different
 
 ## Versioning
 
-The Chrome extension **`extension/manifest.json`** `version` field is the single source of truth. The Tampermonkey header `// @version` and the website `<meta name="app-version">` values are kept in sync by scripts (do not edit those copies by hand for release numbers).
+The extension and the userscript are **independent products on independent
+SemVer tracks**. They no longer share a version number.
 
--   `npm run version:sync` — propagate manifest version to the userscript and website meta tags.
--   `npm run version:verify` — fail if manifest, userscript, and website disagree (use in CI or before release).
--   `npm run version:bump` — increment the patch segment in the manifest, then sync.
+| Product | Version source | Bump command |
+| --- | --- | --- |
+| Chrome extension | `extension/manifest.json`; the website's `<meta name="app-version" />` tags mirror it | `npm run version:bump:ext` |
+| Tampermonkey userscript | `userscript/OpenInNewTab.user.js` — both the `// @version` metadata line and the `SCRIPT_VERSION` constant must agree | `npm run version:bump:us` |
 
-**Git hook**: If a commit’s staged files include anything under `extension/`, `userscript/`, or `website/`, the pre-commit hook runs **`version:bump`** (patch +1) and re-stages the synced files—**unless** `extension/manifest.json` itself is already staged, in which case only **`version:sync`** runs so you can set major/minor/patch manually in the manifest. Staged changes under `extension/` still run **`npm run pack:extension`** to refresh the local zip under `release/`.
+- `npm run version:verify` — fails if (a) the website meta tags disagree with the manifest, or (b) the userscript's two version locations disagree with each other. The two products are **not** compared against each other.
+
+**Git hook**: pre-commit runs `version:verify` whenever `extension/`, `userscript/`, or `website/` files are staged, and runs `npm run pack:extension` whenever `extension/` files are staged. The hook no longer auto-bumps — set major / minor / patch manually in the relevant file or run the appropriate `version:bump:*` command, then commit.
+
+See [`CHANGELOG.md`](./CHANGELOG.md) for release notes (split per product).
 
 To skip hooks (e.g. `git commit --amend`), use `HUSKY=0 git commit` on Unix shells, or disable Husky for that command per your environment.
 

@@ -4,6 +4,8 @@
 
 一个 Tampermonkey 用户脚本，使用白名单模式强制所有链接在新标签页中打开，支持暗色模式和国际化。
 
+> **版本号说明**：油猴脚本走独立的 SemVer 节奏，与 Chrome 扩展版本号已解耦。完整的脚本端发布历史见 [`../CHANGELOG.md`](../CHANGELOG.md)。
+
 📖 **[官方网站](https://open-in-new-tab.vercel.app/)** | 🎯 **[从 Greasy Fork 安装](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub 仓库](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## 功能特性
