@@ -1,13 +1,20 @@
 #!/usr/bin/env sh
 STAGED=$(git diff --cached --name-only --diff-filter=ACM)
 
+# Verify version invariants whenever a versioned tree is touched.
+# Scope (post-decoupling):
+#   extension/manifest.json  ==  website <meta name="app-version" />
+#   userscript // @version   ==  userscript SCRIPT_VERSION constant
+# Extension and userscript are independent — no cross-track check.
 if echo "$STAGED" | grep -qE '^(extension/|userscript/|website/)'; then
-	if echo "$STAGED" | grep -q '^extension/manifest\.json$'; then
-		node scripts/sync-version.mjs
-	else
-		node scripts/bump-patch.mjs
+	if ! npm run --silent version:verify; then
+		echo ""
+		echo "Hint: version:verify failed. Use one of"
+		echo "  npm run version:bump:ext   (bump manifest + sync website meta)"
+		echo "  npm run version:bump:us    (bump // @version + SCRIPT_VERSION)"
+		echo "or set the versions manually in the affected files."
+		exit 1
 	fi
-	git add extension/manifest.json userscript/OpenInNewTab.user.js website/index.html website/privacy-policy.html
 fi
 
 if echo "$STAGED" | grep -qE '^extension/'; then

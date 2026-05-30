@@ -5,9 +5,9 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "lint:tsc": "tsc --noEmit",
-        "version:sync": "node scripts/sync-version.mjs",
         "version:verify": "node scripts/verify-version.mjs",
-        "version:bump": "node scripts/bump-patch.mjs",
+        "version:bump:ext": "node scripts/bump-extension.mjs",
+        "version:bump:us": "node scripts/bump-userscript.mjs",
         "pack:extension": "node scripts/pack-extension.mjs"
     },
     "devDependencies": {
