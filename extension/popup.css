@@ -1,6 +1,12 @@
 /**
  * Popup Styles - Open In New Tabs Extension
  * Modern, responsive design with dark mode support
+ *
+ * MIRROR: shared/STYLE_TOKENS.md — colour values are the single source of
+ * truth for the whole project. The userscript mirrors the same values in
+ * `getThemeColors()` (see userscript/OpenInNewTab.user.js). When changing
+ * a token, update STYLE_TOKENS.md, all three theme blocks below, and the
+ * userscript in the same commit.
  */
 
 :root {
@@ -16,9 +22,16 @@
     --input-border: #dddddd;
     --input-text: #333333;
     /* Accent · single teal, shared with the website (see STYLE_GUIDE.md) */
-    --btn-primary: #0d9488;
-    --btn-primary-hover: #0f766e;
-    --btn-primary-fg: #ffffff;
+    --color-accent: #0d9488;
+    --color-accent-hover: #0f766e;
+    --color-accent-fg: #ffffff;
+    /* Danger · reserved; only consumed today by userscript toast.error */
+    --color-danger: #dc2626;
+    --color-danger-fg: #ffffff;
+    /* Native form widgets (radio / checkbox / scrollbar) follow the theme
+       and tint their checked state with our accent without per-element JS. */
+    color-scheme: light;
+    accent-color: var(--color-accent);
 }
 
 /* Dark mode colors - system preference */
@@ -34,9 +47,12 @@
         --input-bg: #333333;
         --input-border: #555555;
         --input-text: #ffffff;
-        --btn-primary: #2dd4bf;
-        --btn-primary-hover: #5eead4;
-        --btn-primary-fg: #0a0a0a;
+        --color-accent: #2dd4bf;
+        --color-accent-hover: #5eead4;
+        --color-accent-fg: #0a0a0a;
+        --color-danger: #ef4444;
+        --color-danger-fg: #ffffff;
+        color-scheme: dark;
     }
 }
 
@@ -52,9 +68,12 @@ body[style*="color-scheme: dark"] {
     --input-bg: #333333;
     --input-border: #555555;
     --input-text: #ffffff;
-    --btn-primary: #2dd4bf;
-    --btn-primary-hover: #5eead4;
-    --btn-primary-fg: #0a0a0a;
+    --color-accent: #2dd4bf;
+    --color-accent-hover: #5eead4;
+    --color-accent-fg: #0a0a0a;
+    --color-danger: #ef4444;
+    --color-danger-fg: #ffffff;
+    color-scheme: dark;
 }
 
 /* Manual light mode override */
@@ -69,9 +88,12 @@ body[style*="color-scheme: light"] {
     --input-bg: #ffffff;
     --input-border: #dddddd;
     --input-text: #333333;
-    --btn-primary: #0d9488;
-    --btn-primary-hover: #0f766e;
-    --btn-primary-fg: #ffffff;
+    --color-accent: #0d9488;
+    --color-accent-hover: #0f766e;
+    --color-accent-fg: #ffffff;
+    --color-danger: #dc2626;
+    --color-danger-fg: #ffffff;
+    color-scheme: light;
 }
 
 * {
@@ -172,7 +194,7 @@ body {
 }
 
 .current-domain-card:focus-within {
-    border-color: var(--btn-primary);
+    border-color: var(--color-accent);
 }
 
 .domain-info {
@@ -203,8 +225,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 10px 20px;
-    background: var(--btn-primary);
-    color: var(--btn-primary-fg);
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -216,7 +238,7 @@ body {
 }
 
 .quick-add-btn:hover {
-    background: var(--btn-primary-hover);
+    background: var(--color-accent-hover);
 }
 
 .quick-add-btn.remove-state {
@@ -489,14 +511,14 @@ select,
 }
 
 .theme-option:hover {
-    border-color: var(--btn-primary);
+    border-color: var(--color-accent);
     background: var(--bg-primary);
 }
 
 .theme-option.active {
-    border-color: var(--btn-primary);
-    background: var(--btn-primary);
-    color: var(--btn-primary-fg);
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
 }
 
 .theme-option .theme-icon {
@@ -510,7 +532,7 @@ select,
 }
 
 .theme-option.active .theme-text {
-    color: var(--btn-primary-fg);
+    color: var(--color-accent-fg);
 }
 
 /* Language Select */
@@ -528,11 +550,11 @@ select,
 }
 
 .language-select:hover {
-    border-color: var(--btn-primary);
+    border-color: var(--color-accent);
 }
 
 .language-select:focus {
-    border-color: var(--btn-primary);
+    border-color: var(--color-accent);
 }
 
 /* Setting row with toggle (popup modal) */
@@ -603,7 +625,7 @@ select,
 }
 
 .toggle-switch input:checked + .toggle-slider {
-    background: var(--btn-primary);
+    background: var(--color-accent);
 }
 
 .toggle-switch input:checked + .toggle-slider::before {
@@ -611,7 +633,7 @@ select,
 }
 
 .toggle-switch input:focus-visible + .toggle-slider {
-    outline: 2px solid var(--btn-primary);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
 
@@ -634,8 +656,8 @@ select,
 }
 
 .more-options-row:hover {
-    border-color: var(--btn-primary);
-    color: var(--btn-primary);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 .more-options-row .icon {

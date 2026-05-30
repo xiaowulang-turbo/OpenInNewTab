@@ -21,8 +21,8 @@
     border-radius: 999px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--btn-primary);
-    background: color-mix(in srgb, var(--btn-primary) 12%, transparent);
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .hero-badge .icon {
@@ -89,8 +89,8 @@
     height: 44px;
     margin-bottom: 16px;
     border-radius: 10px;
-    color: var(--btn-primary);
-    background: color-mix(in srgb, var(--btn-primary) 12%, transparent);
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 .step-icon .icon {
@@ -138,13 +138,13 @@
 }
 
 .cta-primary {
-    color: var(--btn-primary-fg);
+    color: var(--color-accent-fg);
     border: none;
-    background: var(--btn-primary);
+    background: var(--color-accent);
 }
 
 .cta-primary:hover {
-    background: var(--btn-primary-hover);
+    background: var(--color-accent-hover);
 }
 
 .cta-secondary {
@@ -154,8 +154,8 @@
 }
 
 .cta-secondary:hover {
-    border-color: var(--btn-primary);
-    color: var(--btn-primary);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
 /* Responsive */

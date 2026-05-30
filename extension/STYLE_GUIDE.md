@@ -85,10 +85,16 @@ default), `@media (prefers-color-scheme: dark)`, and the manual
 `body[style*="color-scheme: …"]` overrides. Any accent/fg token added above must be defined
 in **all** of those blocks.
 
-**Naming note:** the website uses `--color-accent*`. The extension historically uses
-`--btn-primary*`. Aligning the extension onto the `--color-accent*` names is the desired end
-state for true cross-end token sharing, but it touches many references and should be done as
-its own migration step.
+**Single source of truth:** the table above and the neutrals are normative in
+[`shared/STYLE_TOKENS.md`](../shared/STYLE_TOKENS.md). Both `extension/popup.css` and the
+userscript's `getThemeColors()` mirror that file. When changing a value, update
+`STYLE_TOKENS.md`, all three theme blocks in `popup.css`, and the userscript in the same
+commit.
+
+> **Naming history:** the extension previously used `--btn-primary*`. As of v1.7.x the
+> extension and userscript both use `--color-accent*`, matching the website and the names
+> recorded in `shared/STYLE_TOKENS.md`. There is no compatibility alias — all references
+> were migrated in one pass.
 
 ---
 

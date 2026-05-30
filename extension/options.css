@@ -150,13 +150,13 @@ body {
 }
 
 .input-with-button input:focus {
-    border-color: var(--btn-primary);
+    border-color: var(--color-accent);
 }
 
 .input-with-button .add-btn {
     padding: 8px 16px;
-    background: var(--btn-primary);
-    color: var(--btn-primary-fg);
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -166,7 +166,7 @@ body {
 }
 
 .input-with-button .add-btn:hover {
-    background: var(--btn-primary-hover);
+    background: var(--color-accent-hover);
 }
 
 /* Domains Container */
