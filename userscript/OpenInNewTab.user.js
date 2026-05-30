@@ -2,7 +2,7 @@
 // @name              Open In New Tab
 // @name:zh-CN        Open In New Tab - 链接强制新标签页打开
 // @namespace         https://github.com/xiaowulang-turbo/OpenInNewTab
-// @version           1.6.1
+// @version           1.7.0
 // @description       Force links to open in a new tab on whitelisted sites only. One-click add or remove the current domain from the Tampermonkey menu, with subdomain matching, dynamic-content support, dark mode, and English/Chinese UI. Other sites stay untouched.
 // @description:zh-CN 基于白名单的链接拦截脚本：仅在你勾选的网站把链接强制改为新标签页打开，其它网站完全不受影响。油猴菜单一键加入/移出当前域名，支持子域名匹配、深色模式与中英文界面。
 // @author            Xiaowu
@@ -20,6 +20,7 @@
 // @grant             GM_unregisterMenuCommand
 // @grant             GM_addValueChangeListener
 // @grant             GM_removeValueChangeListener
+// @grant             GM_openInTab
 // @run-at            document-start
 // ==/UserScript==
 
@@ -30,16 +31,63 @@
     // Constants & module state (mirrored from extension/content.js)
     // ─────────────────────────────────────────────────────────────
     const STORAGE_KEY_WHITELIST = "userWhitelist"
+    const STORAGE_KEY_THEME = "theme"
+    const STORAGE_KEY_LANGUAGE = "language"
+    const STORAGE_KEY_OPEN_IN_BG = "openInBackground"
+    const STORAGE_KEY_INSTALLED_AT = "__installed_at"
     const PATCHED_ATTR = "data-oint-patched"
 
-    /** @type {{ isApplied: boolean, observer: MutationObserver|null, menuIds: any[], pendingNodes: Node[], scheduled: boolean, listenerId: any }} */
+    const SETTINGS_KEYS = [
+        STORAGE_KEY_THEME,
+        STORAGE_KEY_LANGUAGE,
+        STORAGE_KEY_OPEN_IN_BG,
+    ]
+
+    const DEFAULT_SETTINGS = Object.freeze({
+        theme: "auto", // "auto" | "light" | "dark"
+        language: "auto", // "auto" | "en" | "zh"
+        openInBackground: false,
+    })
+
+    const SCRIPT_VERSION = "1.7.0"
+    const PROJECT_HOME = "https://github.com/xiaowulang-turbo/OpenInNewTab"
+    const GREASY_FORK_URL =
+        "https://greasyfork.org/en/scripts/551033-open-in-new-tab"
+    // Official landing page (vercel.json → outputDirectory: "website").
+    // Query string is a soft signal for future analytics; the page itself
+    // does not need to read it.
+    const WELCOME_URL =
+        "https://open-in-new-tab.vercel.app/?from=userscript-welcome"
+
+    /**
+     * @type {{
+     *   isApplied: boolean,
+     *   observer: MutationObserver|null,
+     *   menuIds: any[],
+     *   pendingNodes: Node[],
+     *   scheduled: boolean,
+     *   listenerIds: any[],
+     *   settings: { theme: string, language: string, openInBackground: boolean },
+     *   caps: { canUnregisterMenu: boolean, canListenStorage: boolean, canOpenInTab: boolean },
+     *   toastContainer: HTMLElement|null,
+     *   toasts: HTMLElement[]
+     * }}
+     */
     const state = {
         isApplied: false,
         observer: null,
         menuIds: [],
         pendingNodes: [],
         scheduled: false,
-        listenerId: null,
+        listenerIds: [],
+        settings: { ...DEFAULT_SETTINGS },
+        caps: {
+            canUnregisterMenu: false,
+            canListenStorage: false,
+            canOpenInTab: false,
+        },
+        toastContainer: null,
+        toasts: [],
     }
 
     /**
@@ -53,7 +101,7 @@
      * @returns {Array} Array of whitelisted domains
      */
     function getUserWhitelist() {
-        const stored = GM_getValue("userWhitelist", [])
+        const stored = GM_getValue(STORAGE_KEY_WHITELIST, [])
         return Array.isArray(stored) ? stored : DEFAULT_DOMAINS
     }
 
@@ -62,7 +110,82 @@
      * @param {Array} domains Array of domains to save
      */
     function saveUserWhitelist(domains) {
-        GM_setValue("userWhitelist", domains)
+        GM_setValue(STORAGE_KEY_WHITELIST, domains)
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Settings layer: persisted preferences (theme/language/bg) +
+    // capability detection + effective-value getters (single source of truth)
+    // ─────────────────────────────────────────────────────────────
+
+    /**
+     * Detect runtime capabilities once. Result is memoized on `state.caps`.
+     */
+    function detectCaps() {
+        state.caps.canUnregisterMenu =
+            typeof GM_unregisterMenuCommand === "function"
+        state.caps.canListenStorage =
+            typeof GM_addValueChangeListener === "function"
+        state.caps.canOpenInTab = typeof GM_openInTab === "function"
+    }
+
+    /**
+     * Read all settings keys into in-memory state.settings.
+     * Unknown / invalid stored values fall back to DEFAULT_SETTINGS.
+     */
+    function loadSettings() {
+        const theme = GM_getValue(STORAGE_KEY_THEME, DEFAULT_SETTINGS.theme)
+        const language = GM_getValue(
+            STORAGE_KEY_LANGUAGE,
+            DEFAULT_SETTINGS.language
+        )
+        const openInBackground = GM_getValue(
+            STORAGE_KEY_OPEN_IN_BG,
+            DEFAULT_SETTINGS.openInBackground
+        )
+
+        state.settings.theme = ["auto", "light", "dark"].includes(theme)
+            ? theme
+            : DEFAULT_SETTINGS.theme
+        state.settings.language = ["auto", "en", "zh"].includes(language)
+            ? language
+            : DEFAULT_SETTINGS.language
+        state.settings.openInBackground = Boolean(openInBackground)
+    }
+
+    /**
+     * Persist a single setting key. The storage listener will reflect the
+     * change back into `state.settings` on the same tick (next event loop).
+     * @param {string} key
+     * @param {*} value
+     */
+    function saveSetting(key, value) {
+        GM_setValue(key, value)
+        // Mirror immediately so synchronous reads after this call are correct.
+        if (key === STORAGE_KEY_THEME) state.settings.theme = value
+        else if (key === STORAGE_KEY_LANGUAGE) state.settings.language = value
+        else if (key === STORAGE_KEY_OPEN_IN_BG)
+            state.settings.openInBackground = Boolean(value)
+    }
+
+    /**
+     * Resolve "auto" theme to a concrete light/dark by consulting matchMedia.
+     * @returns {"light"|"dark"}
+     */
+    function getEffectiveTheme() {
+        const t = state.settings.theme
+        if (t === "light" || t === "dark") return t
+        return isDarkMode() ? "dark" : "light"
+    }
+
+    /**
+     * Resolve "auto" language to a concrete en/zh from navigator.language.
+     * @returns {"en"|"zh"}
+     */
+    function getEffectiveLanguage() {
+        const l = state.settings.language
+        if (l === "en" || l === "zh") return l
+        return detectLanguage()
     }
 
     /**
@@ -84,14 +207,19 @@
     function addCurrentDomainToWhitelist() {
         const currentDomain = window.location.hostname
         const userWhitelist = getUserWhitelist()
-        const lang = detectLanguage()
 
         if (!userWhitelist.includes(currentDomain)) {
             userWhitelist.push(currentDomain)
             saveUserWhitelist(userWhitelist)
-            alert(`${currentDomain} ${getText("addedToWhitelist", lang)}`)
+            showToast(
+                `${currentDomain} — ${getText("addedToWhitelist")}`,
+                "success"
+            )
         } else {
-            alert(`${currentDomain} ${getText("alreadyInWhitelist", lang)}`)
+            showToast(
+                `${currentDomain} — ${getText("alreadyInWhitelist")}`,
+                "info"
+            )
         }
     }
 
@@ -103,15 +231,20 @@
     function removeCurrentDomainFromWhitelist() {
         const currentDomain = window.location.hostname
         const userWhitelist = getUserWhitelist()
-        const lang = detectLanguage()
         const idx = userWhitelist.indexOf(currentDomain)
 
         if (idx > -1) {
             userWhitelist.splice(idx, 1)
             saveUserWhitelist(userWhitelist)
-            alert(`${currentDomain} ${getText("removedFromWhitelist", lang)}`)
+            showToast(
+                `${currentDomain} — ${getText("removedFromWhitelist")}`,
+                "success"
+            )
         } else {
-            alert(`${currentDomain} ${getText("notInWhitelist", lang)}`)
+            showToast(
+                `${currentDomain} — ${getText("notInWhitelist")}`,
+                "info"
+            )
         }
     }
 
@@ -129,45 +262,139 @@
      */
     const languageResources = {
         en: {
-            modalTitle: "Whitelist Management",
+            // Modal chrome
+            modalTitle: "Open In New Tab — Settings",
+            settingsTitle: "Open In New Tab — Settings",
+            closeButton: "×",
+
+            // Section headers
+            sectionWhitelist: "Whitelist",
+            sectionPreferences: "Preferences",
+            sectionAbout: "About",
+
+            // Whitelist section
             inputPlaceholder: "Enter domain, e.g., example.com",
             addButton: "Add",
             removeButton: "Remove",
-            closeButton: "×",
-            addedToWhitelist: "Added to whitelist!",
+            addedToWhitelist: "Added to whitelist",
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
             notInWhitelist: "Not in whitelist",
-            noDomains: "No domains in whitelist",
+            noDomains: "No domains in whitelist yet",
+
+            // Import / export
+            exportButton: "Export JSON",
+            importButton: "Import JSON",
+            exportSuccess: "Whitelist exported",
+            exportFailed: "Export failed",
+            importInvalidJson: "Invalid JSON file",
+            importEmpty: "No valid domains in file",
+            importMergeOrReplace:
+                "OK = merge into current whitelist · Cancel = replace current whitelist",
+            importDoneMerge:
+                "Imported {added} new · {skipped} skipped (duplicate / invalid)",
+            importDoneReplace:
+                "Replaced whitelist with {total} domains · {skipped} invalid",
+
+            // Preferences section — theme
+            prefsTheme: "Theme",
+            prefsThemeAuto: "Auto",
+            prefsThemeLight: "Light",
+            prefsThemeDark: "Dark",
+
+            // Preferences section — language
+            prefsLanguage: "Language",
+            prefsLanguageAuto: "Auto",
+            prefsLanguageEn: "English",
+            prefsLanguageZh: "中文",
+
+            // Preferences section — background open
+            prefsOpenInBg: "Open links in a background tab",
+            prefsOpenInBgHint: "Experimental · requires Tampermonkey",
+            prefsOpenInBgUnavailable:
+                "Your script manager does not support GM_openInTab",
+
+            // About section
+            aboutVersion: "Version",
+            aboutHomepage: "GitHub",
+            aboutGreasyFork: "Greasy Fork",
+
+            // Tampermonkey menu commands
             addToWhitelist: "Add to Whitelist",
             removeFromWhitelist: "Remove from Whitelist",
             manageWhitelist: "Manage Whitelist",
+            openSettings: "Open Settings",
+
+            // Welcome
+            welcomeToast:
+                "Welcome to Open In New Tab! Click here to learn more.",
         },
         zh: {
-            modalTitle: "白名单管理",
+            modalTitle: "Open In New Tab — 设置",
+            settingsTitle: "Open In New Tab — 设置",
+            closeButton: "×",
+
+            sectionWhitelist: "白名单",
+            sectionPreferences: "偏好设置",
+            sectionAbout: "关于",
+
             inputPlaceholder: "输入域名，如：example.com",
             addButton: "添加",
             removeButton: "移除",
-            closeButton: "×",
-            addedToWhitelist: "已添加到白名单！",
+            addedToWhitelist: "已添加到白名单",
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
             notInWhitelist: "不在白名单中",
-            noDomains: "白名单中没有域名",
-            addToWhitelist: "添加白名单",
+            noDomains: "白名单中暂无域名",
+
+            exportButton: "导出 JSON",
+            importButton: "导入 JSON",
+            exportSuccess: "白名单已导出",
+            exportFailed: "导出失败",
+            importInvalidJson: "JSON 文件无效",
+            importEmpty: "文件中没有有效域名",
+            importMergeOrReplace:
+                "确定 = 合并到当前白名单 · 取消 = 覆盖当前白名单",
+            importDoneMerge: "导入新增 {added} 项 · 跳过 {skipped} 项（重复/无效）",
+            importDoneReplace: "已用 {total} 项覆盖白名单 · 无效 {skipped} 项",
+
+            prefsTheme: "主题",
+            prefsThemeAuto: "自动",
+            prefsThemeLight: "浅色",
+            prefsThemeDark: "深色",
+
+            prefsLanguage: "语言",
+            prefsLanguageAuto: "自动",
+            prefsLanguageEn: "English",
+            prefsLanguageZh: "中文",
+
+            prefsOpenInBg: "新链接在后台标签页打开",
+            prefsOpenInBgHint: "实验性 · 需要 Tampermonkey",
+            prefsOpenInBgUnavailable:
+                "当前脚本管理器不支持 GM_openInTab",
+
+            aboutVersion: "版本",
+            aboutHomepage: "GitHub",
+            aboutGreasyFork: "Greasy Fork",
+
+            addToWhitelist: "加入白名单",
             removeFromWhitelist: "移出白名单",
             manageWhitelist: "管理白名单",
+            openSettings: "打开设置",
+
+            welcomeToast: "欢迎使用 Open In New Tab！点击此处了解更多。",
         },
     }
 
     /**
-     * Get text by language
+     * Get text by language. Defaults to user-effective language (which may be
+     * a manual override; "auto" falls back to navigator.language).
      * @param {string} key Text key
-     * @param {string} lang Language code
+     * @param {string} [lang] Optional explicit language override
      * @returns {string} Localized text
      */
     function getText(key, lang = null) {
-        const language = lang || detectLanguage()
+        const language = lang || getEffectiveLanguage()
         return (
             languageResources[language]?.[key] ||
             languageResources.en[key] ||
@@ -176,7 +403,9 @@
     }
 
     /**
-     * Detect if the browser is in dark mode
+     * Detect if the OS / browser prefers dark color scheme.
+     * Used as the underlying probe for `getEffectiveTheme()` when user
+     * setting is "auto".
      * @returns {boolean} True if in dark mode
      */
     function isDarkMode() {
@@ -187,11 +416,11 @@
     }
 
     /**
-     * Get CSS variables based on theme
+     * Get CSS color variables based on the user-effective theme.
      * @returns {Object} CSS color variables
      */
     function getThemeColors() {
-        const isDark = isDarkMode()
+        const isDark = getEffectiveTheme() === "dark"
         return {
             bgPrimary: isDark ? "#1a1a1a" : "#ffffff",
             bgSecondary: isDark ? "#2d2d2d" : "#f8f9fa",
@@ -202,68 +431,235 @@
             inputBg: isDark ? "#333333" : "#ffffff",
             inputBorder: isDark ? "#555555" : "#dddddd",
             inputText: isDark ? "#ffffff" : "#333333",
+            accent: "#4caf50",
+            danger: "#f44336",
+            warning: "#ff9800",
         }
     }
 
+    // ─────────────────────────────────────────────────────────────
+    // Toast: non-blocking notifications (replaces alert() calls)
+    // ─────────────────────────────────────────────────────────────
+
+    const TOAST_MAX_VISIBLE = 3
+    const TOAST_DEFAULT_DURATION = 3000
+
     /**
-     * Create whitelist management modal
+     * Lazily create the singleton toast container and attach to document.body.
+     * Returns null if body is not yet available (caller falls back to console).
+     * @returns {HTMLElement|null}
      */
-    function createWhitelistModal() {
-        const lang = detectLanguage()
+    function ensureToastContainer() {
+        if (state.toastContainer && state.toastContainer.isConnected) {
+            return state.toastContainer
+        }
+        if (!document.body) return null
+
+        const container = document.createElement("div")
+        container.className = "oint-toast-container"
+        container.style.cssText = `
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 2147483647;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+        `
+        document.body.appendChild(container)
+        state.toastContainer = container
+        return container
+    }
+
+    /**
+     * Smoothly remove a toast: fade-out via inline transition, then detach.
+     * @param {HTMLElement} toast
+     */
+    function dismissToast(toast) {
+        if (!toast || toast.dataset.dismissing === "1") return
+        toast.dataset.dismissing = "1"
+        toast.style.opacity = "0"
+        toast.style.transform = "translateX(8px)"
+        setTimeout(() => {
+            toast.remove()
+            state.toasts = state.toasts.filter((t) => t !== toast)
+        }, 200)
+    }
+
+    /**
+     * Show a non-blocking toast. Idempotent w.r.t. container creation.
+     * Falls back to console.info when DOM isn't ready (e.g., document_start).
+     * @param {string} message
+     * @param {"success"|"info"|"error"} [type="info"]
+     * @param {{ duration?: number, onClick?: () => void }} [opts]
+     */
+    function showToast(message, type = "info", opts = {}) {
+        const container = ensureToastContainer()
+        if (!container) {
+            console.info(`[OpenInNewTab] ${message}`)
+            return
+        }
+
+        // Cap visible toasts: dismiss the oldest non-dismissing one first.
+        while (state.toasts.length >= TOAST_MAX_VISIBLE) {
+            dismissToast(state.toasts[0])
+            // Splice handled by dismissToast async; defensive break to avoid loop.
+            break
+        }
+
+        const colors = getThemeColors()
+        const accent =
+            type === "success"
+                ? colors.accent
+                : type === "error"
+                ? colors.danger
+                : colors.warning
+
+        const toast = document.createElement("div")
+        toast.className = `oint-toast oint-toast--${type}`
+        toast.style.cssText = `
+            min-width: 220px;
+            max-width: 360px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: ${colors.bgPrimary};
+            color: ${colors.textPrimary};
+            border: 1px solid ${colors.borderColor};
+            border-left: 4px solid ${accent};
+            box-shadow: 0 4px 16px ${colors.shadowColor};
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateX(8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: auto;
+            cursor: ${opts.onClick ? "pointer" : "default"};
+            word-break: break-word;
+        `
+        toast.textContent = message
+        container.appendChild(toast)
+        state.toasts.push(toast)
+
+        // Trigger transition on next frame.
+        requestAnimationFrame(() => {
+            toast.style.opacity = "1"
+            toast.style.transform = "translateX(0)"
+        })
+
+        if (opts.onClick) {
+            toast.addEventListener("click", () => {
+                try {
+                    opts.onClick()
+                } finally {
+                    dismissToast(toast)
+                }
+            })
+        }
+
+        const duration = opts.duration ?? TOAST_DEFAULT_DURATION
+        if (duration > 0) {
+            setTimeout(() => dismissToast(toast), duration)
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Settings modal: Whitelist · Preferences · About
+    // Single-shell, fully re-renderable body. All theme/language changes
+    // route through `rerenderModalIfOpen()`.
+    // ─────────────────────────────────────────────────────────────
+
+    /**
+     * Escape a string for safe inclusion as HTML text or attribute value.
+     * @param {*} input
+     * @returns {string}
+     */
+    function escapeHtml(input) {
+        return String(input ?? "").replace(/[&<>"']/g, (c) => {
+            switch (c) {
+                case "&":
+                    return "&amp;"
+                case "<":
+                    return "&lt;"
+                case ">":
+                    return "&gt;"
+                case '"':
+                    return "&quot;"
+                case "'":
+                    return "&#39;"
+                default:
+                    return c
+            }
+        })
+    }
+
+    /**
+     * Create the modal shell once. Body is left empty here — populated by
+     * `renderModalBody()` so re-skinning on theme/language change is uniform.
+     * @returns {HTMLElement}
+     */
+    function createSettingsModal() {
         const modal = document.createElement("div")
         modal.className = "openinnewtabs-modal"
         modal.innerHTML = `
             <div class="openinnewtabs-modal-content">
                 <div class="openinnewtabs-modal-header">
-                    <h3>${getText("modalTitle", lang)}</h3>
-                    <button class="openinnewtabs-close">${getText(
-                        "closeButton",
-                        lang
-                    )}</button>
+                    <h3 class="openinnewtabs-modal-title"></h3>
+                    <button class="openinnewtabs-close" type="button" aria-label="Close">×</button>
                 </div>
-                <div class="openinnewtabs-modal-body">
-                    <div class="openinnewtabs-input-group">
-                        <input type="text" id="openinnewtabs-new-domain" placeholder="${getText(
-                            "inputPlaceholder",
-                            lang
-                        )}">
-                        <button id="openinnewtabs-add-domain">${getText(
-                            "addButton",
-                            lang
-                        )}</button>
-                    </div>
-                    <div class="openinnewtabs-domains-list" id="openinnewtabs-domains-list">
-                        <!-- Domains will be added here -->
-                    </div>
-                </div>
+                <div class="openinnewtabs-modal-body"></div>
             </div>
         `
+        document.body.appendChild(modal)
 
+        // Persistent close behaviour (does not depend on body content).
+        modal
+            .querySelector(".openinnewtabs-close")
+            .addEventListener("click", () => {
+                modal.style.display = "none"
+            })
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) modal.style.display = "none"
+        })
+
+        return modal
+    }
+
+    /**
+     * Render the entire modal body and re-skin the chrome. Idempotent — call
+     * this whenever theme/language/whitelist/settings change while modal open.
+     * @param {HTMLElement} modal
+     */
+    function renderModalBody(modal) {
+        const lang = getEffectiveLanguage()
         const colors = getThemeColors()
+        const settings = state.settings
+        const caps = state.caps
 
+        // Re-skin shell every render (theme switch must take effect immediately).
         modal.style.cssText = `
-            display: none;
+            display: ${modal.style.display || "none"};
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 10000;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-                sans-serif;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2147483646;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
         `
 
-        const modalContent = modal.querySelector(".openinnewtabs-modal-content")
-        modalContent.style.cssText = `
+        const content = modal.querySelector(".openinnewtabs-modal-content")
+        content.style.cssText = `
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: ${colors.bgPrimary};
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
+            width: 92%;
+            max-width: 560px;
+            max-height: 86vh;
             overflow-y: auto;
             border-radius: 12px;
             box-shadow: 0 8px 32px ${colors.shadowColor};
@@ -272,20 +668,24 @@
 
         const header = modal.querySelector(".openinnewtabs-modal-header")
         header.style.cssText = `
-            padding: 20px 24px;
+            padding: 18px 24px;
             border-bottom: 1px solid ${colors.borderColor};
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: ${colors.bgSecondary};
             border-radius: 12px 12px 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         `
 
-        const headerTitle = header.querySelector("h3")
-        headerTitle.style.cssText = `
+        const title = modal.querySelector(".openinnewtabs-modal-title")
+        title.textContent = getText("settingsTitle", lang)
+        title.style.cssText = `
             margin: 0;
             color: ${colors.textPrimary};
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
         `
 
@@ -293,7 +693,7 @@
         closeBtn.style.cssText = `
             background: none;
             border: none;
-            font-size: 28px;
+            font-size: 26px;
             cursor: pointer;
             color: ${colors.textSecondary};
             width: 32px;
@@ -302,27 +702,28 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease, color 0.2s ease;
         `
 
         const body = modal.querySelector(".openinnewtabs-modal-body")
         body.style.cssText = `
-            padding: 24px;
+            padding: 8px 24px 24px;
             color: ${colors.textPrimary};
         `
 
-        const inputGroup = modal.querySelector(".openinnewtabs-input-group")
-        inputGroup.style.cssText = `
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
+        const sectionStyle = `margin-top: 20px;`
+        const sectionHeadingStyle = `
+            margin: 0 0 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: ${colors.textSecondary};
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
         `
-
-        const input = modal.querySelector("#openinnewtabs-new-domain")
-        input.style.cssText = `
+        const inputStyle = `
             flex: 1;
-            padding: 12px 16px;
-            border: 2px solid ${colors.inputBorder};
+            padding: 10px 14px;
+            border: 1.5px solid ${colors.inputBorder};
             border-radius: 8px;
             font-size: 14px;
             background: ${colors.inputBg};
@@ -330,138 +731,190 @@
             outline: none;
             transition: border-color 0.2s ease;
         `
-
-        const addBtn = modal.querySelector("#openinnewtabs-add-domain")
-        addBtn.style.cssText = `
-            padding: 12px 24px;
+        const primaryBtnStyle = `
+            padding: 10px 18px;
             background: linear-gradient(135deg, #4caf50, #45a049);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
             box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
         `
+        const secondaryBtnStyle = `
+            padding: 8px 14px;
+            background: ${colors.bgSecondary};
+            color: ${colors.textPrimary};
+            border: 1px solid ${colors.borderColor};
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.15s ease;
+        `
+        const prefRowStyle = `
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px 0;
+            border-bottom: 1px dashed ${colors.borderColor};
+        `
 
-        // Add hover effects
-        closeBtn.addEventListener("mouseover", () => {
-            closeBtn.style.background = isDarkMode() ? "#404040" : "#e9ecef"
-            closeBtn.style.color = colors.textPrimary
-        })
+        body.innerHTML = `
+            <section class="oint-section oint-section--whitelist" style="${sectionStyle}">
+                <h4 style="${sectionHeadingStyle}">${escapeHtml(
+            getText("sectionWhitelist", lang)
+        )}</h4>
+                <div class="openinnewtabs-input-group" style="display:flex; gap:10px; margin-bottom:14px;">
+                    <input type="text" id="openinnewtabs-new-domain"
+                           placeholder="${escapeHtml(
+                               getText("inputPlaceholder", lang)
+                           )}"
+                           style="${inputStyle}">
+                    <button id="openinnewtabs-add-domain" type="button" style="${primaryBtnStyle}">${escapeHtml(
+            getText("addButton", lang)
+        )}</button>
+                </div>
+                <div class="oint-io-row" style="display:flex; gap:8px; margin-bottom:14px;">
+                    <button id="oint-export-btn" type="button" style="${secondaryBtnStyle}">${escapeHtml(
+            getText("exportButton", lang)
+        )}</button>
+                    <button id="oint-import-btn" type="button" style="${secondaryBtnStyle}">${escapeHtml(
+            getText("importButton", lang)
+        )}</button>
+                </div>
+                <div class="openinnewtabs-domains-list" id="openinnewtabs-domains-list"></div>
+            </section>
 
-        closeBtn.addEventListener("mouseout", () => {
-            closeBtn.style.background = "none"
-            closeBtn.style.color = colors.textSecondary
-        })
+            <section class="oint-section oint-section--prefs" style="${sectionStyle}">
+                <h4 style="${sectionHeadingStyle}">${escapeHtml(
+            getText("sectionPreferences", lang)
+        )}</h4>
 
-        addBtn.addEventListener("mouseover", () => {
-            addBtn.style.transform = "translateY(-1px)"
-            addBtn.style.boxShadow = "0 4px 12px rgba(76, 175, 80, 0.4)"
-        })
+                <div class="oint-pref-row" style="${prefRowStyle}">
+                    <label style="font-size:13px; font-weight:500; color:${
+                        colors.textPrimary
+                    };">${escapeHtml(getText("prefsTheme", lang))}</label>
+                    <div class="oint-radio-group" data-pref="theme">
+                        ${renderRadioGroup("theme", settings.theme, [
+                            ["auto", getText("prefsThemeAuto", lang)],
+                            ["light", getText("prefsThemeLight", lang)],
+                            ["dark", getText("prefsThemeDark", lang)],
+                        ])}
+                    </div>
+                </div>
 
-        addBtn.addEventListener("mouseout", () => {
-            addBtn.style.transform = "translateY(0)"
-            addBtn.style.boxShadow = "0 2px 8px rgba(76, 175, 80, 0.3)"
-        })
+                <div class="oint-pref-row" style="${prefRowStyle}">
+                    <label style="font-size:13px; font-weight:500; color:${
+                        colors.textPrimary
+                    };">${escapeHtml(getText("prefsLanguage", lang))}</label>
+                    <div class="oint-radio-group" data-pref="language">
+                        ${renderRadioGroup("language", settings.language, [
+                            ["auto", getText("prefsLanguageAuto", lang)],
+                            ["en", getText("prefsLanguageEn", lang)],
+                            ["zh", getText("prefsLanguageZh", lang)],
+                        ])}
+                    </div>
+                </div>
 
-        input.addEventListener("focus", () => {
-            input.style.borderColor = "#4caf50"
-        })
+                <div class="oint-pref-row" style="${prefRowStyle} border-bottom: none;">
+                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:500; color:${
+                        colors.textPrimary
+                    }; cursor:${caps.canOpenInTab ? "pointer" : "not-allowed"};">
+                        <input type="checkbox" id="oint-bg-toggle" ${
+                            settings.openInBackground ? "checked" : ""
+                        } ${caps.canOpenInTab ? "" : "disabled"}>
+                        <span>${escapeHtml(getText("prefsOpenInBg", lang))}</span>
+                    </label>
+                    <small style="color:${colors.textSecondary}; font-size:11px;">${escapeHtml(
+            caps.canOpenInTab
+                ? getText("prefsOpenInBgHint", lang)
+                : getText("prefsOpenInBgUnavailable", lang)
+        )}</small>
+                </div>
+            </section>
 
-        input.addEventListener("blur", () => {
-            input.style.borderColor = colors.inputBorder
-        })
+            <section class="oint-section oint-section--about" style="${sectionStyle} padding-bottom: 4px;">
+                <h4 style="${sectionHeadingStyle}">${escapeHtml(
+            getText("sectionAbout", lang)
+        )}</h4>
+                <p style="margin:6px 0; font-size:13px; color:${
+                    colors.textSecondary
+                };">${escapeHtml(getText("aboutVersion", lang))}: ${escapeHtml(
+            SCRIPT_VERSION
+        )}</p>
+                <p style="margin:6px 0; font-size:13px;">
+                    <a href="${escapeHtml(
+                        PROJECT_HOME
+                    )}" target="_blank" rel="noopener noreferrer"
+                       style="color:${colors.accent}; text-decoration:none;">${escapeHtml(
+            getText("aboutHomepage", lang)
+        )}</a>
+                    <span style="color:${
+                        colors.textSecondary
+                    }; margin: 0 8px;">·</span>
+                    <a href="${escapeHtml(
+                        GREASY_FORK_URL
+                    )}" target="_blank" rel="noopener noreferrer"
+                       style="color:${colors.accent}; text-decoration:none;">${escapeHtml(
+            getText("aboutGreasyFork", lang)
+        )}</a>
+                </p>
+            </section>
+        `
 
-        document.body.appendChild(modal)
-
-        // Event listeners
-        closeBtn.addEventListener("click", () => {
-            modal.style.display = "none"
-        })
-
-        modal.addEventListener("click", (e) => {
-            if (e.target === modal) {
-                modal.style.display = "none"
-            }
-        })
-
-        addBtn.addEventListener("click", () => {
-            const input = modal.querySelector("#openinnewtabs-new-domain")
-            const domain = input.value.trim()
-            if (domain) {
-                addDomainToWhitelist(domain)
-                input.value = ""
-                updateWhitelistDisplay()
-            }
-        })
-
-        input.addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                addBtn.click()
-            }
-        })
-
-        return modal
+        renderWhitelistList(modal)
+        bindWhitelistSection(modal)
+        bindPreferencesSection(modal)
     }
 
     /**
-     * Add domain to whitelist
-     * @param {string} domain Domain to add
+     * Render a single radio-group's HTML.
+     * @param {string} name Pref name (used as `oint-${name}` for radio name attr)
+     * @param {string} currentValue
+     * @param {Array<[string, string]>} options [value, label] pairs
+     * @returns {string}
      */
-    function addDomainToWhitelist(domain) {
-        const userWhitelist = getUserWhitelist()
-        const lang = detectLanguage()
-
-        if (!userWhitelist.includes(domain)) {
-            userWhitelist.push(domain)
-            saveUserWhitelist(userWhitelist)
-            alert(`${domain} ${getText("addedToWhitelist", lang)}`)
-        } else {
-            alert(`${domain} ${getText("alreadyInWhitelist", lang)}`)
-        }
+    function renderRadioGroup(name, currentValue, options) {
+        return options
+            .map(
+                ([value, label]) => `
+                <label style="margin-right: 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-size:13px;">
+                    <input type="radio" name="oint-${escapeHtml(
+                        name
+                    )}" value="${escapeHtml(value)}" ${
+                    currentValue === value ? "checked" : ""
+                }>
+                    <span>${escapeHtml(label)}</span>
+                </label>
+            `
+            )
+            .join("")
     }
 
     /**
-     * Remove domain from whitelist
-     * @param {string} domain Domain to remove
+     * Render only the whitelist list (cheaper than full body rerender).
+     * @param {HTMLElement} modal
      */
-    function removeDomainFromWhitelist(domain) {
-        const userWhitelist = getUserWhitelist()
-        const lang = detectLanguage()
-        const index = userWhitelist.indexOf(domain)
-
-        if (index > -1) {
-            userWhitelist.splice(index, 1)
-            saveUserWhitelist(userWhitelist)
-            alert(`${domain} ${getText("removedFromWhitelist", lang)}`)
-            updateWhitelistDisplay()
-        }
-    }
-
-    /**
-     * Update whitelist display in modal
-     */
-    function updateWhitelistDisplay() {
-        const modal = document.querySelector(".openinnewtabs-modal")
-        if (!modal) return
-
+    function renderWhitelistList(modal) {
         const domainsList = modal.querySelector("#openinnewtabs-domains-list")
+        if (!domainsList) return
         const userWhitelist = getUserWhitelist()
         const colors = getThemeColors()
-        const lang = detectLanguage()
+        const lang = getEffectiveLanguage()
 
         if (userWhitelist.length === 0) {
             domainsList.innerHTML = `
                 <div style="
                     text-align: center;
                     color: ${colors.textSecondary};
-                    font-size: 14px;
-                    padding: 32px 16px;
-                ">
-                    ${getText("noDomains", lang)}
-                </div>
+                    font-size: 13px;
+                    padding: 28px 16px;
+                    border: 1px dashed ${colors.borderColor};
+                    border-radius: 8px;
+                ">${escapeHtml(getText("noDomains", lang))}</div>
             `
             return
         }
@@ -473,82 +926,355 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 16px;
+                padding: 12px 14px;
                 border: 1px solid ${colors.borderColor};
-                margin-bottom: 8px;
+                margin-bottom: 6px;
                 border-radius: 8px;
                 background: ${colors.bgSecondary};
-                transition: all 0.2s ease;
+                transition: transform 0.15s ease, box-shadow 0.15s ease;
             ">
-                <span style="
-                    color: ${colors.textPrimary};
-                    font-size: 14px;
-                    font-weight: 500;
-                    flex: 1;
-                ">${domain}</span>
-                <button class="openinnewtabs-remove-domain" data-domain="${domain}" style="
+                <span style="color:${
+                    colors.textPrimary
+                }; font-size:13px; font-weight:500; flex:1; word-break:break-all;">${escapeHtml(
+                    domain
+                )}</span>
+                <button class="openinnewtabs-remove-domain" data-domain="${escapeHtml(
+                    domain
+                )}" type="button" style="
                     background: linear-gradient(135deg, #f44336, #d32f2f);
                     color: white;
                     border: none;
                     border-radius: 6px;
-                    padding: 8px 16px;
+                    padding: 6px 14px;
                     cursor: pointer;
                     font-size: 12px;
                     font-weight: 500;
-                    transition: all 0.2s ease;
-                    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
-                ">${getText("removeButton", lang)}</button>
+                    transition: transform 0.15s ease, box-shadow 0.15s ease;
+                    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
+                ">${escapeHtml(getText("removeButton", lang))}</button>
             </div>
         `
             )
             .join("")
 
-        // Add event listeners and hover effects for remove buttons
         domainsList
             .querySelectorAll(".openinnewtabs-remove-domain")
             .forEach((btn) => {
                 btn.addEventListener("click", (e) => {
-                    const domain = e.target.getAttribute("data-domain")
+                    const domain =
+                        e.currentTarget.getAttribute("data-domain") || ""
                     removeDomainFromWhitelist(domain)
-                })
-
-                btn.addEventListener("mouseover", () => {
-                    btn.style.transform = "translateY(-1px)"
-                    btn.style.boxShadow = "0 4px 12px rgba(244, 67, 54, 0.4)"
-                })
-
-                btn.addEventListener("mouseout", () => {
-                    btn.style.transform = "translateY(0)"
-                    btn.style.boxShadow = "0 2px 8px rgba(244, 67, 54, 0.3)"
-                })
-            })
-
-        // Add hover effects for domain items
-        domainsList
-            .querySelectorAll(".openinnewtabs-domain-item")
-            .forEach((item) => {
-                item.addEventListener("mouseover", () => {
-                    item.style.transform = "translateY(-1px)"
-                    item.style.boxShadow = `0 4px 12px ${colors.shadowColor}`
-                })
-
-                item.addEventListener("mouseout", () => {
-                    item.style.transform = "translateY(0)"
-                    item.style.boxShadow = "none"
                 })
             })
     }
 
     /**
-     * Open whitelist management modal
+     * Wire up the Whitelist section (add input, add button, import/export).
+     * @param {HTMLElement} modal
      */
-    function openWhitelistManager() {
-        let modal = document.querySelector(".openinnewtabs-modal")
-        if (!modal) {
-            modal = createWhitelistModal()
+    function bindWhitelistSection(modal) {
+        const input = modal.querySelector("#openinnewtabs-new-domain")
+        const addBtn = modal.querySelector("#openinnewtabs-add-domain")
+        if (input && addBtn) {
+            const submit = () => {
+                const v = input.value.trim()
+                if (!v) return
+                addDomainToWhitelist(v)
+                input.value = ""
+            }
+            addBtn.addEventListener("click", submit)
+            input.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") submit()
+            })
         }
+
+        const exportBtn = modal.querySelector("#oint-export-btn")
+        const importBtn = modal.querySelector("#oint-import-btn")
+        if (exportBtn) exportBtn.addEventListener("click", exportWhitelist)
+        if (importBtn) importBtn.addEventListener("click", importWhitelist)
+    }
+
+    /**
+     * Wire up the Preferences section radios + checkbox.
+     * @param {HTMLElement} modal
+     */
+    function bindPreferencesSection(modal) {
+        modal
+            .querySelectorAll('input[name="oint-theme"]')
+            .forEach((radio) => {
+                radio.addEventListener("change", (e) => {
+                    saveSetting(STORAGE_KEY_THEME, e.target.value)
+                    rerenderModalIfOpen()
+                })
+            })
+        modal
+            .querySelectorAll('input[name="oint-language"]')
+            .forEach((radio) => {
+                radio.addEventListener("change", (e) => {
+                    saveSetting(STORAGE_KEY_LANGUAGE, e.target.value)
+                    refreshMenu()
+                    rerenderModalIfOpen()
+                })
+            })
+        const bgToggle = modal.querySelector("#oint-bg-toggle")
+        if (bgToggle) {
+            bgToggle.addEventListener("change", (e) => {
+                saveSetting(STORAGE_KEY_OPEN_IN_BG, e.target.checked)
+            })
+        }
+    }
+
+    /**
+     * Add domain to whitelist
+     * @param {string} domain Domain to add
+     */
+    function addDomainToWhitelist(domain) {
+        const userWhitelist = getUserWhitelist()
+
+        if (!userWhitelist.includes(domain)) {
+            userWhitelist.push(domain)
+            saveUserWhitelist(userWhitelist)
+            showToast(`${domain} — ${getText("addedToWhitelist")}`, "success")
+        } else {
+            showToast(`${domain} — ${getText("alreadyInWhitelist")}`, "info")
+        }
+    }
+
+    /**
+     * Remove domain from whitelist
+     * @param {string} domain Domain to remove
+     */
+    function removeDomainFromWhitelist(domain) {
+        const userWhitelist = getUserWhitelist()
+        const index = userWhitelist.indexOf(domain)
+
+        if (index > -1) {
+            userWhitelist.splice(index, 1)
+            saveUserWhitelist(userWhitelist)
+            showToast(
+                `${domain} — ${getText("removedFromWhitelist")}`,
+                "success"
+            )
+            updateWhitelistDisplay()
+        }
+    }
+
+    /**
+     * Whitelist-only refresh hook used by storage listener (cheap path).
+     */
+    function updateWhitelistDisplay() {
+        const modal = document.querySelector(".openinnewtabs-modal")
+        if (modal && modal.style.display !== "none") {
+            renderWhitelistList(modal)
+        }
+    }
+
+    /**
+     * Full modal rebuild used when settings (theme/language/bg) change.
+     */
+    function rerenderModalIfOpen() {
+        const modal = document.querySelector(".openinnewtabs-modal")
+        if (modal && modal.style.display !== "none") {
+            renderModalBody(modal)
+        }
+    }
+
+    /**
+     * Open the settings modal — public entry point used by Tampermonkey menu.
+     */
+    function openSettings() {
+        let modal = document.querySelector(".openinnewtabs-modal")
+        if (!modal) modal = createSettingsModal()
         modal.style.display = "block"
-        updateWhitelistDisplay()
+        renderModalBody(modal)
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // JSON import / export
+    //   Export payload schema:
+    //     { "version": 1, "exportedAt": "<ISO>", "domains": ["..."] }
+    //   Import accepts:
+    //     - this object,
+    //     - a bare string[] (legacy / hand-written),
+    //     - any object whose `domains` field is a string[]
+    // ─────────────────────────────────────────────────────────────
+
+    const EXPORT_SCHEMA_VERSION = 1
+
+    /**
+     * Lightweight domain validator. Liberal on purpose — accepts any non-empty
+     * string with no whitespace and reasonable length. Strips an accidental
+     * `https?://` prefix and trailing slash to be forgiving on paste.
+     * @param {*} raw
+     * @returns {string|null} normalized domain or null when invalid
+     */
+    function normalizeDomainEntry(raw) {
+        if (typeof raw !== "string") return null
+        let v = raw.trim().toLowerCase()
+        if (!v) return null
+        v = v.replace(/^https?:\/\//, "").replace(/\/.*$/, "")
+        if (/\s/.test(v)) return null
+        if (v.length > 253) return null
+        if (!/^[a-z0-9.-]+$/i.test(v)) return null
+        return v
+    }
+
+    /**
+     * Build today's filename slug (YYYYMMDD).
+     * @returns {string}
+     */
+    function isoDateSlug() {
+        const d = new Date()
+        const yyyy = d.getFullYear()
+        const mm = String(d.getMonth() + 1).padStart(2, "0")
+        const dd = String(d.getDate()).padStart(2, "0")
+        return `${yyyy}${mm}${dd}`
+    }
+
+    /**
+     * Trigger a download of the current whitelist as a JSON file.
+     */
+    function exportWhitelist() {
+        try {
+            const domains = getUserWhitelist()
+            const payload = {
+                version: EXPORT_SCHEMA_VERSION,
+                exportedAt: new Date().toISOString(),
+                domains,
+            }
+            const blob = new Blob([JSON.stringify(payload, null, 2)], {
+                type: "application/json",
+            })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement("a")
+            a.href = url
+            a.download = `open-in-new-tab-whitelist-${isoDateSlug()}.json`
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            // Defer revoke so the click navigation has a chance to start.
+            setTimeout(() => URL.revokeObjectURL(url), 1000)
+            showToast(getText("exportSuccess"), "success")
+        } catch (e) {
+            console.warn("[OpenInNewTab] export failed:", e)
+            showToast(getText("exportFailed"), "error")
+        }
+    }
+
+    /**
+     * Extract a string[] of domains from the parsed payload, accepting all
+     * supported formats. Returns [] when no recognizable shape is found.
+     * @param {*} parsed
+     * @returns {string[]}
+     */
+    function extractDomainsFromPayload(parsed) {
+        if (Array.isArray(parsed)) return parsed
+        if (parsed && typeof parsed === "object") {
+            if (Array.isArray(parsed.domains)) return parsed.domains
+            if (Array.isArray(parsed.userWhitelist))
+                return parsed.userWhitelist
+            if (Array.isArray(parsed.whitelist)) return parsed.whitelist
+        }
+        return []
+    }
+
+    /**
+     * Open a file picker, parse the chosen JSON file, and merge or replace
+     * the current whitelist depending on user choice (native confirm).
+     */
+    function importWhitelist() {
+        const input = document.createElement("input")
+        input.type = "file"
+        input.accept = "application/json,.json"
+        input.style.display = "none"
+        document.body.appendChild(input)
+
+        input.addEventListener("change", () => {
+            const file = input.files && input.files[0]
+            input.remove()
+            if (!file) return
+
+            const reader = new FileReader()
+            reader.onerror = () => {
+                showToast(getText("importInvalidJson"), "error")
+            }
+            reader.onload = () => {
+                let parsed
+                try {
+                    parsed = JSON.parse(String(reader.result || ""))
+                } catch (e) {
+                    console.warn("[OpenInNewTab] import parse failed:", e)
+                    showToast(getText("importInvalidJson"), "error")
+                    return
+                }
+
+                const raw = extractDomainsFromPayload(parsed)
+                if (!Array.isArray(raw) || raw.length === 0) {
+                    showToast(getText("importEmpty"), "error")
+                    return
+                }
+
+                // Normalize + dedupe within the imported list itself.
+                const seen = new Set()
+                const valid = []
+                let invalidCount = 0
+                for (const item of raw) {
+                    const norm = normalizeDomainEntry(item)
+                    if (!norm) {
+                        invalidCount++
+                        continue
+                    }
+                    if (seen.has(norm)) continue
+                    seen.add(norm)
+                    valid.push(norm)
+                }
+                if (valid.length === 0) {
+                    showToast(getText("importEmpty"), "error")
+                    return
+                }
+
+                // Merge vs replace — synchronous confirm keeps it simple.
+                const mergeChosen = window.confirm(
+                    getText("importMergeOrReplace")
+                )
+                const current = getUserWhitelist()
+
+                if (mergeChosen) {
+                    const existing = new Set(current)
+                    let added = 0
+                    for (const d of valid) {
+                        if (!existing.has(d)) {
+                            existing.add(d)
+                            current.push(d)
+                            added++
+                        }
+                    }
+                    saveUserWhitelist(current)
+                    showToast(
+                        getText("importDoneMerge")
+                            .replace("{added}", String(added))
+                            .replace(
+                                "{skipped}",
+                                String(valid.length - added + invalidCount)
+                            ),
+                        "success",
+                        { duration: 5000 }
+                    )
+                } else {
+                    saveUserWhitelist(valid)
+                    showToast(
+                        getText("importDoneReplace")
+                            .replace("{total}", String(valid.length))
+                            .replace("{skipped}", String(invalidCount)),
+                        "success",
+                        { duration: 5000 }
+                    )
+                }
+            }
+            reader.readAsText(file)
+        })
+
+        input.click()
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -595,8 +1321,11 @@
     }
 
     /**
-     * Capture-phase click handler. Synchronous so window.open stays in the
-     * user-gesture stack (popup blockers won't fire).
+     * Capture-phase click handler. Synchronous so the new-tab call stays in
+     * the user-gesture stack (popup blockers won't fire).
+     * Background-tab opening (when enabled & supported) goes through
+     * `GM_openInTab` with `active: false`; otherwise we fall back to the
+     * native `window.open` foreground-tab behaviour.
      * @param {MouseEvent} event
      */
     function handleLinkClick(event) {
@@ -608,6 +1337,22 @@
         event.preventDefault()
         event.stopPropagation()
         event.stopImmediatePropagation()
+
+        if (state.caps.canOpenInTab && state.settings.openInBackground) {
+            try {
+                GM_openInTab(link.href, {
+                    active: false,
+                    insert: true,
+                    setParent: true,
+                })
+                return
+            } catch (e) {
+                console.warn(
+                    "[OpenInNewTab] GM_openInTab failed, falling back to window.open:",
+                    e
+                )
+            }
+        }
 
         window.open(link.href, "_blank", "noopener,noreferrer")
     }
@@ -745,8 +1490,8 @@
      * GM_unregisterMenuCommand is unavailable (registers both add+remove).
      */
     function refreshMenu() {
-        const lang = detectLanguage()
-        const canUnregister = typeof GM_unregisterMenuCommand === "function"
+        const lang = getEffectiveLanguage()
+        const canUnregister = state.caps.canUnregisterMenu
         const inWhitelist = isWhitelisted()
 
         if (canUnregister) {
@@ -776,8 +1521,8 @@
             }
             state.menuIds.push(
                 GM_registerMenuCommand(
-                    getText("manageWhitelist", lang),
-                    openWhitelistManager
+                    getText("openSettings", lang),
+                    openSettings
                 )
             )
             return
@@ -795,8 +1540,8 @@
                     removeCurrentDomainFromWhitelist
                 ),
                 GM_registerMenuCommand(
-                    getText("manageWhitelist", lang),
-                    openWhitelistManager
+                    getText("openSettings", lang),
+                    openSettings
                 )
             )
         }
@@ -808,32 +1553,112 @@
      * with `remote === false`. Both should re-evaluate page state and menu.
      */
     function setupStorageListener() {
-        if (typeof GM_addValueChangeListener !== "function") return
-        try {
-            state.listenerId = GM_addValueChangeListener(
-                STORAGE_KEY_WHITELIST,
-                () => {
-                    applyToCurrentPage()
-                    refreshMenu()
-                    const modal = document.querySelector(
-                        ".openinnewtabs-modal"
-                    )
-                    if (modal && modal.style.display !== "none") {
-                        updateWhitelistDisplay()
-                    }
-                }
-            )
-        } catch (e) {
-            console.warn("[OpenInNewTab] storage listener unavailable:", e)
+        if (!state.caps.canListenStorage) return
+
+        const safeAdd = (key, cb) => {
+            try {
+                state.listenerIds.push(GM_addValueChangeListener(key, cb))
+            } catch (e) {
+                console.warn(
+                    `[OpenInNewTab] storage listener for "${key}" failed:`,
+                    e
+                )
+            }
         }
+
+        // Whitelist drives interception lifecycle, menu label, and modal list.
+        safeAdd(STORAGE_KEY_WHITELIST, () => {
+            applyToCurrentPage()
+            refreshMenu()
+            const modal = document.querySelector(".openinnewtabs-modal")
+            if (modal && modal.style.display !== "none") {
+                updateWhitelistDisplay()
+            }
+        })
+
+        // Settings changes only re-render UI; they do not affect interception.
+        for (const key of SETTINGS_KEYS) {
+            safeAdd(key, (_name, _old, value) => {
+                if (key === STORAGE_KEY_THEME) state.settings.theme = value
+                else if (key === STORAGE_KEY_LANGUAGE)
+                    state.settings.language = value
+                else if (key === STORAGE_KEY_OPEN_IN_BG)
+                    state.settings.openInBackground = Boolean(value)
+                refreshMenu()
+                rerenderModalIfOpen()
+            })
+        }
+    }
+
+    /**
+     * Two-factor first-run sentinel:
+     *   - If `__installed_at` is missing AND whitelist is empty → genuine
+     *     first run: stamp time + open welcome page (or degrade to toast).
+     *   - If `__installed_at` is missing BUT whitelist already has entries →
+     *     existing v1.6.x user upgrading: silently stamp the time so future
+     *     fresh installs of theirs aren't double-welcomed, but DO NOT pop
+     *     anything. This avoids unwanted disruption.
+     */
+    function maybeShowWelcome() {
+        const installedAt = GM_getValue(STORAGE_KEY_INSTALLED_AT, null)
+        if (installedAt) return // Already greeted at some point.
+
+        const now = Date.now()
+        const userWhitelist = getUserWhitelist()
+
+        // Always stamp first to make this idempotent across racy re-inits.
+        GM_setValue(STORAGE_KEY_INSTALLED_AT, now)
+
+        if (userWhitelist.length > 0) {
+            // Returning user upgrading from a pre-1.7 install — stay quiet.
+            return
+        }
+
+        // Genuine first install — best-effort welcome.
+        if (state.caps.canOpenInTab) {
+            try {
+                GM_openInTab(WELCOME_URL, {
+                    active: true,
+                    insert: true,
+                    setParent: true,
+                })
+                return
+            } catch (e) {
+                console.warn(
+                    "[OpenInNewTab] welcome page open failed, degrading to toast:",
+                    e
+                )
+            }
+        }
+
+        // Degraded path: a long-lived clickable toast.
+        showToast(getText("welcomeToast"), "info", {
+            duration: 8000,
+            onClick: () => {
+                window.open(WELCOME_URL, "_blank", "noopener,noreferrer")
+            },
+        })
     }
 
     /** Entry point. */
     function initialize() {
         try {
+            detectCaps()
+            loadSettings()
             refreshMenu()
             applyToCurrentPage()
             setupStorageListener()
+
+            // Defer welcome until body is ready so the toast fallback works.
+            if (document.body) {
+                maybeShowWelcome()
+            } else {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    maybeShowWelcome,
+                    { once: true }
+                )
+            }
         } catch (e) {
             console.error("[OpenInNewTab] init failed:", e)
         }

@@ -129,7 +129,7 @@ The whitelist management interface automatically adapts to your system's dark/li
 
 ## Known Differences from the Extension
 
-The userscript and the Chrome extension share the same core whitelist logic and link-interception behavior, but a few capabilities differ due to the platforms:
+The userscript and the Chrome extension share the same core whitelist logic and link-interception behavior. As of v1.7.0 the userscript also has its own settings center; the remaining differences are platform-imposed:
 
 | Capability | Extension | Userscript |
 |---|---|---|
@@ -137,15 +137,17 @@ The userscript and the Chrome extension share the same core whitelist logic and 
 | Skip rules (download / modifier keys / middle-click / `javascript:` / `mailto:` / `tel:` / `#anchor`) | ✅ | ✅ |
 | Live whitelist updates without reload | ✅ via `chrome.storage.onChanged` | ✅ via `GM_addValueChangeListener` (TM 4.13+) |
 | Dynamic menu label (Add ↔ Remove for current domain) | ✅ popup toggle | ✅ menu re-register |
-| Background open (`active: false`, no focus steal) | ✅ | ❌ Browser security model prevents `window.open` from opening in background |
-| New tab inserted right next to the source tab | ✅ via `chrome.tabs.create({ index })` | ❌ Always appended at the end |
-| Theme / language manual override | ✅ | ❌ Follows system / browser only (planned) |
-| JSON whitelist import / export | ✅ | ❌ (planned) |
+| Theme manual override (Auto / Light / Dark) | ✅ | ✅ |
+| Language manual override (Auto / English / 中文) | ✅ | ✅ |
+| JSON whitelist import / export | ✅ | ✅ (Tampermonkey menu → Open Settings) |
+| Toast notifications (non-blocking) | ✅ | ✅ |
+| Welcome / onboarding page | ✅ on install | ✅ via `GM_openInTab`, falls back to a clickable toast |
+| Background open (`active: false`, no focus steal) | ✅ | ⚠️ Experimental — opt-in, requires `GM_openInTab` (Tampermonkey only) |
+| New tab inserted right next to the source tab | ✅ via `chrome.tabs.create({ index })` | ⚠️ Only when "Open in background" is enabled (`GM_openInTab` honors `insert: true`); otherwise appended at the end |
 | Auto-reload other tabs after settings change | ✅ via `chrome.tabs.reload` | ❌ Each tab self-updates via the storage listener |
-| Welcome / onboarding page | ✅ on install | ❌ (planned) |
 | iframe coverage | Top frame only | Top frame only (`@noframes`) |
 
-The script targets feature parity for **link-interception behavior** (the user-visible core); features in the "❌ planned" rows are tracked in [TODO](../TODO.md).
+The script targets feature parity for **link-interception behavior** (the user-visible core); cross-tab reload is the only remaining capability we deliberately leave out, since userscripts have no `tabs` API.
 
 ## License
 
