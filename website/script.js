@@ -238,11 +238,11 @@
 
             updateFooterReleaseVersion(lang)
 
-            const greasyforkLink = document.getElementById("greasyforkLink")
-            if (greasyforkLink) {
-                const langPrefix = lang === "zh" ? "zh-CN" : "en"
-                greasyforkLink.href = `https://greasyfork.org/${langPrefix}/scripts/551033-open-in-new-tab`
-            }
+            const langPrefix = lang === "zh" ? "zh-CN" : "en"
+            const greasyForkUrl = `https://greasyfork.org/${langPrefix}/scripts/551033-open-in-new-tab`
+            document.querySelectorAll("[data-greasyfork-link]").forEach((el) => {
+                el.href = greasyForkUrl
+            })
 
             const copyButtons = document.querySelectorAll(".copy-btn")
             copyButtons.forEach((btn) => {

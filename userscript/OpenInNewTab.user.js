@@ -51,8 +51,7 @@
 
     const SCRIPT_VERSION = "1.7.1"
     const PROJECT_HOME = "https://github.com/xiaowulang-turbo/OpenInNewTab"
-    const GREASY_FORK_URL =
-        "https://greasyfork.org/en/scripts/551033-open-in-new-tab"
+    const GREASY_FORK_SCRIPT_PATH = "scripts/551033-open-in-new-tab"
     // Official landing page (vercel.json → outputDirectory: "website").
     // Query string is a soft signal for future analytics; the page itself
     // does not need to read it.
@@ -186,6 +185,15 @@
         const l = state.settings.language
         if (l === "en" || l === "zh") return l
         return detectLanguage()
+    }
+
+    /**
+     * Greasy Fork listing URL in the current UI language.
+     * @returns {string}
+     */
+    function getGreasyForkUrl() {
+        const prefix = getEffectiveLanguage() === "zh" ? "zh-CN" : "en"
+        return `https://greasyfork.org/${prefix}/${GREASY_FORK_SCRIPT_PATH}`
     }
 
     /**
@@ -897,7 +905,7 @@
                         colors.textSecondary
                     }; margin: 0 8px;">·</span>
                     <a href="${escapeHtml(
-                        GREASY_FORK_URL
+                        getGreasyForkUrl()
                     )}" target="_blank" rel="noopener noreferrer"
                        style="color:${colors.accent}; text-decoration:none;">${escapeHtml(
             getText("aboutGreasyFork", lang)

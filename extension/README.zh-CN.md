@@ -4,7 +4,7 @@
 
 一个 Chrome 扩展程序，使用白名单模式强制所有链接在新标签页中打开，支持暗色模式和国际化。
 
-📖 **[官方网站](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork 脚本](https://greasyfork.org/en/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub 仓库](https://github.com/xiaowulang-turbo/OpenInNewTab)**
+📖 **[官方网站](https://open-in-new-tab.vercel.app/)** | 🎯 **[Greasy Fork 脚本](https://greasyfork.org/zh-CN/scripts/551033-open-in-new-tab)** | 🌟 **[GitHub 仓库](https://github.com/xiaowulang-turbo/OpenInNewTab)**
 
 ## 🎯 快速入门指南
 
