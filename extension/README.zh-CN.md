@@ -80,6 +80,8 @@
     - 填写所需信息
     - 提交审核
 
+商店列表截图（1280×800）位于 [`store/screenshots/`](../store/)。使用 `npm run store:screenshots` 生成后，在开发者控制台上传 PNG。详见 [`store/README.md`](../store/README.md)。
+
 ## 配置
 
 ### 初始设置
