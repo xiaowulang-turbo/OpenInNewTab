@@ -15,7 +15,10 @@ function getUpdateNotice(version) {
     if (typeof version !== "string" || !version) {
         return null
     }
-    return UPDATE_NOTICES[version] || null
+    if (!Object.prototype.hasOwnProperty.call(UPDATE_NOTICES, version)) {
+        return null
+    }
+    return UPDATE_NOTICES[version]
 }
 
 function shouldShowUpdateNotice(notice, userPreferenceEnabled) {
@@ -56,6 +59,12 @@ function validateLocalizedNotice(notice, locale, errors) {
         errors.push(
             `${locale}.highlights must contain only non-empty strings`
         )
+    }
+    if (
+        copy.migrationNote !== undefined &&
+        typeof copy.migrationNote !== "string"
+    ) {
+        errors.push(`${locale}.migrationNote must be a string`)
     }
 }
 

@@ -48,6 +48,7 @@ describe("update notice visibility", () => {
         const notice = getUpdateNotice("1.7.0")
         assert.equal(notice?.showUpdateNotice, false)
         assert.equal(shouldShowUpdateNotice(notice, true), false)
+        assert.equal(getUpdateNotice("toString"), null)
     })
 })
 
@@ -88,6 +89,7 @@ describe("validateUpdateNotice", () => {
                 title: 42,
                 summary: null,
                 highlights: ["valid", 7],
+                migrationNote: 123,
             },
             zh: {
                 title: "",
@@ -101,6 +103,7 @@ describe("validateUpdateNotice", () => {
             "en.title must be a string",
             "en.summary must be a string",
             "en.highlights must contain only non-empty strings",
+            "en.migrationNote must be a string",
             "zh.title is required",
             "zh.highlights must contain only non-empty strings",
         ])
