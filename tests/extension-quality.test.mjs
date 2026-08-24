@@ -10,15 +10,19 @@ const optionsScript = readFileSync(join(root, "extension/options.js"), "utf8")
 const popupHtml = readFileSync(join(root, "extension/popup.html"), "utf8")
 const privacyPolicy = readFileSync(join(root, "PRIVACY_POLICY.md"), "utf8")
 
+const documentLangAssignment = /document\.documentElement\.lang\s*=/
+const hardcodedErrorNotification =
+    /showNotification\s*\(\s*(["'`])Error /
+
 describe("extension quality contracts", () => {
     it("popup and options update the document language", () => {
-        assert.match(popupScript, /document\.documentElement\.lang/)
-        assert.match(optionsScript, /document\.documentElement\.lang/)
+        assert.match(popupScript, documentLangAssignment)
+        assert.match(optionsScript, documentLangAssignment)
     })
 
     it("localized error messages are not hardcoded", () => {
-        assert.doesNotMatch(popupScript, /showNotification\(["']Error /)
-        assert.doesNotMatch(optionsScript, /showNotification\(["']Error /)
+        assert.doesNotMatch(popupScript, hardcodedErrorNotification)
+        assert.doesNotMatch(optionsScript, hardcodedErrorNotification)
     })
 
     it("popup modal close button has an accessible name", () => {
