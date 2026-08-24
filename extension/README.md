@@ -80,6 +80,8 @@ The extension will be available on Chrome Web Store soon. Stay tuned!
     - Fill in the required information
     - Submit for review
 
+Store listing screenshots (1280×800) live in [`store/screenshots/`](../store/). Generate with `npm run store:screenshots`, then upload the PNGs in the Developer Dashboard. See [`store/README.md`](../store/README.md).
+
 ## Configuration
 
 ### Initial Setup
