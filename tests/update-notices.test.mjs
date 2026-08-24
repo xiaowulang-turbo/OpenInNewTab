@@ -44,10 +44,10 @@ describe("update notice visibility", () => {
         assert.equal(shouldShowUpdateNotice(null, true), false)
     })
 
-    it("keeps the current release silent until explicitly configured", () => {
+    it("exposes the current sample notice for local testing", () => {
         const notice = getUpdateNotice("1.7.0")
-        assert.equal(notice?.showUpdateNotice, false)
-        assert.equal(shouldShowUpdateNotice(notice, true), false)
+        assert.equal(notice?.showUpdateNotice, true)
+        assert.equal(shouldShowUpdateNotice(notice, true), true)
         assert.equal(getUpdateNotice("toString"), null)
     })
 })

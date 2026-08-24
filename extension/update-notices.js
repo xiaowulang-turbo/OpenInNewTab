@@ -7,7 +7,28 @@
 
 const UPDATE_NOTICES = {
     "1.7.0": {
-        showUpdateNotice: false,
+        showUpdateNotice: true,
+        releaseDate: "2026-08-24",
+        en: {
+            title: "A more reliable way to open links",
+            summary:
+                "This update makes link handling more responsive and keeps your preferences in sync without requiring a page refresh.",
+            highlights: [
+                "Whitelist changes now take effect immediately.",
+                "Background-tab opening is handled reliably by the extension service worker.",
+                "Link types that should keep their native behavior are skipped more consistently.",
+            ],
+        },
+        zh: {
+            title: "更可靠的链接打开体验",
+            summary:
+                "本次更新让链接处理更加及时，设置变更无需刷新页面即可生效。",
+            highlights: [
+                "白名单变更现在会立即生效。",
+                "后台打开新标签由扩展 Service Worker 更可靠地处理。",
+                "需要保持浏览器原生行为的链接类型会被更一致地跳过。",
+            ],
+        },
     },
 }
 
