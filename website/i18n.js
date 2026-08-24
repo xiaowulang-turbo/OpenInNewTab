@@ -181,6 +181,7 @@ const translations = {
         footerTitle: "Open In New Tab",
         privacyPolicyTitle: "Privacy Policy for Open In New Tab",
         privacyLastUpdated: "Last updated:",
+        privacyLastUpdatedDate: "August 24, 2026",
         privacyDataCollectionTitle: "Data Collection",
         privacyDataCollectionDesc:
             "Open In New Tab does not collect, store, or transmit any personal data to external servers.",
@@ -387,6 +388,7 @@ const translations = {
         footerTitle: "Open In New Tab",
         privacyPolicyTitle: "Open In New Tab 隐私政策",
         privacyLastUpdated: "最后更新：",
+        privacyLastUpdatedDate: "2026年8月24日",
         privacyDataCollectionTitle: "数据收集",
         privacyDataCollectionDesc:
             "Open In New Tab 不会收集、存储或向外部服务器传输任何个人数据。",

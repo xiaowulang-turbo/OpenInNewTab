@@ -279,6 +279,16 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        const openInBackgroundToggle = document.getElementById(
+            "openInBackgroundToggle"
+        )
+        openInBackgroundToggle.setAttribute(
+            "aria-label",
+            getText("openInBackgroundLabel")
+        )
+        openInBackgroundToggle.closest(".toggle-switch").title = getText(
+            "openInBackgroundLabel"
+        )
         document.getElementById("updateNoticesHeading").textContent =
             getText("updateNoticesHeading")
         document.getElementById("updateNoticesLabel").textContent =
