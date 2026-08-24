@@ -62,7 +62,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2 id="settingsTitle">Settings</h2>
-                    <button id="modalCloseBtn" class="modal-close-btn">
+                    <button
+                        id="modalCloseBtn"
+                        class="modal-close-btn"
+                        aria-label="Close settings"
+                    >
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M18 6 6 18M6 6l12 12" />
                         </svg>
@@ -146,6 +150,7 @@
                             <input
                                 type="checkbox"
                                 id="openInBackgroundToggle"
+                                aria-label="Open in background"
                             />
                             <span class="toggle-slider" aria-hidden="true"></span>
                         </label>

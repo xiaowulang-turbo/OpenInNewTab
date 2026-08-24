@@ -24,16 +24,22 @@
             removedFromWhitelist: "Removed from whitelist",
             noDomains: "No domains in whitelist",
             settingsTitle: "Settings",
+            settingsButtonTitle: "Settings",
+            closeSettingsButtonLabel: "Close settings",
             themeLabel: "Theme",
             themeLightText: "Light",
             themeDarkText: "Dark",
             themeAutoText: "Auto",
             languageLabel: "Language",
             openInBackgroundLabel: "Open in background",
+            openInBackgroundTitle: "Open in background",
             openInBackgroundDesc:
                 "Keep focus on the current tab when opening links",
             moreSettings: "More settings",
             cannotDetectCurrentDomain: "Cannot detect current domain",
+            errorAddingDomain: "Error adding domain",
+            errorRemovingDomain: "Error removing domain",
+            errorExportingWhitelist: "Error exporting whitelist",
         },
         zh: {
             modalTitle: "白名单管理",
@@ -49,15 +55,21 @@
             removedFromWhitelist: "已从白名单移除",
             noDomains: "白名单中没有域名",
             settingsTitle: "设置",
+            settingsButtonTitle: "设置",
+            closeSettingsButtonLabel: "关闭设置",
             themeLabel: "主题",
             themeLightText: "亮色",
             themeDarkText: "暗色",
             themeAutoText: "自动",
             languageLabel: "语言",
             openInBackgroundLabel: "在后台打开新标签",
+            openInBackgroundTitle: "在后台打开",
             openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
             moreSettings: "更多设置",
             cannotDetectCurrentDomain: "无法识别当前域名",
+            errorAddingDomain: "添加域名失败",
+            errorRemovingDomain: "移除域名失败",
+            errorExportingWhitelist: "导出白名单失败",
         },
     }
 
@@ -220,6 +232,14 @@
         // Update settings modal elements
         document.getElementById("settingsTitle").textContent =
             getText("settingsTitle")
+        document.getElementById("settingsButton").title =
+            getText("settingsButtonTitle")
+        document.getElementById("modalCloseBtn").title =
+            getText("closeSettingsButtonLabel")
+        document.getElementById("modalCloseBtn").setAttribute(
+            "aria-label",
+            getText("closeSettingsButtonLabel")
+        )
         document.getElementById("themeLabel").textContent =
             getText("themeLabel")
         document.getElementById("themeLightText").textContent =
@@ -234,6 +254,12 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        document.querySelector(".toggle-switch").title =
+            getText("openInBackgroundTitle")
+        document.getElementById("openInBackgroundToggle").setAttribute(
+            "aria-label",
+            getText("openInBackgroundTitle")
+        )
         document.getElementById("moreOptionsText").textContent =
             getText("moreSettings")
 
@@ -250,6 +276,8 @@
 
         // Refresh domains list to update language
         loadWhitelist()
+
+        document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
     }
 
     /**
@@ -356,6 +384,7 @@
             await chrome.storage.sync.set({ userWhitelist: domains })
         } catch (error) {
             console.error("Error saving whitelist:", error)
+            throw error
         }
     }
 
@@ -436,7 +465,7 @@
             }
         } catch (error) {
             console.error("Error adding domain:", error)
-            showNotification("Error adding domain")
+            showNotification(getText("errorAddingDomain"))
         }
     }
 
@@ -462,7 +491,7 @@
             }
         } catch (error) {
             console.error("Error removing domain:", error)
-            showNotification("Error removing domain")
+            showNotification(getText("errorRemovingDomain"))
         }
     }
 

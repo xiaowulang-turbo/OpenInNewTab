@@ -44,6 +44,9 @@
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
             inputPlaceholder: "example.com",
+            errorAddingDomain: "Error adding domain",
+            errorRemovingDomain: "Error removing domain",
+            errorExportingWhitelist: "Error exporting whitelist",
         },
         zh: {
             optionsTitle: "扩展设置",
@@ -78,6 +81,9 @@
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
             inputPlaceholder: "example.com",
+            errorAddingDomain: "添加域名失败",
+            errorRemovingDomain: "移除域名失败",
+            errorExportingWhitelist: "导出白名单失败",
         },
     }
 
@@ -246,6 +252,16 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        const openInBackgroundToggle = document.getElementById(
+            "openInBackgroundToggle"
+        )
+        openInBackgroundToggle.setAttribute(
+            "aria-label",
+            getText("openInBackgroundLabel")
+        )
+        openInBackgroundToggle.closest(".toggle-switch").title = getText(
+            "openInBackgroundLabel"
+        )
         document.getElementById("whitelistHeading").textContent =
             getText("whitelistHeading")
         document.getElementById("importExportLabel").textContent =
@@ -276,6 +292,8 @@
         })
 
         loadWhitelist()
+
+        document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
     }
 
     /**
@@ -302,6 +320,7 @@
             await chrome.storage.sync.set({ userWhitelist: domains })
         } catch (error) {
             console.error("Error saving whitelist:", error)
+            throw error
         }
     }
 
@@ -403,7 +422,7 @@
             }
         } catch (error) {
             console.error("Error adding domain:", error)
-            showNotification("Error adding domain")
+            showNotification(getText("errorAddingDomain"))
         }
     }
 
@@ -425,7 +444,7 @@
             }
         } catch (error) {
             console.error("Error removing domain:", error)
-            showNotification("Error removing domain")
+            showNotification(getText("errorRemovingDomain"))
         }
     }
 
@@ -502,7 +521,7 @@
             showNotification(getText("exportSuccess"))
         } catch (error) {
             console.error("Error exporting whitelist:", error)
-            showNotification("Error exporting whitelist")
+            showNotification(getText("errorExportingWhitelist"))
         }
     }
 
