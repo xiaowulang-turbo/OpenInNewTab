@@ -172,6 +172,7 @@
             return
         }
 
+        document.body.classList.add("update-mode")
         document
             .querySelectorAll(".install-only-section")
             .forEach((section) => {

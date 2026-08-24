@@ -7,7 +7,7 @@ globalThis.importScripts("update-notices.js")
 
 const MSG_OPEN_TAB = "OPEN_TAB"
 const UPDATE_NOTICE_ENABLED = "updateNoticeEnabled"
-const updateNoticeApi = globalThis.OpenInNewTabUpdateNotices
+const updateNotices = globalThis.OpenInNewTabUpdateNotices
 
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
@@ -41,7 +41,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 async function openUpdateNotice(details) {
     const version = chrome.runtime.getManifest().version
-    const notice = updateNoticeApi.getUpdateNotice(version)
+    const notice = updateNotices.getUpdateNotice(version)
 
     if (!notice?.showUpdateNotice) {
         return
@@ -50,7 +50,7 @@ async function openUpdateNotice(details) {
     try {
         const result = await chrome.storage.sync.get([UPDATE_NOTICE_ENABLED])
         if (
-            !updateNoticeApi.shouldShowUpdateNotice(
+            !updateNotices.shouldShowUpdateNotice(
                 notice,
                 result[UPDATE_NOTICE_ENABLED] !== false
             )
