@@ -256,6 +256,10 @@
             getText("openInBackgroundDesc")
         document.querySelector(".toggle-switch").title =
             getText("openInBackgroundTitle")
+        document.getElementById("openInBackgroundToggle").setAttribute(
+            "aria-label",
+            getText("openInBackgroundTitle")
+        )
         document.getElementById("moreOptionsText").textContent =
             getText("moreSettings")
 
@@ -363,6 +367,7 @@
             await chrome.storage.sync.set({ userWhitelist: domains })
         } catch (error) {
             console.error("Error saving whitelist:", error)
+            throw error
         }
     }
 

@@ -184,19 +184,27 @@ const translations = {
         privacyDataCollectionTitle: "Data Collection",
         privacyDataCollectionDesc:
             "Open In New Tab does not collect, store, or transmit any personal data to external servers.",
-        privacyLocalStorageTitle: "Local Storage",
-        privacyLocalStorageDesc1:
-            "The extension uses Chrome's local storage (chrome.storage.sync) to save:",
-        privacyLocalStorageItem1: "User's whitelist of domain names",
-        privacyLocalStorageDesc2:
-            "This data is stored locally on your device and synchronized across your Chrome browsers if you're signed in. We do not have access to this data.",
+        privacySyncStorageTitle: "Chrome Sync Storage",
+        privacySyncStorageDesc1:
+            "The extension uses Chrome sync storage (chrome.storage.sync) to save these five fields:",
+        privacySyncStorageItem1:
+            "userWhitelist — your whitelist of domain names",
+        privacySyncStorageItem2:
+            "openInBackground — whether new tabs open in the background",
+        privacySyncStorageItem3:
+            "userTheme — your theme preference (light, dark, or auto)",
+        privacySyncStorageItem4: "userLanguage — your language preference",
+        privacySyncStorageItem5:
+            "updateNoticeEnabled — whether to show update notices after extension updates",
+        privacySyncStorageDesc2:
+            "This data stays in Chrome's storage. When you're signed in to Chrome, Chrome may synchronize it across your signed-in browsers. We do not have access to this data.",
         privacyPermissionsTitle: "Permissions",
-        privacyPermStorage: "Used to save your whitelist preferences locally",
+        privacyPermStorage:
+            "Used to save the five fields listed above via chrome.storage.sync",
         privacyPermActiveTab:
             "Used to detect current tab's domain for quick-add feature",
-        privacyPermScripting:
-            "Used to inject content scripts on whitelisted domains",
-        privacyPermHost: "Required to modify links on whitelisted websites",
+        privacyPermHost:
+            "Matches *://*/* for static content scripts. They load on matching pages, but modify links and intercept clicks only on whitelisted domains.",
         privacyThirdPartyTitle: "Third-Party Services",
         privacyThirdPartyDesc:
             "This extension does not use any third-party services, analytics, or tracking tools.",
@@ -382,17 +390,26 @@ const translations = {
         privacyDataCollectionTitle: "数据收集",
         privacyDataCollectionDesc:
             "Open In New Tab 不会收集、存储或向外部服务器传输任何个人数据。",
-        privacyLocalStorageTitle: "本地存储",
-        privacyLocalStorageDesc1:
-            "扩展使用 Chrome 的本地存储 (chrome.storage.sync) 来保存：",
-        privacyLocalStorageItem1: "用户的白名单域名",
-        privacyLocalStorageDesc2:
-            "这些数据存储在您的设备本地，如果您已登录 Chrome，数据会在您的浏览器之间同步。我们无法访问这些数据。",
+        privacySyncStorageTitle: "Chrome 同步存储",
+        privacySyncStorageDesc1:
+            "扩展使用 Chrome 同步存储（chrome.storage.sync）保存以下五个字段：",
+        privacySyncStorageItem1:
+            "userWhitelist — 您的白名单域名",
+        privacySyncStorageItem2:
+            "openInBackground — 是否在后台打开新标签页",
+        privacySyncStorageItem3:
+            "userTheme — 您的主题偏好（亮色、暗色或自动）",
+        privacySyncStorageItem4: "userLanguage — 您的语言偏好",
+        privacySyncStorageItem5:
+            "updateNoticeEnabled — 更新扩展后是否显示更新说明",
+        privacySyncStorageDesc2:
+            "这些数据保存在 Chrome 存储中。登录 Chrome 后，Chrome 可能会在您登录的浏览器之间同步这些数据。我们无法访问这些数据。",
         privacyPermissionsTitle: "权限说明",
-        privacyPermStorage: "用于在本地保存您的白名单配置",
+        privacyPermStorage:
+            "用于通过 chrome.storage.sync 保存上述五个字段",
         privacyPermActiveTab: "用于检测当前标签页的域名，实现快速添加功能",
-        privacyPermScripting: "用于向白名单域名的页面注入内容脚本",
-        privacyPermHost: "用于修改白名单网站上的链接",
+        privacyPermHost:
+            "匹配 *://*/*，用于加载静态内容脚本。脚本会在匹配的页面加载，但仅在白名单域名上修改链接和拦截点击。",
         privacyThirdPartyTitle: "第三方服务",
         privacyThirdPartyDesc:
             "本扩展不使用任何第三方服务、分析工具或跟踪工具。",
