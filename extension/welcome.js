@@ -295,13 +295,21 @@
                 })
 
             if (updateContext) {
-                const result = await chrome.storage.sync.get([
-                    "updateNoticeEnabled",
-                ])
                 const toggle = document.getElementById(
                     "disableUpdateNotices"
                 )
-                toggle.checked = result.updateNoticeEnabled === false
+                try {
+                    const result = await chrome.storage.sync.get([
+                        "updateNoticeEnabled",
+                    ])
+                    toggle.checked = result.updateNoticeEnabled === false
+                } catch (error) {
+                    console.error(
+                        "Error loading update notice preference:",
+                        error
+                    )
+                    toggle.checked = false
+                }
                 toggle.addEventListener("change", async () => {
                     try {
                         await chrome.storage.sync.set({

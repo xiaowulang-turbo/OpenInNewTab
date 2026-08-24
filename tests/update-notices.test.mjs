@@ -34,6 +34,13 @@ describe("update notice visibility", () => {
             ),
             false
         )
+        assert.equal(
+            shouldShowUpdateNotice(
+                { ...validNotice, en: { title: 42 } },
+                true
+            ),
+            false
+        )
         assert.equal(shouldShowUpdateNotice(null, true), false)
     })
 
@@ -71,5 +78,31 @@ describe("validateUpdateNotice", () => {
             validateUpdateNotice({ showUpdateNotice: false }),
             []
         )
+    })
+
+    it("rejects invalid field types and impossible calendar dates", () => {
+        const errors = validateUpdateNotice({
+            showUpdateNotice: true,
+            releaseDate: "2026-02-31",
+            en: {
+                title: 42,
+                summary: null,
+                highlights: ["valid", 7],
+            },
+            zh: {
+                title: "",
+                summary: "有效摘要",
+                highlights: [""],
+            },
+        })
+
+        assert.deepEqual(errors, [
+            "releaseDate must use YYYY-MM-DD",
+            "en.title must be a string",
+            "en.summary must be a string",
+            "en.highlights must contain only non-empty strings",
+            "zh.title is required",
+            "zh.highlights must contain only non-empty strings",
+        ])
     })
 })

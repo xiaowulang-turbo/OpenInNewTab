@@ -4,7 +4,7 @@ globs:
   - "extension/**"
   - "scripts/**"
   - "package.json"
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Extension release notice gate

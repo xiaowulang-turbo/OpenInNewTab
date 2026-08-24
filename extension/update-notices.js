@@ -21,30 +21,64 @@ function getUpdateNotice(version) {
 function shouldShowUpdateNotice(notice, userPreferenceEnabled) {
     return (
         notice?.showUpdateNotice === true &&
+        validateUpdateNotice(notice).length === 0 &&
         userPreferenceEnabled !== false
     )
 }
 
 function validateLocalizedNotice(notice, locale, errors) {
     const copy = notice[locale]
-    if (!copy || typeof copy !== "object") {
+    if (
+        !copy ||
+        typeof copy !== "object" ||
+        Array.isArray(copy)
+    ) {
         errors.push(`${locale} must be an object`)
         return
     }
-    if (!copy.title) {
+    if (typeof copy.title !== "string") {
+        errors.push(`${locale}.title must be a string`)
+    } else if (!copy.title.trim()) {
         errors.push(`${locale}.title is required`)
     }
-    if (!copy.summary) {
+    if (typeof copy.summary !== "string") {
+        errors.push(`${locale}.summary must be a string`)
+    } else if (!copy.summary.trim()) {
         errors.push(`${locale}.summary is required`)
     }
     if (!Array.isArray(copy.highlights) || copy.highlights.length === 0) {
         errors.push(`${locale}.highlights must contain at least one item`)
+    } else if (
+        copy.highlights.some(
+            (item) => typeof item !== "string" || !item.trim()
+        )
+    ) {
+        errors.push(
+            `${locale}.highlights must contain only non-empty strings`
+        )
     }
+}
+
+function isValidReleaseDate(value) {
+    if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return false
+    }
+    const [year, month, day] = value.split("-").map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day))
+    return (
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() === month - 1 &&
+        date.getUTCDate() === day
+    )
 }
 
 function validateUpdateNotice(notice) {
     const errors = []
-    if (!notice || typeof notice !== "object") {
+    if (
+        !notice ||
+        typeof notice !== "object" ||
+        Array.isArray(notice)
+    ) {
         return ["notice must be an object"]
     }
     if (typeof notice.showUpdateNotice !== "boolean") {
@@ -53,7 +87,7 @@ function validateUpdateNotice(notice) {
     if (notice.showUpdateNotice !== true) {
         return errors
     }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(notice.releaseDate || "")) {
+    if (!isValidReleaseDate(notice.releaseDate)) {
         errors.push("releaseDate must use YYYY-MM-DD")
     }
     validateLocalizedNotice(notice, "en", errors)
