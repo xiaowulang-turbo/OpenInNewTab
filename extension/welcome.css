@@ -6,6 +6,10 @@
 
 @import url("./options.css");
 
+.options-container {
+    --welcome-content-width: 680px;
+}
+
 /* Hero */
 .welcome-hero {
     padding: 56px 24px 32px;
@@ -58,7 +62,7 @@
 
 /* Update notice */
 .update-notice-card {
-    max-width: 680px;
+    max-width: var(--welcome-content-width);
     margin: 0 auto;
 }
 
@@ -97,7 +101,7 @@
 
 .update-notice-preference {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
     margin-top: 24px;
     color: var(--text-secondary);
@@ -107,7 +111,8 @@
 }
 
 .update-notice-preference input {
-    margin: 2px 0 0;
+    flex: 0 0 auto;
+    margin: 0;
     accent-color: var(--color-accent);
 }
 
@@ -175,7 +180,7 @@
 }
 
 .update-mode .cta-row {
-    max-width: 680px;
+    max-width: var(--welcome-content-width);
     margin: 0 auto;
 }
 
