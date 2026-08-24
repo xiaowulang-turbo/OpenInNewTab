@@ -67,7 +67,7 @@ describe("extension quality contracts", () => {
             ["options.js", optionsScript],
         ]) {
             const fnBody = source.match(
-                /async function saveUserWhitelist\(domains\) \{([\s\S]*?\n    \})/
+                /async\s+function\s+saveUserWhitelist\(domains\)\s+\{([\s\S]*?\n[ \t]{4}\})/
             )?.[1]
             assert.ok(fnBody, `${label} defines saveUserWhitelist`)
             assert.match(
