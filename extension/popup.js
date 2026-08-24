@@ -34,6 +34,9 @@
                 "Keep focus on the current tab when opening links",
             moreSettings: "More settings",
             cannotDetectCurrentDomain: "Cannot detect current domain",
+            errorAddingDomain: "Error adding domain",
+            errorRemovingDomain: "Error removing domain",
+            errorExportingWhitelist: "Error exporting whitelist",
         },
         zh: {
             modalTitle: "白名单管理",
@@ -58,6 +61,9 @@
             openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
             moreSettings: "更多设置",
             cannotDetectCurrentDomain: "无法识别当前域名",
+            errorAddingDomain: "添加域名失败",
+            errorRemovingDomain: "移除域名失败",
+            errorExportingWhitelist: "导出白名单失败",
         },
     }
 
@@ -250,6 +256,8 @@
 
         // Refresh domains list to update language
         loadWhitelist()
+
+        document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
     }
 
     /**
@@ -417,7 +425,7 @@
             }
         } catch (error) {
             console.error("Error adding domain:", error)
-            showNotification("Error adding domain")
+            showNotification(getText("errorAddingDomain"))
         }
     }
 
@@ -441,7 +449,7 @@
             }
         } catch (error) {
             console.error("Error removing domain:", error)
-            showNotification("Error removing domain")
+            showNotification(getText("errorRemovingDomain"))
         }
     }
 

@@ -48,6 +48,9 @@
             alreadyInWhitelist: "Already in whitelist",
             removedFromWhitelist: "Removed from whitelist",
             inputPlaceholder: "example.com",
+            errorAddingDomain: "Error adding domain",
+            errorRemovingDomain: "Error removing domain",
+            errorExportingWhitelist: "Error exporting whitelist",
         },
         zh: {
             optionsTitle: "扩展设置",
@@ -85,6 +88,9 @@
             alreadyInWhitelist: "已在白名单中",
             removedFromWhitelist: "已从白名单移除",
             inputPlaceholder: "example.com",
+            errorAddingDomain: "添加域名失败",
+            errorRemovingDomain: "移除域名失败",
+            errorExportingWhitelist: "导出白名单失败",
         },
     }
 
@@ -309,6 +315,8 @@
         })
 
         loadWhitelist()
+
+        document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
     }
 
     /**
@@ -406,7 +414,7 @@
             }
         } catch (error) {
             console.error("Error adding domain:", error)
-            showNotification("Error adding domain")
+            showNotification(getText("errorAddingDomain"))
         }
     }
 
@@ -427,7 +435,7 @@
             }
         } catch (error) {
             console.error("Error removing domain:", error)
-            showNotification("Error removing domain")
+            showNotification(getText("errorRemovingDomain"))
         }
     }
 
@@ -525,7 +533,7 @@
             showNotification(getText("exportSuccess"))
         } catch (error) {
             console.error("Error exporting whitelist:", error)
-            showNotification("Error exporting whitelist")
+            showNotification(getText("errorExportingWhitelist"))
         }
     }
 
