@@ -1,6 +1,6 @@
 # Privacy Policy for Open In New Tab
 
-Last updated: January 2025
+Last updated: 2026-08-24
 
 ## Data Collection
 Open In New Tab does not collect, store, or transmit any personal data to external servers.
