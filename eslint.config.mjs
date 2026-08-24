@@ -15,7 +15,6 @@ export default [
     },
     {
         files: ["extension/**/*.js"],
-        ignores: ["extension/content.js", "extension/link-policy.js"],
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "script",
@@ -23,11 +22,12 @@ export default [
         },
     },
     {
-        files: ["extension/content.js", "extension/link-policy.js"],
+        files: ["extension/content.js"],
         languageOptions: {
-            ecmaVersion: "latest",
-            sourceType: "module",
-            globals: { ...globals.browser, ...globals.webextensions },
+            globals: {
+                isHostAllowed: "readonly",
+                shouldSkipClick: "readonly",
+            },
         },
     },
     {

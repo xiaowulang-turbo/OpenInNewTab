@@ -34,6 +34,8 @@ The whitelist-based approach means:
 ├── extension/               # Chrome extension version
 │   ├── manifest.json
 │   ├── background.js
+│   ├── link-policy.js
+│   ├── update-notices.js
 │   ├── content.js
 │   ├── popup.html
 │   ├── popup.js
@@ -66,6 +68,7 @@ Choose your preferred version:
 -   **Best for**: Production use, better performance, native browser integration
 -   **Installation**: [See extension/README.md](extension/README.md#installation) ([中文](extension/README.zh-CN.md#安装))
 -   **Features**: Popup interface, auto-updates, Web Store distribution
+-   **Release communication**: Optional, minimal notices for meaningful extension updates
 
 ## Documentation
 

@@ -1,0 +1,75 @@
+import { createRequire } from "node:module"
+import assert from "node:assert/strict"
+import { describe, it } from "node:test"
+
+const {
+    getUpdateNotice,
+    shouldShowUpdateNotice,
+    validateUpdateNotice,
+} = createRequire(import.meta.url)("../extension/update-notices.js")
+
+const validNotice = {
+    showUpdateNotice: true,
+    releaseDate: "2026-08-24",
+    en: {
+        title: "A meaningful update",
+        summary: "A short user-facing summary.",
+        highlights: ["A visible improvement"],
+    },
+    zh: {
+        title: "重要更新",
+        summary: "面向用户的简短摘要。",
+        highlights: ["一项可感知的改进"],
+    },
+}
+
+describe("update notice visibility", () => {
+    it("requires both an opted-in release and enabled user preference", () => {
+        assert.equal(shouldShowUpdateNotice(validNotice, true), true)
+        assert.equal(shouldShowUpdateNotice(validNotice, false), false)
+        assert.equal(
+            shouldShowUpdateNotice(
+                { ...validNotice, showUpdateNotice: false },
+                true
+            ),
+            false
+        )
+        assert.equal(shouldShowUpdateNotice(null, true), false)
+    })
+
+    it("keeps the current release silent until explicitly configured", () => {
+        const notice = getUpdateNotice("1.7.0")
+        assert.equal(notice?.showUpdateNotice, false)
+        assert.equal(shouldShowUpdateNotice(notice, true), false)
+    })
+})
+
+describe("validateUpdateNotice", () => {
+    it("accepts a complete bilingual notice", () => {
+        assert.deepEqual(validateUpdateNotice(validNotice), [])
+    })
+
+    it("rejects a notice missing required release content", () => {
+        const errors = validateUpdateNotice({
+            showUpdateNotice: true,
+            releaseDate: "not-a-date",
+            en: { title: "", summary: "", highlights: [] },
+            zh: null,
+        })
+
+        assert.deepEqual(errors, [
+            "releaseDate must use YYYY-MM-DD",
+            "en.title is required",
+            "en.summary is required",
+            "en.highlights must contain at least one item",
+            "zh must be an object",
+        ])
+    })
+
+    it("allows a silent release entry without release copy", () => {
+        assert.deepEqual(
+            validateUpdateNotice({ showUpdateNotice: false }),
+            []
+        )
+    })
+})

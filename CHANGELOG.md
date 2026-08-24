@@ -70,9 +70,15 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 - Removed `web_accessible_resources` exposing popup assets to every site.
 - Popup and options render domain rows with DOM APIs instead of HTML
   interpolation.
+- Added opt-in, versioned update notices with a user-controlled reminder
+  preference and a local bilingual release-note data source.
+- Added a release-notice validation command and an Agent release gate so
+  meaningful updates cannot be packaged without their notice configuration.
 
 #### Fixed
 - Opening a link no longer races popup blockers after `await storage`.
+- Content scripts stay classic: Chrome ignores `content_scripts.type`, so
+  `link-policy.js` is injected before `content.js` instead of ESM `import`.
 
 ---
 

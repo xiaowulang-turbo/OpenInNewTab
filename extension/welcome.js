@@ -27,6 +27,17 @@
                 "Every link on whitelisted sites now opens in a new tab. Manage sites anytime from Settings.",
             openOptionsBtnText: "Open Settings",
             visitSiteBtnText: "Visit Website",
+            updateHeroBadge: "What's new",
+            updatePageTitle: "What's new in Open In New Tab",
+            updatePageSubtitle:
+                "See what changed in version {version}.",
+            updateVersionText: "Version {version}",
+            updatePreviousVersionText: "Updated from {version}",
+            updateDateText: "Released {date}",
+            updateHighlightsHeading: "Highlights",
+            updateMigrationHeading: "What you need to know",
+            disableUpdateNoticesText:
+                "Don't automatically open important update notices",
             footerText: "Open In New Tab Extension v{version}",
         },
         zh: {
@@ -48,11 +59,21 @@
                 "白名单网站上的每个链接都会在新标签页打开。随时可在设置中管理网站。",
             openOptionsBtnText: "打开设置",
             visitSiteBtnText: "访问官网",
+            updateHeroBadge: "更新说明",
+            updatePageTitle: "Open In New Tab 更新说明",
+            updatePageSubtitle: "了解 v{version} 的更新内容。",
+            updateVersionText: "当前版本：{version}",
+            updatePreviousVersionText: "从 {version} 更新",
+            updateDateText: "发布日期：{date}",
+            updateHighlightsHeading: "重点变化",
+            updateMigrationHeading: "你需要了解",
+            disableUpdateNoticesText: "以后不再自动打开重要更新说明",
             footerText: "Open In New Tab 扩展 v{version}",
         },
     }
 
     let currentLanguage = "en"
+    let updateContext = null
 
     /**
      * Detect browser language setting
@@ -125,6 +146,84 @@
         return text
     }
 
+    function getUpdateContext() {
+        const params = new URLSearchParams(window.location.search)
+        if (params.get("mode") !== "update") {
+            return null
+        }
+
+        const version =
+            params.get("version") || chrome.runtime.getManifest().version
+        const notice =
+            globalThis.OpenInNewTabUpdateNotices?.getUpdateNotice(version)
+        if (!notice?.showUpdateNotice) {
+            return null
+        }
+
+        return {
+            from: params.get("from") || "",
+            notice,
+            version,
+        }
+    }
+
+    function applyPageMode() {
+        if (!updateContext) {
+            return
+        }
+
+        document
+            .querySelectorAll(".install-only-section")
+            .forEach((section) => {
+                section.hidden = true
+            })
+        document.getElementById("updateNoticeSection").hidden = false
+    }
+
+    function renderUpdateNotice() {
+        if (!updateContext) {
+            return
+        }
+
+        const copy =
+            updateContext.notice[currentLanguage] ||
+            updateContext.notice.en
+        document.getElementById("updateVersionText").textContent = getText(
+            "updateVersionText",
+            { version: updateContext.version }
+        )
+        document.getElementById("updatePreviousVersionText").textContent =
+            updateContext.from
+                ? getText("updatePreviousVersionText", {
+                      version: updateContext.from,
+                  })
+                : ""
+        document.getElementById("updateDateText").textContent = getText(
+            "updateDateText",
+            { date: updateContext.notice.releaseDate }
+        )
+        document.getElementById("updateNoticeTitle").textContent = copy.title
+        document.getElementById("updateNoticeSummary").textContent =
+            copy.summary
+
+        const highlights = document.getElementById("updateHighlights")
+        highlights.replaceChildren()
+        copy.highlights.forEach((item) => {
+            const listItem = document.createElement("li")
+            listItem.textContent = item
+            highlights.append(listItem)
+        })
+
+        const migration = document.getElementById("updateMigration")
+        if (copy.migrationNote) {
+            migration.hidden = false
+            document.getElementById("updateMigrationText").textContent =
+                copy.migrationNote
+        } else {
+            migration.hidden = true
+        }
+    }
+
     /**
      * Apply localized text to all known elements
      */
@@ -144,6 +243,9 @@
             "step3Desc",
             "openOptionsBtnText",
             "visitSiteBtnText",
+            "updateHighlightsHeading",
+            "updateMigrationHeading",
+            "disableUpdateNoticesText",
         ]
 
         keys.forEach((key) => {
@@ -159,6 +261,20 @@
         )
 
         document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
+
+        if (updateContext) {
+            document.getElementById("heroBadge").textContent = getText(
+                "updateHeroBadge"
+            )
+            document.getElementById("welcomeTitle").textContent = getText(
+                "updatePageTitle"
+            )
+            document.getElementById("welcomeSubtitle").textContent = getText(
+                "updatePageSubtitle",
+                { version: updateContext.version }
+            )
+            renderUpdateNotice()
+        }
     }
 
     /**
@@ -166,6 +282,8 @@
      */
     async function initialize() {
         try {
+            updateContext = getUpdateContext()
+            applyPageMode()
             applyTheme(await getThemePreference())
             currentLanguage = await getLanguagePreference()
             updateLanguage()
@@ -175,6 +293,29 @@
                 .addEventListener("click", () => {
                     chrome.runtime.openOptionsPage()
                 })
+
+            if (updateContext) {
+                const result = await chrome.storage.sync.get([
+                    "updateNoticeEnabled",
+                ])
+                const toggle = document.getElementById(
+                    "disableUpdateNotices"
+                )
+                toggle.checked = result.updateNoticeEnabled === false
+                toggle.addEventListener("change", async () => {
+                    try {
+                        await chrome.storage.sync.set({
+                            updateNoticeEnabled: !toggle.checked,
+                        })
+                    } catch (error) {
+                        toggle.checked = !toggle.checked
+                        console.error(
+                            "Error saving update notice preference:",
+                            error
+                        )
+                    }
+                })
+            }
         } catch (error) {
             console.error("Error initializing welcome page:", error)
         }

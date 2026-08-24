@@ -33,6 +33,8 @@
 ├── extension/               # Chrome 扩展版本
 │   ├── manifest.json
 │   ├── background.js
+│   ├── link-policy.js
+│   ├── update-notices.js
 │   ├── content.js
 │   ├── popup.html
 │   ├── popup.js
@@ -65,7 +67,7 @@
 
 -   **适合场景**：生产环境使用、更好的性能、原生浏览器集成
 -   **安装方式**：[查看 extension/README.zh-CN.md](extension/README.zh-CN.md#安装) ([English](extension/README.md#installation))
--   **功能特性**：弹窗界面、自动更新、Web Store 分发
+-   **功能特性**：弹窗界面、自动更新、Web Store 分发、重要更新说明
 
 ## 文档
 

@@ -25,6 +25,10 @@
             openInBackgroundLabel: "Open in background",
             openInBackgroundDesc:
                 "Keep focus on the current tab when opening links",
+            updateNoticesHeading: "Update notices",
+            updateNoticesLabel: "Important update notices",
+            updateNoticesDesc:
+                "Allow important release notes to open after an update",
             whitelistHeading: "Whitelist Management",
             importExportLabel: "Import / Export",
             importExportDesc: "Backup or restore your whitelist",
@@ -59,6 +63,9 @@
             linkBehaviorHeading: "链接行为",
             openInBackgroundLabel: "在后台打开新标签",
             openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
+            updateNoticesHeading: "更新说明提醒",
+            updateNoticesLabel: "重要更新说明",
+            updateNoticesDesc: "允许重要版本更新后自动打开更新说明",
             whitelistHeading: "白名单管理",
             importExportLabel: "导入 / 导出",
             importExportDesc: "备份或恢复您的白名单",
@@ -183,6 +190,26 @@
         }
     }
 
+    async function getUpdateNoticePreference() {
+        try {
+            const result = await chrome.storage.sync.get([
+                "updateNoticeEnabled",
+            ])
+            return result.updateNoticeEnabled !== false
+        } catch (error) {
+            console.error("Error getting update notice preference:", error)
+            return true
+        }
+    }
+
+    async function setUpdateNoticePreference(enabled) {
+        try {
+            await chrome.storage.sync.set({ updateNoticeEnabled: enabled })
+        } catch (error) {
+            console.error("Error saving update notice preference:", error)
+        }
+    }
+
     /**
      * Detect browser language setting
      * @returns {string} Language code ('en' or 'zh')
@@ -246,6 +273,12 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        document.getElementById("updateNoticesHeading").textContent =
+            getText("updateNoticesHeading")
+        document.getElementById("updateNoticesLabel").textContent =
+            getText("updateNoticesLabel")
+        document.getElementById("updateNoticesDesc").textContent =
+            getText("updateNoticesDesc")
         document.getElementById("whitelistHeading").textContent =
             getText("whitelistHeading")
         document.getElementById("importExportLabel").textContent =
@@ -553,6 +586,13 @@
                 await setOpenInBackgroundPreference(
                     openInBackgroundToggle.checked
                 )
+            })
+
+            const updateNoticeToggle =
+                document.getElementById("updateNoticeToggle")
+            updateNoticeToggle.checked = await getUpdateNoticePreference()
+            updateNoticeToggle.addEventListener("change", async () => {
+                await setUpdateNoticePreference(updateNoticeToggle.checked)
             })
 
             const addBtn = document.getElementById("addDomainBtn")

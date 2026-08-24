@@ -23,7 +23,7 @@
 
             <main class="options-main">
                 <!-- How it works -->
-                <section class="settings-section">
+                <section class="settings-section install-only-section">
                     <h2 class="section-heading" id="howItWorksHeading">
                         How it works
                     </h2>
@@ -40,7 +40,7 @@
                 </section>
 
                 <!-- Get started -->
-                <section class="settings-section">
+                <section class="settings-section install-only-section">
                     <h2 class="section-heading" id="getStartedHeading">
                         Get started in 3 steps
                     </h2>
@@ -102,6 +102,38 @@
                     </div>
                 </section>
 
+                <!-- Update notice -->
+                <section
+                    class="settings-section update-notice-section"
+                    id="updateNoticeSection"
+                    hidden
+                >
+                    <div class="settings-card update-notice-card">
+                        <div class="welcome-copy">
+                            <div class="update-notice-meta">
+                                <span id="updateVersionText"></span>
+                                <span id="updatePreviousVersionText"></span>
+                                <span id="updateDateText"></span>
+                            </div>
+                            <h2 id="updateNoticeTitle"></h2>
+                            <p id="updateNoticeSummary"></p>
+                            <h3 id="updateHighlightsHeading"></h3>
+                            <ul id="updateHighlights"></ul>
+                            <div id="updateMigration" class="update-migration" hidden>
+                                <h3 id="updateMigrationHeading"></h3>
+                                <p id="updateMigrationText"></p>
+                            </div>
+                            <label class="update-notice-preference">
+                                <input
+                                    type="checkbox"
+                                    id="disableUpdateNotices"
+                                />
+                                <span id="disableUpdateNoticesText"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Call to action -->
                 <section class="settings-section">
                     <div class="cta-row">
@@ -137,6 +169,7 @@
             </footer>
         </div>
 
+        <script src="update-notices.js"></script>
         <script src="welcome.js"></script>
     </body>
 </html>

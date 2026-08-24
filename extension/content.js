@@ -2,9 +2,8 @@
  * Content script: whitelist-gated click intercept and optional target=_blank patch.
  * Click handling stays synchronous (cached prefs + sendMessage) so the
  * service worker can open the tab without a lost user-activation race.
+ * Injected after link-policy.js (same isolated world).
  */
-
-import { isHostAllowed, shouldSkipClick } from "./link-policy.js"
 
 const MSG_OPEN_TAB = "OPEN_TAB"
 const PATCHED_ATTR = "data-oint-patched"

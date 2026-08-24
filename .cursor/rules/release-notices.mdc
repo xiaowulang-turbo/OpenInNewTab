@@ -1,0 +1,24 @@
+---
+description: Release-notice gate for extension changes and versioned releases
+globs:
+  - "extension/**"
+  - "scripts/**"
+  - "package.json"
+alwaysApply: false
+---
+
+# Extension release notice gate
+
+When preparing a Chrome extension release, version bump, package, or store submission, follow this order:
+
+1. Review the complete diff and classify user impact as `notify`, `silent`, or `uncertain`.
+2. Use `notify` for new user-visible features, changed link behavior or defaults, permission/privacy changes, security fixes, migrations, or meaningful UX changes.
+3. Use `silent` for internal refactors, tests, documentation-only changes, and fixes with no material user-facing impact.
+4. If the classification is `uncertain`, stop and ask the user before continuing the release.
+5. For `notify`, add or update the current extension version entry in `extension/update-notices.js`, set `showUpdateNotice: true`, and provide complete English and Chinese copy plus an explicit `YYYY-MM-DD` release date.
+6. For `silent`, keep the current version entry explicit with `showUpdateNotice: false`.
+7. Never invent release dates, user impact, migration steps, or feature claims. Ask when the source facts are incomplete.
+8. Run `npm run release:check` before packaging. It must pass before `npm run pack:extension`.
+9. Before reporting the release as ready, run `npm test`, `npm run lint`, `npm run lint:tsc`, `npm run lint:fix`, `npm run version:verify`, and `npm run pack:extension`.
+
+The update notice is opt-in per release and opt-out by the user. Keep the update page minimal; do not add unrelated promotional messaging to release notes.

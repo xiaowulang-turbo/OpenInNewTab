@@ -44,6 +44,7 @@ You can also manually add domains by typing them in the input field (e.g., `stac
 -   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
 -   **Open in background** (optional): New tabs open without stealing focus from the current page
 -   **Onboarding**: A welcome page opens on first install to explain whitelist mode and guide first-time setup
+-   **Important update notices**: Release authors can opt in to a minimal notice page for meaningful updates; users can disable future notices in Settings
 
 ## Installation
 
@@ -90,10 +91,22 @@ The extension comes with an empty default whitelist. Users can add domains throu
 
 In the popup **Settings** (gear icon) or on the **Options** page, enable **Open in background**. On whitelisted sites, ordinary left-clicks on links open a new tab without switching focus. Modifier clicks (Ctrl/Cmd/Shift) and middle-click are not intercepted.
 
+### Important update notices
+
+Only releases explicitly marked by the publisher open the minimal update
+notice page. Users can disable future notices, or re-enable them, from the
+Options page. Silent releases continue without opening a tab.
+
 ### Local testing
 
 1. Serve the fixture page, e.g. `npx http-server dev -p 8765` from the repo root.
 2. Open `http://127.0.0.1:8765/fixture.html`, add `127.0.0.1` to the whitelist, toggle the setting, and click the sample links.
+
+To test an update notice locally, temporarily set the current version entry in
+`update-notices.js` to `showUpdateNotice: true`, add complete English and
+Chinese release copy, load the extension as an update from a higher manifest
+version, and restore the entry to silent after testing. The notice preference
+can be re-enabled from the Options page.
 
 ### User Management
 
@@ -151,6 +164,8 @@ The extension supports both exact domain matching and subdomain matching:
 /extension/
 ├── manifest.json          # Extension manifest (Manifest V3)
 ├── background.js          # Service worker
+├── link-policy.js         # Host / click policy (classic, shared with tests)
+├── update-notices.js      # Versioned update notice data and validation
 ├── content.js             # Content script (link modification logic)
 ├── popup.html             # Popup interface
 ├── popup.js               # Popup functionality
@@ -173,6 +188,7 @@ The extension supports both exact domain matching and subdomain matching:
 
 -   **manifest.json**: Defines extension metadata, permissions, and structure
 -   **background.js**: Service worker for extension lifecycle management
+-   **link-policy.js**: Host and click skip rules; injected before content.js
 -   **content.js**: Injected into web pages to modify link behavior
 -   **popup.html/js/css**: User interface for whitelist management
 -   **options.html/js/css**: Full settings and configuration page

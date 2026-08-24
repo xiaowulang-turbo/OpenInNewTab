@@ -1,14 +1,17 @@
 /**
- * Pure host / click policy shared by content.js (module) and Node tests.
+ * Pure host / click policy shared by the content script and Node tests.
+ * Classic script: Chrome content_scripts cannot use ESM. Tests load via require.
  * No DOM writes, no chrome APIs.
  */
+
+/* global module */
 
 /**
  * @param {string} hostname
  * @param {unknown} whitelist
  * @returns {boolean}
  */
-export function isHostAllowed(hostname, whitelist) {
+function isHostAllowed(hostname, whitelist) {
     if (!hostname || !Array.isArray(whitelist)) {
         return false
     }
@@ -26,7 +29,7 @@ export function isHostAllowed(hostname, whitelist) {
  * @param {string|null} href
  * @returns {boolean}
  */
-export function shouldSkipHref(href) {
+function shouldSkipHref(href) {
     if (!href) {
         return true
     }
@@ -43,7 +46,7 @@ export function shouldSkipHref(href) {
  * @param {{ hasAttribute: (name: string) => boolean, getAttribute: (name: string) => string|null }} link
  * @returns {boolean}
  */
-export function shouldSkipClick(event, link) {
+function shouldSkipClick(event, link) {
     if (link.hasAttribute("download")) {
         return true
     }
@@ -56,4 +59,12 @@ export function shouldSkipClick(event, link) {
         return true
     }
     return shouldSkipHref(link.getAttribute("href"))
+}
+
+if (typeof module === "object" && module.exports) {
+    module.exports = {
+        isHostAllowed,
+        shouldSkipHref,
+        shouldSkipClick,
+    }
 }

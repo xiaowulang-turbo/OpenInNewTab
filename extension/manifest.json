@@ -16,8 +16,7 @@
     "content_scripts": [
         {
             "matches": ["*://*/*"],
-            "js": ["content.js"],
-            "type": "module",
+            "js": ["link-policy.js", "content.js"],
             "run_at": "document_start"
         }
     ],

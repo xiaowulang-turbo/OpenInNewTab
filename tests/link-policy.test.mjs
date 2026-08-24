@@ -1,10 +1,12 @@
+import { createRequire } from "node:module"
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
-import {
+
+const {
     isHostAllowed,
     shouldSkipClick,
     shouldSkipHref,
-} from "../extension/link-policy.js"
+} = createRequire(import.meta.url)("../extension/link-policy.js")
 
 describe("isHostAllowed", () => {
     it("rejects empty hostname or non-array whitelist", () => {
