@@ -8,6 +8,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const popupScript = readFileSync(join(root, "extension/popup.js"), "utf8")
 const optionsScript = readFileSync(join(root, "extension/options.js"), "utf8")
 const popupHtml = readFileSync(join(root, "extension/popup.html"), "utf8")
+const optionsHtml = readFileSync(join(root, "extension/options.html"), "utf8")
 const privacyPolicy = readFileSync(join(root, "PRIVACY_POLICY.md"), "utf8")
 const websitePrivacyPolicy = readFileSync(
     join(root, "website/privacy-policy.html"),
@@ -58,6 +59,17 @@ describe("extension quality contracts", () => {
         assert.ok(
             hasAriaLabel || hasExplicitLabel,
             "openInBackgroundToggle requires aria-label or label[for]"
+        )
+    })
+
+    it("options background toggle has a programmatic accessible name", () => {
+        const hasAriaLabel =
+            /id="openInBackgroundToggle"[^>]*aria-label=/.test(optionsHtml)
+        const hasExplicitLabel =
+            /<label[^>]*\sfor="openInBackgroundToggle"/.test(optionsHtml)
+        assert.ok(
+            hasAriaLabel || hasExplicitLabel,
+            "options openInBackgroundToggle requires aria-label or label[for]"
         )
     })
 
