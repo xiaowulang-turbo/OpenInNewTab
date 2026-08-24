@@ -310,6 +310,7 @@
             await chrome.storage.sync.set({ userWhitelist: domains })
         } catch (error) {
             console.error("Error saving whitelist:", error)
+            throw error
         }
     }
 
