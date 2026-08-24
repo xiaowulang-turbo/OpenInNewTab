@@ -16,7 +16,7 @@
     "content_scripts": [
         {
             "matches": ["*://*/*"],
-            "js": ["content.js"],
+            "js": ["link-policy.js", "content.js"],
             "run_at": "document_start"
         }
     ],
@@ -34,12 +34,5 @@
         "32": "icons/icon32.png",
         "64": "icons/icon64.png",
         "128": "icons/icon128.png"
-    },
-
-    "web_accessible_resources": [
-        {
-            "resources": ["popup.html", "popup.js", "popup.css"],
-            "matches": ["*://*/*"]
-        }
-    ]
+    }
 }

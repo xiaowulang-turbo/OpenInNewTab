@@ -1,210 +1,209 @@
 /**
- * Content Script - Open In New Tabs Extension
- * Handles link modification and whitelist checking
+ * Content script: whitelist-gated click intercept and optional target=_blank patch.
+ * Click handling stays synchronous (cached prefs + sendMessage) so the
+ * service worker can open the tab without a lost user-activation race.
+ * Injected after link-policy.js (same isolated world).
  */
 
-;(function () {
-    "use strict"
+const MSG_OPEN_TAB = "OPEN_TAB"
+const PATCHED_ATTR = "data-oint-patched"
 
-    const MSG_OPEN_TAB = "OPEN_TAB"
-    const PATCHED_ATTR = "data-oint-patched"
-    const DEFAULT_DOMAINS = []
+const state = {
+    whitelist: [],
+    openInBackground: false,
+    intercepting: false,
+    observer: null,
+    pending: [],
+    scheduled: false,
+}
 
-    let targetBlankObserver = null
-
-    async function getUserWhitelist() {
-        try {
-            const result = await chrome.storage.sync.get(["userWhitelist"])
-            const stored = result.userWhitelist
-            return Array.isArray(stored) ? stored : DEFAULT_DOMAINS
-        } catch (error) {
-            console.error("Error getting whitelist:", error)
-            return DEFAULT_DOMAINS
-        }
+function handleLinkClick(event) {
+    const target = event.target
+    if (!target || typeof target.closest !== "function") {
+        return
+    }
+    const link = target.closest("a[href]")
+    if (!link || shouldSkipClick(event, link)) {
+        return
     }
 
-    async function getOpenInBackground() {
-        try {
-            const result = await chrome.storage.sync.get(["openInBackground"])
-            return !!result.openInBackground
-        } catch (error) {
-            console.error("Error getting openInBackground:", error)
-            return false
-        }
+    event.preventDefault()
+    event.stopPropagation()
+    event.stopImmediatePropagation()
+
+    chrome.runtime.sendMessage({
+        type: MSG_OPEN_TAB,
+        url: link.href,
+        active: !state.openInBackground,
+    }).catch((error) => {
+        console.error("Error opening tab:", error)
+    })
+}
+
+function patchLinkTarget(link) {
+    if (
+        link.target ||
+        link.hasAttribute("download") ||
+        link.hasAttribute(PATCHED_ATTR)
+    ) {
+        return
     }
+    link.target = "_blank"
+    link.rel = "noopener noreferrer"
+    link.setAttribute(PATCHED_ATTR, "1")
+}
 
-    async function isWhitelisted() {
-        try {
-            const currentDomain = window.location.hostname
-            const userWhitelist = await getUserWhitelist()
-            return userWhitelist.some(
-                (domain) =>
-                    currentDomain === domain ||
-                    currentDomain.endsWith("." + domain)
-            )
-        } catch (error) {
-            console.error("Error checking whitelist:", error)
-            return false
-        }
+function patchLinksUnder(root) {
+    if (!root || root.nodeType !== Node.ELEMENT_NODE) {
+        return
     }
-
-    function shouldSkipLinkClick(event, link) {
-        if (link.hasAttribute("download")) {
-            return true
-        }
-
-        if (
-            event.ctrlKey ||
-            event.metaKey ||
-            event.shiftKey ||
-            event.button === 1
-        ) {
-            return true
-        }
-
-        const href = link.getAttribute("href")
-        if (
-            !href ||
-            href.startsWith("javascript:") ||
-            href.startsWith("mailto:")
-        ) {
-            return true
-        }
-
-        if (href.startsWith("#")) {
-            return true
-        }
-
-        return false
+    if (root.matches?.("a[href]")) {
+        patchLinkTarget(root)
     }
+    root.querySelectorAll?.("a[href]").forEach(patchLinkTarget)
+}
 
-    function patchLinkTarget(link) {
-        if (link.target || link.hasAttribute("download") || link.hasAttribute(PATCHED_ATTR)) {
-            return
-        }
-        link.target = "_blank"
-        link.rel = "noopener noreferrer"
-        link.setAttribute(PATCHED_ATTR, "1")
+function removePatchedTargets() {
+    document.querySelectorAll(`a[${PATCHED_ATTR}]`).forEach((link) => {
+        link.removeAttribute("target")
+        link.removeAttribute("rel")
+        link.removeAttribute(PATCHED_ATTR)
+    })
+}
+
+function flushPendingPatches() {
+    state.scheduled = false
+    const batch = state.pending
+    state.pending = []
+    for (const node of batch) {
+        patchLinksUnder(node)
     }
+}
 
-    function patchLinksUnder(root) {
-        if (root.nodeType === Node.ELEMENT_NODE) {
-            if (root.matches?.("a[href]")) {
-                patchLinkTarget(root)
+function schedulePatchFlush() {
+    if (state.scheduled) {
+        return
+    }
+    state.scheduled = true
+    if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(flushPendingPatches, { timeout: 200 })
+    } else {
+        setTimeout(flushPendingPatches, 0)
+    }
+}
+
+function startObserver() {
+    if (state.observer || !document.body) {
+        return
+    }
+    state.observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === "childList") {
+                mutation.addedNodes.forEach((node) => state.pending.push(node))
+            } else if (
+                mutation.type === "attributes" &&
+                mutation.target.nodeType === Node.ELEMENT_NODE &&
+                mutation.target.matches?.("a[href]")
+            ) {
+                state.pending.push(mutation.target)
             }
-            root.querySelectorAll?.("a[href]").forEach(patchLinkTarget)
         }
-    }
+        schedulePatchFlush()
+    })
+    state.observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["href"],
+    })
+}
 
-    function removePatchedTargets() {
-        document.querySelectorAll(`a[${PATCHED_ATTR}]`).forEach((link) => {
-            link.removeAttribute("target")
-            link.removeAttribute("rel")
-            link.removeAttribute(PATCHED_ATTR)
-        })
+function stopObserver() {
+    if (state.observer) {
+        state.observer.disconnect()
+        state.observer = null
     }
+    state.pending = []
+    state.scheduled = false
+}
 
-    function enableTargetBlankPatching() {
-        if (!document.body) {
+function startPatching() {
+    const onReady = () => {
+        if (!state.intercepting || state.openInBackground) {
             return
         }
-
         patchLinksUnder(document.body)
-
-        if (targetBlankObserver) {
-            return
-        }
-
-        targetBlankObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
-                    patchLinksUnder(node)
-                })
-            })
-        })
-
-        targetBlankObserver.observe(document.body, {
-            childList: true,
-            subtree: true,
-        })
+        startObserver()
     }
-
-    function disableTargetBlankPatching() {
-        if (targetBlankObserver) {
-            targetBlankObserver.disconnect()
-            targetBlankObserver = null
-        }
-        removePatchedTargets()
+    if (document.body) {
+        onReady()
+    } else {
+        document.addEventListener("DOMContentLoaded", onReady, { once: true })
     }
+}
 
-    async function syncTargetBlankPatching() {
-        if (await getOpenInBackground()) {
-            disableTargetBlankPatching()
-        } else {
-            enableTargetBlankPatching()
-        }
+function teardownPatching() {
+    stopObserver()
+    removePatchedTargets()
+}
+
+function syncPatching() {
+    if (!state.intercepting || state.openInBackground) {
+        teardownPatching()
+        return
     }
+    startPatching()
+}
 
-    async function openLinkInNewTab(url, inBackground) {
-        if (inBackground) {
-            try {
-                await chrome.runtime.sendMessage({
-                    type: MSG_OPEN_TAB,
-                    url,
-                    active: false,
-                })
-                return
-            } catch (error) {
-                console.error("Error opening tab in background:", error)
-            }
-        }
+function applyToPage() {
+    const should = isHostAllowed(location.hostname, state.whitelist)
 
-        window.open(url, "_blank", "noopener,noreferrer")
-    }
-
-    async function handleLinkClick(event) {
-        const link = event.target.closest("a[href]")
-        if (!link || shouldSkipLinkClick(event, link)) {
-            return
-        }
-
-        event.preventDefault()
-        event.stopPropagation()
-        event.stopImmediatePropagation()
-
-        await openLinkInNewTab(link.href, await getOpenInBackground())
-    }
-
-    async function activateOnWhitelistedSite() {
+    if (should && !state.intercepting) {
         document.addEventListener("click", handleLinkClick, true)
-        await syncTargetBlankPatching()
+        state.intercepting = true
+        syncPatching()
+        return
     }
 
-    async function initialize() {
-        try {
-            if (!(await isWhitelisted())) {
-                return
-            }
-            await activateOnWhitelistedSite()
-        } catch (error) {
-            console.error("Error initializing content script:", error)
-        }
+    if (!should && state.intercepting) {
+        document.removeEventListener("click", handleLinkClick, true)
+        teardownPatching()
+        state.intercepting = false
+        return
     }
 
-    chrome.storage.onChanged.addListener((changes, area) => {
-        if (area !== "sync" || !changes.openInBackground) {
-            return
-        }
-        isWhitelisted().then((whitelisted) => {
-            if (whitelisted) {
-                syncTargetBlankPatching()
-            }
-        })
+    if (should && state.intercepting) {
+        syncPatching()
+    }
+}
+
+function applyStorage(result) {
+    state.whitelist = Array.isArray(result.userWhitelist)
+        ? result.userWhitelist
+        : []
+    state.openInBackground = !!result.openInBackground
+    applyToPage()
+}
+
+chrome.storage.sync
+    .get(["userWhitelist", "openInBackground"])
+    .then(applyStorage)
+    .catch((error) => {
+        console.error("Error loading intercept state:", error)
     })
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initialize)
-    } else {
-        initialize()
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== "sync") {
+        return
     }
-})()
+    if (changes.userWhitelist) {
+        const next = changes.userWhitelist.newValue
+        state.whitelist = Array.isArray(next) ? next : []
+    }
+    if (changes.openInBackground) {
+        state.openInBackground = !!changes.openInBackground.newValue
+    }
+    if (changes.userWhitelist || changes.openInBackground) {
+        applyToPage()
+    }
+})

@@ -2,12 +2,13 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-A monorepo project providing two implementations to force all links to open in new tab using a **whitelist-based approach**:
+A monorepo with two whitelist-based implementations that force links to open
+in a new tab. **The Chrome extension is the primary product**; the Tampermonkey
+userscript remains available but is not on the same release track.
 
--   **Userscript Version**: Tampermonkey/Greasemonkey userscript
--   **Chrome Extension Version**: Native Chrome extension with popup interface
+-   **Chrome Extension**: native popup, options page, and content script
+-   **Userscript**: Tampermonkey / Greasemonkey menu + settings modal
 
-Both versions feature dark mode support, internationalization, and modern UI design.
 
 ## 🎯 How Whitelist Mode Works
 
@@ -33,6 +34,8 @@ The whitelist-based approach means:
 ├── extension/               # Chrome extension version
 │   ├── manifest.json
 │   ├── background.js
+│   ├── link-policy.js
+│   ├── update-notices.js
 │   ├── content.js
 │   ├── popup.html
 │   ├── popup.js
@@ -65,6 +68,7 @@ Choose your preferred version:
 -   **Best for**: Production use, better performance, native browser integration
 -   **Installation**: [See extension/README.md](extension/README.md#installation) ([中文](extension/README.zh-CN.md#安装))
 -   **Features**: Popup interface, auto-updates, Web Store distribution
+-   **Release communication**: Optional, minimal notices for meaningful extension updates
 
 ## Documentation
 
@@ -78,7 +82,9 @@ Both versions share the same core functionality and features, but have different
 ## Versioning
 
 The extension and the userscript are **independent products on independent
-SemVer tracks**. They no longer share a version number.
+SemVer tracks**. They must not be kept in lockstep, and a change to one does
+**not** require a version bump on the other. Active development focuses on the
+extension.
 
 | Product | Version source | Bump command |
 | --- | --- | --- |
@@ -86,6 +92,7 @@ SemVer tracks**. They no longer share a version number.
 | Tampermonkey userscript | `userscript/OpenInNewTab.user.js` — both the `// @version` metadata line and the `SCRIPT_VERSION` constant must agree | `npm run version:bump:us` |
 
 - `npm run version:verify` — fails if (a) the website meta tags disagree with the manifest, or (b) the userscript's two version locations disagree with each other. The two products are **not** compared against each other.
+- Do not bump a product's version unless that product is being released.
 
 **Git hook**: pre-commit runs `version:verify` whenever `extension/`, `userscript/`, or `website/` files are staged, and runs `npm run pack:extension` whenever `extension/` files are staged. The hook no longer auto-bumps — set major / minor / patch manually in the relevant file or run the appropriate `version:bump:*` command, then commit.
 

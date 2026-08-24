@@ -2,12 +2,11 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-一个 Monorepo 项目，提供两种实现方式，使用**白名单模式**强制所有链接在新标签页中打开：
+一个 Monorepo，提供两种白名单实现，强制链接在新标签页打开。**Chrome 扩展是主产品**；油猴脚本仍可用，但与扩展不在同一条发布轨道上。
 
--   **油猴脚本版本**：Tampermonkey/Greasemonkey 用户脚本
--   **Chrome 扩展版本**：原生 Chrome 扩展，配备弹窗界面
+-   **Chrome 扩展**：原生弹窗、选项页与 content script
+-   **油猴脚本**：Tampermonkey / Greasemonkey 菜单 + 设置模态框
 
-两个版本均支持暗色模式、国际化和现代化 UI 设计。
 
 ## 🎯 白名单模式的工作原理
 
@@ -34,6 +33,8 @@
 ├── extension/               # Chrome 扩展版本
 │   ├── manifest.json
 │   ├── background.js
+│   ├── link-policy.js
+│   ├── update-notices.js
 │   ├── content.js
 │   ├── popup.html
 │   ├── popup.js
@@ -66,7 +67,7 @@
 
 -   **适合场景**：生产环境使用、更好的性能、原生浏览器集成
 -   **安装方式**：[查看 extension/README.zh-CN.md](extension/README.zh-CN.md#安装) ([English](extension/README.md#installation))
--   **功能特性**：弹窗界面、自动更新、Web Store 分发
+-   **功能特性**：弹窗界面、自动更新、Web Store 分发、重要更新说明
 
 ## 文档
 
@@ -119,7 +120,7 @@ MIT License - 详见 LICENSE 文件
 
 ## 版本与发布号
 
-扩展与脚本是**两个独立的产品，分别走各自的 SemVer 节奏**，不再共享同一个版本号。
+扩展与脚本是**两个独立的产品，分别走各自的 SemVer 节奏**。不必锁版本、不必同步递增。后续开发以扩展为主。
 
 | 产品 | 版本来源 | Bump 命令 |
 | --- | --- | --- |
@@ -127,6 +128,7 @@ MIT License - 详见 LICENSE 文件
 | 油猴脚本 | `userscript/OpenInNewTab.user.js`：`// @version` 行与 `SCRIPT_VERSION` 常量必须一致 | `npm run version:bump:us` |
 
 - `npm run version:verify` —— 当（a）官网 meta 与 manifest 不一致，或（b）脚本两处版本号自身不一致时报错退出。**不再**比较扩展与脚本的版本号。
+- 只有在真正发布该产品时才升版本号。
 
 **Git 钩子**：暂存区包含 `extension/`、`userscript/` 或 `website/` 下文件时，pre-commit 会跑 `version:verify`；暂存了 `extension/` 还会跑 `npm run pack:extension`。**钩子不再自动 bump 版本号**——major / minor / patch 由开发者手动设置或显式运行对应的 `version:bump:*` 命令。
 

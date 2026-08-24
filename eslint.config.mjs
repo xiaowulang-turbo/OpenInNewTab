@@ -22,6 +22,15 @@ export default [
         },
     },
     {
+        files: ["extension/content.js"],
+        languageOptions: {
+            globals: {
+                isHostAllowed: "readonly",
+                shouldSkipClick: "readonly",
+            },
+        },
+    },
+    {
         files: ["userscript/**/*.js"],
         languageOptions: {
             ecmaVersion: "latest",

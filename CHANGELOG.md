@@ -58,6 +58,30 @@ The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/
 
 ## Extension
 
+### Unreleased
+
+#### Changed
+- Content script now remounts interceptors when the whitelist or
+  background-tab preference changes, so popup / options edits apply without
+  reloading the page.
+- Foreground and background opens both go through `chrome.tabs.create` from
+  the service worker; the click handler stays synchronous (cached prefs).
+- Skip `tel:` links; observe `href` mutations with idle-batched patching.
+- Removed `web_accessible_resources` exposing popup assets to every site.
+- Popup and options render domain rows with DOM APIs instead of HTML
+  interpolation.
+- Added opt-in, versioned update notices with a user-controlled reminder
+  preference and a local bilingual release-note data source.
+- Added a release-notice validation command and an Agent release gate so
+  meaningful updates cannot be packaged without their notice configuration.
+
+#### Fixed
+- Opening a link no longer races popup blockers after `await storage`.
+- Content scripts stay classic: Chrome ignores `content_scripts.type`, so
+  `link-policy.js` is injected before `content.js` instead of ESM `import`.
+
+---
+
 ### [1.7.0] — 2025
 - Settings center with theme and language overrides, JSON import / export,
   background-tab opening (`chrome.tabs.create({ active: false })`), an
