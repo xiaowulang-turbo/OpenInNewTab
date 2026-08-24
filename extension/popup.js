@@ -24,12 +24,15 @@
             removedFromWhitelist: "Removed from whitelist",
             noDomains: "No domains in whitelist",
             settingsTitle: "Settings",
+            settingsButtonTitle: "Settings",
+            closeSettingsButtonLabel: "Close settings",
             themeLabel: "Theme",
             themeLightText: "Light",
             themeDarkText: "Dark",
             themeAutoText: "Auto",
             languageLabel: "Language",
             openInBackgroundLabel: "Open in background",
+            openInBackgroundTitle: "Open in background",
             openInBackgroundDesc:
                 "Keep focus on the current tab when opening links",
             moreSettings: "More settings",
@@ -52,12 +55,15 @@
             removedFromWhitelist: "已从白名单移除",
             noDomains: "白名单中没有域名",
             settingsTitle: "设置",
+            settingsButtonTitle: "设置",
+            closeSettingsButtonLabel: "关闭设置",
             themeLabel: "主题",
             themeLightText: "亮色",
             themeDarkText: "暗色",
             themeAutoText: "自动",
             languageLabel: "语言",
             openInBackgroundLabel: "在后台打开新标签",
+            openInBackgroundTitle: "在后台打开",
             openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
             moreSettings: "更多设置",
             cannotDetectCurrentDomain: "无法识别当前域名",
@@ -226,6 +232,14 @@
         // Update settings modal elements
         document.getElementById("settingsTitle").textContent =
             getText("settingsTitle")
+        document.getElementById("settingsButton").title =
+            getText("settingsButtonTitle")
+        document.getElementById("modalCloseBtn").title =
+            getText("closeSettingsButtonLabel")
+        document.getElementById("modalCloseBtn").setAttribute(
+            "aria-label",
+            getText("closeSettingsButtonLabel")
+        )
         document.getElementById("themeLabel").textContent =
             getText("themeLabel")
         document.getElementById("themeLightText").textContent =
@@ -240,6 +254,8 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        document.querySelector(".toggle-switch").title =
+            getText("openInBackgroundTitle")
         document.getElementById("moreOptionsText").textContent =
             getText("moreSettings")
 
