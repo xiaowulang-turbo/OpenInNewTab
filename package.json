@@ -5,6 +5,7 @@
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "lint:tsc": "tsc --noEmit",
+        "test": "node --test tests/**/*.test.mjs",
         "version:verify": "node scripts/verify-version.mjs",
         "version:bump:ext": "node scripts/bump-extension.mjs",
         "version:bump:us": "node scripts/bump-userscript.mjs",

@@ -375,35 +375,6 @@
     }
 
     /**
-     * Reload tabs matching the domain
-     * @param {string} domain Domain to match
-     */
-    async function reloadMatchingTabs(domain) {
-        try {
-            const tabs = await chrome.tabs.query({})
-            for (const tab of tabs) {
-                if (tab.url) {
-                    try {
-                        const url = new URL(tab.url)
-                        const hostname = url.hostname
-                        if (
-                            hostname === domain ||
-                            hostname.endsWith("." + domain)
-                        ) {
-                            await chrome.tabs.reload(tab.id)
-                        }
-                    } catch (error) {
-                        // Skip invalid URLs
-                        continue
-                    }
-                }
-            }
-        } catch (error) {
-            console.error("Error reloading matching tabs:", error)
-        }
-    }
-
-    /**
      * Add domain to whitelist
      * @param {string} domain Domain to add
      */
@@ -416,7 +387,6 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("addedToWhitelist")}`)
                 loadWhitelist()
-                await reloadMatchingTabs(domain)
             } else {
                 showNotification(`${domain} ${getText("alreadyInWhitelist")}`)
             }
@@ -440,12 +410,53 @@
                 await saveUserWhitelist(userWhitelist)
                 showNotification(`${domain} ${getText("removedFromWhitelist")}`)
                 loadWhitelist()
-                await reloadMatchingTabs(domain)
             }
         } catch (error) {
             console.error("Error removing domain:", error)
             showNotification(getText("errorRemovingDomain"))
         }
+    }
+
+    /**
+     * Render whitelist rows without HTML string interpolation.
+     * @param {HTMLElement} container
+     * @param {string[]} domains
+     * @param {string} emptyText
+     * @param {string} removeLabel
+     * @param {(domain: string) => void} onRemove
+     */
+    function renderDomainList(
+        container,
+        domains,
+        emptyText,
+        removeLabel,
+        onRemove
+    ) {
+        container.replaceChildren()
+        if (domains.length === 0) {
+            const empty = document.createElement("div")
+            empty.className = "empty-state"
+            empty.textContent = emptyText
+            container.append(empty)
+            return
+        }
+        const fragment = document.createDocumentFragment()
+        for (const domain of domains) {
+            const item = document.createElement("div")
+            item.className = "domain-item"
+            const name = document.createElement("span")
+            name.className = "domain-name"
+            name.textContent = domain
+            const button = document.createElement("button")
+            button.type = "button"
+            button.className = "remove-btn"
+            button.dataset.domain = domain
+            button.textContent = removeLabel
+            button.addEventListener("click", () => onRemove(domain))
+            item.append(name, button)
+            fragment.append(item)
+        }
+        container.append(fragment)
     }
 
     /**
@@ -461,34 +472,13 @@
                 count: userWhitelist.length,
             })
 
-            if (userWhitelist.length === 0) {
-                domainsList.innerHTML = `
-                    <div class="empty-state">
-                        ${getText("noDomains")}
-                    </div>
-                `
-                return
-            }
-
-            domainsList.innerHTML = userWhitelist
-                .map(
-                    (domain) => `
-                <div class="domain-item">
-                    <span class="domain-name">${domain}</span>
-                    <button class="remove-btn" data-domain="${domain}">
-                        ${getText("removeButton")}
-                    </button>
-                </div>
-            `
-                )
-                .join("")
-
-            domainsList.querySelectorAll(".remove-btn").forEach((btn) => {
-                btn.addEventListener("click", (e) => {
-                    const domain = e.target.getAttribute("data-domain")
-                    removeDomainFromWhitelist(domain)
-                })
-            })
+            renderDomainList(
+                domainsList,
+                userWhitelist,
+                getText("noDomains"),
+                getText("removeButton"),
+                removeDomainFromWhitelist
+            )
         } catch (error) {
             console.error("Error loading whitelist:", error)
         }
