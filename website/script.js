@@ -201,10 +201,11 @@
             return entry ? entry.label : id
         }
 
-        // The toggle shows the label of the locale the user will switch to.
+        // The toggle shows the CURRENT locale's label (clicking cycles to the next),
+        // so the button always reflects the language the page is rendered in.
         function updateIcon(lang) {
             if (langIcon) {
-                langIcon.textContent = labelFor(nextLocale(lang))
+                langIcon.textContent = labelFor(lang)
             }
         }
 
