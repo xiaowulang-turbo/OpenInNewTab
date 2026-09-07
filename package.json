@@ -9,6 +9,7 @@
         "version:bump:ext": "node scripts/bump-extension.mjs",
         "version:bump:us": "node scripts/bump-userscript.mjs",
         "pack:extension": "node scripts/pack-extension.mjs",
+        "i18n:sync": "node scripts/sync-locales.mjs",
         "store:screenshots": "node scripts/generate-store-screenshots.mjs"
     },
     "devDependencies": {

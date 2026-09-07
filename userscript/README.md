@@ -19,7 +19,7 @@ A Tampermonkey userscript that forces all links to open in new tab using a white
 -   **Persistent Storage**: Uses Tampermonkey's GM\_\* APIs to store user preferences
 -   **Dark Mode Support**: Automatically adapts to system dark/light mode preferences
 -   **Modern UI**: Clean, responsive design with smooth animations and hover effects
--   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
+-   **Internationalization**: Automatic language detection (English / 简体中文 / 繁體中文) based on browser settings
 
 ## Installation
 
@@ -98,12 +98,13 @@ The script supports both exact domain matching and subdomain matching:
 
 ## Language Support
 
-The script automatically detects your browser's language setting and displays the interface in the appropriate language:
+The script automatically detects your browser's language and displays the interface accordingly. You can also override it from the settings modal (Auto / English / 简体中文 / 繁體中文).
 
--   **English** (Default): Used when browser language is not Chinese
--   **Chinese (中文)**: Used when browser language starts with 'zh' (e.g., zh-CN, zh-TW, zh-HK)
+-   **English** (default): used when the browser language is not Chinese
+-   **简体中文 (zh-CN)**: used when the browser language starts with `zh` (e.g. zh-CN)
+-   **繁體中文 (zh-TW)**: used for zh-TW / zh-HK / zh-MO / zh-Hant variants
 
-All user interface elements are internationalized including menu commands, modal dialogs, notifications, and domain displays.
+All user interface elements are internationalized including menu commands, modal dialogs, notifications, and domain displays. Translation strings live in `shared/locales/us/{en,zh-CN,zh-TW}.json` as the single source of truth; run `npm run i18n:sync` to regenerate the inlined `languageResources` block.
 
 ## Dark Mode Support
 

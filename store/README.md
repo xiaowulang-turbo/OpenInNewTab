@@ -8,10 +8,12 @@
 | --- | --- |
 | `screenshots/popup-light-add.png` | Real popup, light mode, current domain can be added |
 | `screenshots/popup-dark-remove.png` | Real popup, dark mode, current domain is enabled |
-| `screenshots/popup-zh-light-add.png` | Real popup, Simplified Chinese, light mode |
+| `screenshots/popup-zh-light-add.png` | Real popup, Simplified Chinese (zh-CN), light mode |
+| `screenshots/popup-zh-tw-light-add.png` | Real popup, Traditional Chinese (zh-TW), light mode |
 | `screenshots/options-light.png` | Real options page, light mode |
 | `screenshots/options-dark.png` | Real options page, dark mode |
-| `screenshots/options-zh-light.png` | Real options page, Simplified Chinese, light mode |
+| `screenshots/options-zh-light.png` | Real options page, Simplified Chinese (zh-CN), light mode |
+| `screenshots/options-zh-tw-light.png` | Real options page, Traditional Chinese (zh-TW), light mode |
 
 The screenshots use the current extension HTML, CSS, JavaScript, storage schema,
 and localization strings. No marketing-only mock UI is used.

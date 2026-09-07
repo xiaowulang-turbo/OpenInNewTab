@@ -30,7 +30,7 @@ website/
 ├── index.html          # Main HTML file (includes <meta name="app-version"> synced from extension manifest)
 ├── styles.css          # All styles with CSS variables
 ├── script.js           # Interactive functionality
-├── i18n.js             # Translations
+├── i18n.js             # Translations (AUTO-GENERATED from shared/locales/site/*.json via `npm run i18n:sync`)
 └── README.md           # This file
 ```
 

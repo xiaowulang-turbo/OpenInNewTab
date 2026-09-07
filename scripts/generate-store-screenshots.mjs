@@ -357,7 +357,13 @@ async function main() {
             {
                 filename: "popup-zh-light-add.png",
                 theme: "light",
-                language: "zh",
+                language: "zh-CN",
+                whitelist: domains,
+            },
+            {
+                filename: "popup-zh-tw-light-add.png",
+                theme: "light",
+                language: "zh-TW",
                 whitelist: domains,
             },
         ]
@@ -393,7 +399,12 @@ async function main() {
             {
                 filename: "options-zh-light.png",
                 theme: "light",
-                language: "zh",
+                language: "zh-CN",
+            },
+            {
+                filename: "options-zh-tw-light.png",
+                theme: "light",
+                language: "zh-TW",
             },
         ]
         const options = await createExtensionPage(

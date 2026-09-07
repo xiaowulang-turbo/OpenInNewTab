@@ -6,82 +6,10 @@
 ;(function () {
     "use strict"
 
-    /**
-     * Language resources for internationalization
-     */
-    const languageResources = {
-        en: {
-            optionsTitle: "Extension Settings",
-            optionsSubtitle: "Configure your preferences and manage whitelist",
-            appearanceHeading: "Appearance & Language",
-            themeLabel: "Theme",
-            themeDesc: "Choose your preferred theme",
-            themeLightText: "Light",
-            themeDarkText: "Dark",
-            themeAutoText: "Auto",
-            languageLabel: "Language",
-            languageDesc: "Select your language",
-            linkBehaviorHeading: "Link behavior",
-            openInBackgroundLabel: "Open in background",
-            openInBackgroundDesc:
-                "Keep focus on the current tab when opening links",
-            whitelistHeading: "Whitelist Management",
-            importExportLabel: "Import / Export",
-            importExportDesc: "Backup or restore your whitelist",
-            exportBtnText: "Export",
-            importBtnText: "Import",
-            addDomainLabel: "Add Domain",
-            addDomainDesc: "Add a new domain to whitelist",
-            addBtnText: "Add",
-            removeButton: "Remove",
-            domainsCount: "{count} domains",
-            noDomains: "No domains in whitelist",
-            footerText: "Open In New Tab Extension v{version}",
-            exportSuccess: "Whitelist exported successfully!",
-            importSuccess: "Whitelist imported successfully!",
-            importError: "Failed to import whitelist",
-            addedToWhitelist: "Added to whitelist!",
-            alreadyInWhitelist: "Already in whitelist",
-            removedFromWhitelist: "Removed from whitelist",
-            inputPlaceholder: "example.com",
-        },
-        zh: {
-            optionsTitle: "扩展设置",
-            optionsSubtitle: "配置您的偏好设置和管理白名单",
-            appearanceHeading: "外观和语言",
-            themeLabel: "主题",
-            themeDesc: "选择您的偏好主题",
-            themeLightText: "亮色",
-            themeDarkText: "暗色",
-            themeAutoText: "自动",
-            languageLabel: "语言",
-            languageDesc: "选择您的语言",
-            linkBehaviorHeading: "链接行为",
-            openInBackgroundLabel: "在后台打开新标签",
-            openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
-            whitelistHeading: "白名单管理",
-            importExportLabel: "导入 / 导出",
-            importExportDesc: "备份或恢复您的白名单",
-            exportBtnText: "导出",
-            importBtnText: "导入",
-            addDomainLabel: "添加域名",
-            addDomainDesc: "添加一个新域名到白名单",
-            addBtnText: "添加",
-            removeButton: "移除",
-            domainsCount: "{count} 个域名",
-            noDomains: "白名单中没有域名",
-            footerText: "Open In New Tab 扩展 v{version}",
-            exportSuccess: "白名单导出成功！",
-            importSuccess: "白名单导入成功！",
-            importError: "导入白名单失败",
-            addedToWhitelist: "已添加到白名单！",
-            alreadyInWhitelist: "已在白名单中",
-            removedFromWhitelist: "已从白名单移除",
-            inputPlaceholder: "example.com",
-        },
-    }
+    /** Shared i18n runtime (loaded via i18n-bundle.js before options.js). */
+    const i18n = window.I18n
+    let currentLanguage = i18n.DEFAULT_LOCALE
 
-    let currentLanguage = "en"
     let currentTheme = "auto"
 
     /**
@@ -137,19 +65,17 @@
     }
 
     /**
-     * Get language preference from storage
-     * @returns {Promise<string>} Language code ('en' or 'zh')
+     * Get language preference from storage, falling back to browser language.
+     * Legacy stored "zh" canonicalizes to "zh-CN".
+     * @returns {Promise<string>} BCP-47 locale code
      */
     async function getLanguagePreference() {
         try {
             const result = await chrome.storage.sync.get(["userLanguage"])
-            if (result.userLanguage) {
-                return result.userLanguage
-            }
-            return detectLanguage()
+            return i18n.resolveStoredLocale(result.userLanguage)
         } catch (error) {
             console.error("Error getting language preference:", error)
-            return detectLanguage()
+            return i18n.detectLocale()
         }
     }
 
@@ -184,31 +110,13 @@
     }
 
     /**
-     * Detect browser language setting
-     * @returns {string} Language code ('en' or 'zh')
-     */
-    function detectLanguage() {
-        const userLang = navigator.language || navigator.userLanguage || "en"
-        return userLang.startsWith("zh") ? "zh" : "en"
-    }
-
-    /**
      * Get text by language
      * @param {string} key Text key
      * @param {Object} params Parameters to replace in text
      * @returns {string} Localized text
      */
     function getText(key, params = {}) {
-        let text =
-            languageResources[currentLanguage]?.[key] ||
-            languageResources.en[key] ||
-            key
-
-        Object.keys(params).forEach((param) => {
-            text = text.replace(`{${param}}`, params[param])
-        })
-
-        return text
+        return i18n.getText(key, currentLanguage, params)
     }
 
     /**
@@ -269,7 +177,10 @@
         document.getElementById("newDomainInput").placeholder =
             getText("inputPlaceholder")
 
-        document.getElementById("languageSelect").value = currentLanguage
+        i18n.fillLanguageSelect(
+            document.getElementById("languageSelect"),
+            currentLanguage
+        )
 
         document.querySelectorAll(".remove-btn").forEach((btn) => {
             btn.textContent = getText("removeButton")
