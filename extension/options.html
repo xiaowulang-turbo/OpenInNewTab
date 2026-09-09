@@ -92,7 +92,8 @@
                             </div>
                             <select id="languageSelect" class="language-select">
                                 <option value="en">English</option>
-                                <option value="zh">中文</option>
+                                <option value="zh-CN">简体中文</option>
+                                <option value="zh-TW">繁體中文</option>
                             </select>
                         </div>
                     </div>
@@ -122,6 +123,7 @@
                                 <input
                                     type="checkbox"
                                     id="openInBackgroundToggle"
+                                    aria-label="Open in background"
                                 />
                                 <span
                                     class="toggle-slider"
@@ -218,6 +220,7 @@
             </footer>
         </div>
 
+        <script src="i18n-bundle.js"></script>
         <script src="options.js"></script>
     </body>
 </html>
