@@ -152,6 +152,14 @@
         // Update settings modal elements
         document.getElementById("settingsTitle").textContent =
             getText("settingsTitle")
+        document.getElementById("settingsButton").title =
+            getText("settingsButtonTitle")
+        document.getElementById("modalCloseBtn").title =
+            getText("closeSettingsButtonLabel")
+        document.getElementById("modalCloseBtn").setAttribute(
+            "aria-label",
+            getText("closeSettingsButtonLabel")
+        )
         document.getElementById("themeLabel").textContent =
             getText("themeLabel")
         document.getElementById("themeLightText").textContent =
@@ -166,6 +174,12 @@
             getText("openInBackgroundLabel")
         document.getElementById("openInBackgroundDesc").textContent =
             getText("openInBackgroundDesc")
+        document.querySelector(".toggle-switch").title =
+            getText("openInBackgroundTitle")
+        document.getElementById("openInBackgroundToggle").setAttribute(
+            "aria-label",
+            getText("openInBackgroundTitle")
+        )
         document.getElementById("moreOptionsText").textContent =
             getText("moreSettings")
 
@@ -185,6 +199,8 @@
 
         // Refresh domains list to update language
         loadWhitelist()
+
+        document.documentElement.lang = i18n.normalizeLocale(currentLanguage)
     }
 
     /**
@@ -291,6 +307,7 @@
             await chrome.storage.sync.set({ userWhitelist: domains })
         } catch (error) {
             console.error("Error saving whitelist:", error)
+            throw error
         }
     }
 
@@ -371,7 +388,7 @@
             }
         } catch (error) {
             console.error("Error adding domain:", error)
-            showNotification("Error adding domain")
+            showNotification(getText("errorAddingDomain"))
         }
     }
 
@@ -397,7 +414,7 @@
             }
         } catch (error) {
             console.error("Error removing domain:", error)
-            showNotification("Error removing domain")
+            showNotification(getText("errorRemovingDomain"))
         }
     }
 
