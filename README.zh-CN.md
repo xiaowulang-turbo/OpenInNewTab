@@ -132,6 +132,27 @@ MIT License - 详见 LICENSE 文件
 
 详见 [`CHANGELOG.md`](./CHANGELOG.md)（按产品分两栏维护）。
 
+## 发布 Chrome 扩展
+
+新版本通过官方 **Chrome Web Store API v2** 上架——仓库内提供了轻量本地 CLI（`scripts/upload-chrome.mjs`，用法见 `npm run store:chrome -- help`），不再需要手工拖 zip。
+
+**一次性前置步骤：**
+1. 注册 CWS 开发者账号，并启用**两步验证**（Google 硬性要求）。
+2. 在 Google Cloud 中启用 **Chrome Web Store API**，并创建一个 **Desktop app** 类型的 OAuth 客户端（拿到 clientId / clientSecret）。
+3. 首次上架的商品资料（标题、截图、隐私政策等）仍需在 [Developer Dashboard](https://chrome.google.com/webstore/devconsole) 手工创建——API 只负责之后的新版本上传与提交。
+
+**发版步骤：**
+```sh
+npm run version:bump:ext      # 升 extension/manifest.json（并同步官网 meta）
+npm run pack:extension        # 生成 release/OpenInNewTab-extension-<version>.zip
+npm run store:chrome -- login   # 一次性 OAuth 授权（会打开浏览器）
+npm run store:chrome -- upload  # 上传 zip，并等待包处理完成
+npm run store:chrome -- status  # 核对上传后的草稿状态
+npm run store:chrome -- publish # 提交审核（加 --staged 则先暂存）
+```
+
+凭据保存在**仓库之外**的 `~/.config/open-in-new-tab/cws.json`（不会误提交）。也可用环境变量 `CWS_CLIENT_ID`、`CWS_CLIENT_SECRET`、`CWS_PUBLISHER_ID`、`CWS_ITEM_ID`、`CWS_REFRESH_TOKEN` 覆盖，脚本因此天然可用于 CI。
+
 ## 更新日志
 
 详见仓库根目录的 [`CHANGELOG.md`](./CHANGELOG.md)。

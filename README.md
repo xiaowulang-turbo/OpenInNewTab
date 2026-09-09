@@ -95,6 +95,32 @@ See [`CHANGELOG.md`](./CHANGELOG.md) for release notes (split per product).
 
 To skip hooks (e.g. `git commit --amend`), use `HUSKY=0 git commit` on Unix shells, or disable Husky for that command per your environment.
 
+## Publishing the Chrome extension
+
+New versions go to the Chrome Web Store through the official **Chrome Web Store
+API v2** via a small local CLI (`scripts/upload-chrome.mjs`, see
+`npm run store:chrome -- help`) — no manual zip upload.
+
+**One-time prerequisites:**
+1. A Chrome Web Store developer account with **2-Step Verification** enabled (Google requirement).
+2. In Google Cloud: enable the **Chrome Web Store API**, then create a **Desktop app** OAuth client (ID + secret).
+3. The very first listing (title, screenshots, privacy policy, …) must still be created manually in the [Developer Dashboard](https://chrome.google.com/webstore/devconsole) — the API only uploads and submits new versions afterwards.
+
+**Release steps:**
+```sh
+npm run version:bump:ext      # bump extension/manifest.json (+ website meta)
+npm run pack:extension        # build release/OpenInNewTab-extension-<version>.zip
+npm run store:chrome -- login   # one-time OAuth (opens a browser)
+npm run store:chrome -- upload  # push the zip, waits for package processing
+npm run store:chrome -- status  # sanity-check the resulting draft
+npm run store:chrome -- publish # submit for review (add --staged to stage it)
+```
+
+Credentials are stored **outside the repo** at
+`~/.config/open-in-new-tab/cws.json` (never committed). Env overrides
+`CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_PUBLISHER_ID`, `CWS_ITEM_ID`,
+`CWS_REFRESH_TOKEN` make the same script CI-ready.
+
 ## License
 
 MIT License - see LICENSE file for details
