@@ -189,16 +189,21 @@
             currentLanguage
         )
 
-        // Update quick add button
-        updateQuickAddButton()
+        // Update quick add button label synchronously from its current state
+        syncQuickAddLabel()
 
         // Update existing remove buttons
         document.querySelectorAll(".remove-btn").forEach((btn) => {
             btn.textContent = getText("removeButton")
         })
 
-        // Refresh domains list to update language
-        loadWhitelist()
+        // When the whitelist is empty the placeholder text needs refreshing;
+        // populated rows keep their existing DOM nodes (their labels were
+        // updated above), so a language switch causes only one layout pass.
+        const emptyState = document.querySelector("#domainsList .empty-state")
+        if (emptyState) {
+            emptyState.textContent = getText("noDomains")
+        }
 
         document.documentElement.lang = i18n.normalizeLocale(currentLanguage)
     }
@@ -245,6 +250,23 @@
             quickAddBtnText.textContent = getText("quickAddBtnText")
             quickAddBtn.title = getText("quickAddBtnAddTitle")
         }
+    }
+
+    /**
+     * Refresh the quick-add label synchronously from its current state.
+     * Used on language switches so no storage round-trip (and thus no second
+     * layout/resize pass) is needed.
+     */
+    function syncQuickAddLabel() {
+        const quickAddBtn = document.getElementById("quickAddBtn")
+        const quickAddBtnText = document.getElementById("quickAddBtnText")
+        const removing = quickAddBtn.classList.contains("remove-state")
+        quickAddBtnText.textContent = removing
+            ? getText("quickAddBtnRemove")
+            : getText("quickAddBtnText")
+        quickAddBtn.title = removing
+            ? getText("quickAddBtnRemoveTitle")
+            : getText("quickAddBtnAddTitle")
     }
 
     /**

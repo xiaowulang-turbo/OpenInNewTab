@@ -196,7 +196,21 @@
             btn.textContent = getText("removeButton")
         })
 
-        loadWhitelist()
+        // Refresh list text synchronously instead of rebuilding the DOM, so a
+        // language switch causes a single layout pass with no transient
+        // collapse of the domains list.
+        const domainsList = document.getElementById("domainsList")
+        const emptyState = domainsList.querySelector(".empty-state")
+        const count = emptyState
+            ? 0
+            : domainsList.querySelectorAll(".domain-item").length
+        document.getElementById("domainsCount").textContent = getText(
+            "domainsCount",
+            { count }
+        )
+        if (emptyState) {
+            emptyState.textContent = getText("noDomains")
+        }
 
         document.documentElement.lang = i18n.normalizeLocale(currentLanguage)
     }
