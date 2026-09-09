@@ -1,83 +1,47 @@
 # Internationalization (i18n) Guide
 
-This website supports English and Chinese language switching with the following features:
+The website supports **English**, **简体中文 (zh-CN)**, and **繁體中文 (zh-TW)** with the following features:
 
-## Features
+1.  **Language Detection**: Automatically detects browser language on first load (zh-TW / zh-HK / zh-MO / zh-Hant → 繁體中文; other zh* → 简体中文; everything else → English).
+2.  **Persistent Storage**: Saves the user's language preference in `localStorage` (`user-language` key, BCP-47 value). Legacy stored `"zh"` canonicalizes to `"zh-CN"`.
+3.  **Manual Switch**: The nav-bar language button cycles `en → zh-CN → zh-TW → en` and shows the label of the locale you will switch to.
+4.  **Complete Coverage**: All user-facing text is translated.
 
-1. **Language Detection**: Automatically detects browser language on first load
-2. **Persistent Storage**: Saves user's language preference in localStorage
-3. **Manual Switch**: Users can switch language using buttons in the navigation bar
-4. **Complete Coverage**: All user-facing text is translated
+## Single source of truth
+
+Translation strings are authored in [`shared/locales/site/{en,zh-CN,zh-TW}.json`](../shared/locales/site/) and the shared runtime in [`shared/i18n.js`](../shared/i18n.js). `website/i18n.js` is **generated** — do not edit it by hand.
+
+```bash
+npm run i18n:sync   # regenerates website/i18n.js (and the extension/userscript bundles)
+```
+
+The generated `website/i18n.js` exposes two globals:
+
+-   `window.translations` — the raw `{ en, "zh-CN", "zh-TW" }` map, consumed by the `data-i18n` bulk-apply loop.
+-   `window.i18n` — the `createI18n` runtime (detect / normalize / getText / greasyForkLangPrefix).
 
 ## Implementation
 
-### Files Structure
+### Files
 
--   `i18n.js` - Translation data for English and Chinese
--   `index.html` - HTML with `data-i18n` attributes
--   `script.js` - Language switching logic
--   `styles.css` - Styles for language switcher
+-   `i18n.js` — generated translations + runtime (loaded before `script.js`).
+-   `index.html` / `privacy-policy.html` — HTML with `data-i18n` attributes.
+-   `script.js` — language switching logic (`initLanguageSystem`).
 
-### How It Works
+### How it works
 
-1. **Initialization**: On page load, the system:
+1.  **Initialization**: on load, `i18n.resolveStoredLocale(localStorage["user-language"])` resolves a concrete locale (falling back to browser detection), then `applyLanguage()` writes every `[data-i18n]` element's `textContent` from `translations[lang][key]`.
+2.  **Language switching**: clicking the toggle advances to the next locale in the cycle, re-applies, and persists the choice.
+3.  **Complex elements**: `updateComplexElements()` also rewrites the Greasy Fork listing link prefix (`i18n.greasyForkLangPrefix(lang)`) and resets copy-button labels.
 
-    - Checks localStorage for saved language preference
-    - Falls back to browser language (zh-\* → Chinese, others → English)
-    - Applies the selected language to all elements with `data-i18n` attribute
+## Adding a new language
 
-2. **Language Switching**: When user clicks a language button:
-
-    - Updates all elements with `data-i18n` attributes
-    - Saves preference to localStorage
-    - Updates HTML lang attribute
-    - Highlights active language button
-
-3. **Data Flow**:
-    ```
-    User Action → handleLanguageSwitch() → applyLanguage() → Update DOM + localStorage
-    ```
-
-## Usage
-
-### Adding New Translatable Text
-
-1. Add translation keys to `i18n.js`:
-
-```javascript
-const translations = {
-    en: {
-        myNewKey: "English text",
-    },
-    zh: {
-        myNewKey: "中文文本",
-    },
-}
-```
-
-2. Add `data-i18n` attribute to HTML element:
-
-```html
-<p data-i18n="myNewKey">English text</p>
-```
-
-### Testing
-
-1. Open `index.html` in a browser
-2. Click "EN" or "中文" buttons in the navigation bar
-3. Verify all text switches between languages
-4. Refresh page - language should persist
-5. Check browser DevTools console for language initialization logs
-
-## Browser Compatibility
-
--   Chrome/Edge: ✓
--   Firefox: ✓
--   Safari: ✓
--   All modern browsers with localStorage support
+1.  Create `shared/locales/site/<locale>.json` with every key from `en.json`.
+2.  Add the locale id to `LOCALES` in `scripts/sync-locales.mjs` and to `SUPPORTED_LOCALES` / `LOCALE_LABELS` in `shared/i18n.js`.
+3.  Run `npm run i18n:sync`.
+4.  Update the `detectLocale` mapping in `shared/i18n.js` if the new locale needs browser-language routing.
 
 ## Notes
 
--   Language preference is stored in localStorage key: `user-language`
--   Supported values: `"en"`, `"zh"`
--   Default language if no preference: Based on `navigator.language`
+-   Locale ids are BCP-47 (`en`, `zh-CN`, `zh-TW`).
+-   The `<html lang>` attribute is set to the resolved locale.

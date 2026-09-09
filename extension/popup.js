@@ -6,76 +6,12 @@
 ;(function () {
     "use strict"
 
-    /**
-     * Language resources for internationalization
-     */
-    const languageResources = {
-        en: {
-            modalTitle: "Whitelist Management",
-            currentDomainLabel: "Current Domain:",
-            quickAddBtnText: "Add",
-            quickAddBtnRemove: "Remove",
-            quickAddBtnAddTitle: "Add current domain to whitelist",
-            quickAddBtnRemoveTitle: "Remove current domain from whitelist",
-            whitelistTitle: "Whitelist",
-            removeButton: "Remove",
-            addedToWhitelist: "Added to whitelist!",
-            alreadyInWhitelist: "Already in whitelist",
-            removedFromWhitelist: "Removed from whitelist",
-            noDomains: "No domains in whitelist",
-            settingsTitle: "Settings",
-            settingsButtonTitle: "Settings",
-            closeSettingsButtonLabel: "Close settings",
-            themeLabel: "Theme",
-            themeLightText: "Light",
-            themeDarkText: "Dark",
-            themeAutoText: "Auto",
-            languageLabel: "Language",
-            openInBackgroundLabel: "Open in background",
-            openInBackgroundTitle: "Open in background",
-            openInBackgroundDesc:
-                "Keep focus on the current tab when opening links",
-            moreSettings: "More settings",
-            cannotDetectCurrentDomain: "Cannot detect current domain",
-            errorAddingDomain: "Error adding domain",
-            errorRemovingDomain: "Error removing domain",
-            errorExportingWhitelist: "Error exporting whitelist",
-        },
-        zh: {
-            modalTitle: "白名单管理",
-            currentDomainLabel: "当前域名：",
-            quickAddBtnText: "添加",
-            quickAddBtnRemove: "移除",
-            quickAddBtnAddTitle: "将当前域名添加到白名单",
-            quickAddBtnRemoveTitle: "将当前域名从白名单移除",
-            whitelistTitle: "白名单",
-            removeButton: "移除",
-            addedToWhitelist: "已添加到白名单！",
-            alreadyInWhitelist: "已在白名单中",
-            removedFromWhitelist: "已从白名单移除",
-            noDomains: "白名单中没有域名",
-            settingsTitle: "设置",
-            settingsButtonTitle: "设置",
-            closeSettingsButtonLabel: "关闭设置",
-            themeLabel: "主题",
-            themeLightText: "亮色",
-            themeDarkText: "暗色",
-            themeAutoText: "自动",
-            languageLabel: "语言",
-            openInBackgroundLabel: "在后台打开新标签",
-            openInBackgroundTitle: "在后台打开",
-            openInBackgroundDesc: "打开链接时不切换焦点，留在当前页",
-            moreSettings: "更多设置",
-            cannotDetectCurrentDomain: "无法识别当前域名",
-            errorAddingDomain: "添加域名失败",
-            errorRemovingDomain: "移除域名失败",
-            errorExportingWhitelist: "导出白名单失败",
-        },
-    }
+    /** Shared i18n runtime (loaded via i18n-bundle.js before popup.js). */
+    const i18n = window.I18n
+    let currentLanguage = i18n.DEFAULT_LOCALE
 
     let currentDomain = ""
 
-    let currentLanguage = "en"
     let currentTheme = "auto"
 
     /**
@@ -134,20 +70,17 @@
     }
 
     /**
-     * Get language preference from storage
-     * @returns {Promise<string>} Language code ('en' or 'zh')
+     * Get language preference from storage, falling back to browser language.
+     * Legacy stored "zh" canonicalizes to "zh-CN".
+     * @returns {Promise<string>} BCP-47 locale code
      */
     async function getLanguagePreference() {
         try {
             const result = await chrome.storage.sync.get(["userLanguage"])
-            if (result.userLanguage) {
-                return result.userLanguage
-            }
-            // Fallback to browser detection
-            return detectLanguage()
+            return i18n.resolveStoredLocale(result.userLanguage)
         } catch (error) {
             console.error("Error getting language preference:", error)
-            return detectLanguage()
+            return i18n.detectLocale()
         }
     }
 
@@ -190,25 +123,12 @@
     }
 
     /**
-     * Detect browser language setting
-     * @returns {string} Language code ('en' or 'zh')
-     */
-    function detectLanguage() {
-        const userLang = navigator.language || navigator.userLanguage || "en"
-        return userLang.startsWith("zh") ? "zh" : "en"
-    }
-
-    /**
      * Get text by language
      * @param {string} key Text key
      * @returns {string} Localized text
      */
     function getText(key) {
-        return (
-            languageResources[currentLanguage]?.[key] ||
-            languageResources.en[key] ||
-            key
-        )
+        return i18n.getText(key, currentLanguage)
     }
 
     /**
@@ -263,21 +183,29 @@
         document.getElementById("moreOptionsText").textContent =
             getText("moreSettings")
 
-        // Update language select value
-        document.getElementById("languageSelect").value = currentLanguage
+        // Populate the language select from the shared locale labels
+        i18n.fillLanguageSelect(
+            document.getElementById("languageSelect"),
+            currentLanguage
+        )
 
-        // Update quick add button
-        updateQuickAddButton()
+        // Update quick add button label synchronously from its current state
+        syncQuickAddLabel()
 
         // Update existing remove buttons
         document.querySelectorAll(".remove-btn").forEach((btn) => {
             btn.textContent = getText("removeButton")
         })
 
-        // Refresh domains list to update language
-        loadWhitelist()
+        // When the whitelist is empty the placeholder text needs refreshing;
+        // populated rows keep their existing DOM nodes (their labels were
+        // updated above), so a language switch causes only one layout pass.
+        const emptyState = document.querySelector("#domainsList .empty-state")
+        if (emptyState) {
+            emptyState.textContent = getText("noDomains")
+        }
 
-        document.documentElement.lang = currentLanguage === "zh" ? "zh" : "en"
+        document.documentElement.lang = i18n.normalizeLocale(currentLanguage)
     }
 
     /**
@@ -322,6 +250,23 @@
             quickAddBtnText.textContent = getText("quickAddBtnText")
             quickAddBtn.title = getText("quickAddBtnAddTitle")
         }
+    }
+
+    /**
+     * Refresh the quick-add label synchronously from its current state.
+     * Used on language switches so no storage round-trip (and thus no second
+     * layout/resize pass) is needed.
+     */
+    function syncQuickAddLabel() {
+        const quickAddBtn = document.getElementById("quickAddBtn")
+        const quickAddBtnText = document.getElementById("quickAddBtnText")
+        const removing = quickAddBtn.classList.contains("remove-state")
+        quickAddBtnText.textContent = removing
+            ? getText("quickAddBtnRemove")
+            : getText("quickAddBtnText")
+        quickAddBtn.title = removing
+            ? getText("quickAddBtnRemoveTitle")
+            : getText("quickAddBtnAddTitle")
     }
 
     /**

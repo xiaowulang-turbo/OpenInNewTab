@@ -46,10 +46,10 @@
                         "https://github.com/xiaowulang-turbo/OpenInNewTab/blob/main/userscript/OpenInNewTab.user.js"
                 }
 
-                const currentLang =
-                    localStorage.getItem("user-language") ||
-                    (navigator.language?.startsWith("zh") ? "zh" : "en")
-                const t = translations[currentLang]
+                const currentLang = i18n.resolveStoredLocale(
+                    localStorage.getItem("user-language")
+                )
+                const t = translations[currentLang] || translations.en
 
                 try {
                     await navigator.clipboard.writeText(textToCopy)
@@ -180,22 +180,32 @@
         const langToggle = document.getElementById("langToggle")
         const langIcon = langToggle?.querySelector(".lang-icon")
 
-        function getUserLanguage() {
-            const savedLang = localStorage.getItem(LANG_STORAGE_KEY)
-            if (savedLang && (savedLang === "en" || savedLang === "zh")) {
-                return savedLang
-            }
+        // Cycle order: en → zh-CN → zh-TW → en.
+        const CYCLE = i18n.SUPPORTED_LOCALES
+        const LABELS = i18n.LOCALE_LABELS
 
-            const browserLang = navigator.language || navigator.userLanguage
-            if (browserLang.startsWith("zh")) {
-                return "zh"
-            }
-            return "en"
+        function getUserLanguage() {
+            return i18n.resolveStoredLocale(localStorage.getItem(LANG_STORAGE_KEY))
         }
 
+        function nextLocale(lang) {
+            const idx = CYCLE.indexOf(lang)
+            if (idx === -1) {
+                return CYCLE[0]
+            }
+            return CYCLE[(idx + 1) % CYCLE.length]
+        }
+
+        function labelFor(id) {
+            const entry = LABELS.find((item) => item.id === id)
+            return entry ? entry.label : id
+        }
+
+        // The toggle shows the CURRENT locale's label (clicking cycles to the next),
+        // so the button always reflects the language the page is rendered in.
         function updateIcon(lang) {
             if (langIcon) {
-                langIcon.textContent = lang === "en" ? "中文" : "EN"
+                langIcon.textContent = labelFor(lang)
             }
         }
 
@@ -238,17 +248,18 @@
 
             updateFooterReleaseVersion(lang)
 
-            const langPrefix = lang === "zh" ? "zh-CN" : "en"
-            const greasyForkUrl = `https://greasyfork.org/${langPrefix}/scripts/551033-open-in-new-tab`
+            const greasyForkUrl = `https://greasyfork.org/${i18n.greasyForkLangPrefix(lang)}/scripts/551033-open-in-new-tab`
             document.querySelectorAll("[data-greasyfork-link]").forEach((el) => {
                 el.href = greasyForkUrl
             })
 
+            // Reset copy buttons that are in their default (non-copied) state.
             const copyButtons = document.querySelectorAll(".copy-btn")
             copyButtons.forEach((btn) => {
+                const text = btn.textContent
                 if (
-                    btn.textContent.includes("Copy") ||
-                    btn.textContent.includes("复制")
+                    !text.includes(t.btnCopied) &&
+                    text !== t.btnCopyFailed
                 ) {
                     btn.textContent = t.btnCopyLink
                 }
@@ -258,7 +269,8 @@
             codeHeaders.forEach((span) => {
                 if (
                     span.textContent.includes("Download") ||
-                    span.textContent.includes("下载")
+                    span.textContent.includes("下载") ||
+                    span.textContent.includes("下載")
                 ) {
                     span.textContent = t.installUserscriptDownload
                 }
@@ -267,7 +279,7 @@
 
         function toggleLanguage() {
             const currentLang = document.documentElement.getAttribute("lang")
-            const newLang = currentLang === "en" ? "zh" : "en"
+            const newLang = nextLocale(currentLang)
             applyLanguage(newLang)
             localStorage.setItem(LANG_STORAGE_KEY, newLang)
         }
@@ -332,7 +344,8 @@
         const footerCopyright = document.getElementById("footerCopyright")
         if (footerCopyright) {
             const currentLang = document.documentElement.getAttribute("lang") || "en"
-            const suffix = currentLang === "zh"
+            const isZh = currentLang.indexOf("zh") === 0
+            const suffix = isZh
                 ? " Open In New Tab. 基于 MIT 许可证发布。"
                 : " Open In New Tab. Released under MIT License."
             footerCopyright.innerHTML = `&copy; ${year}${suffix}`

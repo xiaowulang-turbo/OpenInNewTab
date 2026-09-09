@@ -45,7 +45,9 @@ The whitelist-based approach means:
 │   ├── script.js
 │   └── README.md
 ├── shared/icons/            # Lucide-sourced SVG icons (website + extension)
-├── scripts/                 # Repo tooling (version sync, extension zip)
+├── shared/locales/         # i18n single source of truth (ext/us/site × en/zh-CN/zh-TW)
+├── shared/i18n.js          # Shared i18n runtime (createI18n)
+├── scripts/                 # Repo tooling (version sync, extension zip, i18n sync)
 ├── README.md                # This file
 └── LICENSE                  # MIT License
 ```

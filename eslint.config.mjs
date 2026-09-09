@@ -22,6 +22,16 @@ export default [
         },
     },
     {
+        // shared/i18n.js is a classic-script runtime concatenated into the
+        // extension and website bundles; it runs in a browser context.
+        files: ["shared/**/*.js"],
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "script",
+            globals: { ...globals.browser },
+        },
+    },
+    {
         files: ["userscript/**/*.js"],
         languageOptions: {
             ecmaVersion: "latest",
@@ -38,11 +48,11 @@ export default [
         },
     },
     {
-        // `translations` is a top-level const defined in i18n.js and shared
-        // across the page's classic scripts; script.js consumes it.
+        // `translations` and `i18n` are exposed by the generated website/i18n.js
+        // (window.translations + window.i18n) and consumed by script.js.
         files: ["website/script.js"],
         languageOptions: {
-            globals: { translations: "readonly" },
+            globals: { translations: "readonly", i18n: "readonly" },
         },
     },
     {

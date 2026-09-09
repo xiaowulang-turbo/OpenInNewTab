@@ -1,0 +1,14 @@
+{
+    "extName": {
+        "message": "Open In New Tab（在新分頁開啟）",
+        "description": "The name of the extension."
+    },
+    "extDesc": {
+        "message": "強制在所選網站上的所有連結在新分頁開啟。只需點擊擴充功能圖示，並將任何網站加入你的白名單。",
+        "description": "The description of the extension."
+    },
+    "actionTitle": {
+        "message": "在新分頁開啟 - 管理白名單",
+        "description": "The default title of the extension's action."
+    }
+}

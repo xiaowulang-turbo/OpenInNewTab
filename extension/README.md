@@ -41,7 +41,7 @@ You can also manually add domains by typing them in the input field (e.g., `stac
 -   **Persistent Storage**: Uses Chrome's storage APIs to store user preferences
 -   **Dark Mode Support**: Automatically adapts to system dark/light mode preferences
 -   **Modern UI**: Clean, responsive design with smooth animations and hover effects
--   **Internationalization**: Automatic language detection (English/Chinese) based on browser settings
+-   **Internationalization**: Automatic language detection (English / 简体中文 / 繁體中文) based on browser settings
 -   **Open in background** (optional): New tabs open without stealing focus from the current page
 -   **Onboarding**: A welcome page opens on first install to explain whitelist mode and guide first-time setup
 
@@ -79,6 +79,8 @@ The extension will be available on Chrome Web Store soon. Stay tuned!
     - Create a new item and upload your package
     - Fill in the required information
     - Submit for review
+
+Store listing screenshots (1280×800) live in [`store/screenshots/`](../store/). Generate with `npm run store:screenshots`, then upload the PNGs in the Developer Dashboard. See [`store/README.md`](../store/README.md).
 
 ## Configuration
 
@@ -123,7 +125,7 @@ Click the extension icon in the browser toolbar to open the popup interface.
 2. Click "More settings" at the bottom of the settings panel
 3. Access the full configuration page with:
     - Theme settings (Light/Dark/Auto)
-    - Language settings (English/中文)
+    - Language settings (English / 简体中文 / 繁體中文)
     - Complete whitelist management
     - Import/Export whitelist data
 
@@ -181,12 +183,15 @@ The extension supports both exact domain matching and subdomain matching:
 
 ## Language Support
 
-The extension automatically detects your browser's language setting and displays the interface in the appropriate language:
+The extension automatically detects your browser's language and displays the interface accordingly. You can also pick a language manually from the popup / options language selector.
 
--   **English** (Default): Used when browser language is not Chinese
--   **Chinese (中文)**: Used when browser language starts with 'zh' (e.g., zh-CN, zh-TW, zh-HK)
+-   **English** (default): used when the browser language is not Chinese
+-   **简体中文 (zh-CN)**: used when the browser language starts with `zh` (e.g. zh-CN)
+-   **繁體中文 (zh-TW)**: used for zh-TW / zh-HK / zh-MO / zh-Hant variants
 
-All user interface elements are internationalized including popup interface, notifications, and settings.
+All user interface elements are internationalized including the popup, notifications, and settings. Chrome Web Store listing metadata (`extension/_locales/{en,zh_CN,zh_TW}/messages.json`) is localized too.
+
+Translation strings live in `shared/locales/ext/{en,zh-CN,zh-TW}.json` as the single source of truth. Run `npm run i18n:sync` to regenerate `extension/i18n-bundle.js` after editing them.
 
 ## Dark Mode Support
 
