@@ -27,6 +27,37 @@
         scheduled: false,
     }
 
+    /**
+     * Whether this content script still has a live extension runtime. Reading
+     * `chrome.runtime` throws ("Extension context invalidated") once the
+     * extension has been reloaded or updated behind an open tab, so the probe
+     * itself has to be guarded.
+     * @returns {boolean}
+     */
+    function hasLiveRuntime() {
+        try {
+            return Boolean(chrome.runtime?.id)
+        } catch {
+            // Extension context invalidated — no usable runtime.
+            return false
+        }
+    }
+
+    /**
+     * Last resort when the extension can no longer open the tab itself (stale
+     * runtime, or a service worker that cannot be reached): open it here so the
+     * user's click is never silently swallowed.
+     * @param {string} href
+     */
+    function openLinkFallback(href) {
+        const opened = window.open(href, "_blank")
+        if (opened) {
+            opened.opener = null
+        } else {
+            location.href = href
+        }
+    }
+
     function handleLinkClick(event) {
         const target = event.target
         if (!target || typeof target.closest !== "function") {
@@ -36,18 +67,30 @@
         if (!link || shouldSkipClick(event, link)) {
             return
         }
+        // A stale content script — the extension was reloaded or updated while
+        // this tab stayed open — has no usable runtime. Bail out before
+        // preventDefault() so the click falls through to the browser instead of
+        // being swallowed.
+        if (!hasLiveRuntime()) {
+            return
+        }
 
         event.preventDefault()
         event.stopPropagation()
         event.stopImmediatePropagation()
 
-        chrome.runtime.sendMessage({
-            type: MSG_OPEN_TAB,
-            url: link.href,
-            active: !state.openInBackground,
-        }).catch((error) => {
-            console.error("Error opening tab:", error)
-        })
+        chrome.runtime
+            .sendMessage({
+                type: MSG_OPEN_TAB,
+                url: link.href,
+                active: !state.openInBackground,
+            })
+            .catch((error) => {
+                console.error("Error opening tab:", error)
+                // The default was already prevented above, so falling through is
+                // no longer an option — open the link ourselves instead.
+                openLinkFallback(link.href)
+            })
     }
 
     function patchLinkTarget(link) {

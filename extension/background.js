@@ -41,5 +41,9 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         createProperties.index = sender.tab.index + 1
     }
 
-    chrome.tabs.create(createProperties)
+    chrome.tabs.create(createProperties).catch((error) => {
+        // e.g. a URL the extension is not allowed to open — keep the service
+        // worker from throwing an uncaught rejection.
+        console.error("Error creating tab:", error)
+    })
 })

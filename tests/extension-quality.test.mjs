@@ -7,6 +7,7 @@ import { describe, it } from "node:test"
 const root = join(dirname(fileURLToPath(import.meta.url)), "..")
 const popupScript = readFileSync(join(root, "extension/popup.js"), "utf8")
 const optionsScript = readFileSync(join(root, "extension/options.js"), "utf8")
+const contentScript = readFileSync(join(root, "extension/content.js"), "utf8")
 const popupHtml = readFileSync(join(root, "extension/popup.html"), "utf8")
 const optionsHtml = readFileSync(join(root, "extension/options.html"), "utf8")
 const privacyPolicy = readFileSync(join(root, "PRIVACY_POLICY.md"), "utf8")
@@ -88,5 +89,29 @@ describe("extension quality contracts", () => {
                 `${label} saveUserWhitelist must rethrow storage errors`
             )
         }
+    })
+
+    it("content script probes the runtime before preventing the default", () => {
+        // A content script outlives an extension reload/update. Once its context
+        // is invalidated, chrome.runtime throws and the service worker is gone —
+        // so the probe has to happen *before* preventDefault(), otherwise the
+        // click is swallowed and the link does nothing at all.
+        // Scoped to the handler body so the probe in the doc comment above and
+        // the hasLiveRuntime() definition cannot satisfy the assertion.
+        const handler = contentScript.match(
+            /function handleLinkClick\(event\) \{([\s\S]*?)\n {4}\}/
+        )?.[1]
+        assert.ok(handler, "content.js defines handleLinkClick")
+        const guard = handler.indexOf("hasLiveRuntime()")
+        const preventDefault = handler.indexOf("event.preventDefault()")
+        assert.ok(guard !== -1, "handleLinkClick must probe for a live runtime")
+        assert.ok(
+            preventDefault !== -1,
+            "handleLinkClick must still call event.preventDefault()"
+        )
+        assert.ok(
+            guard < preventDefault,
+            "the runtime probe must run before preventDefault()"
+        )
     })
 })
