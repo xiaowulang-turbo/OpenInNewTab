@@ -24,9 +24,9 @@ Let's say you want all links on `github.com` to open in new tabs:
 1. **Navigate to github.com** in your browser
 2. **Click the extension icon** in your browser toolbar
 3. **See the current domain** displayed at the top (e.g., "Current Domain: github.com")
-4. **Click the green "Add" button** next to the current domain
+4. **Click the "Add" button** next to the current domain
 5. **Done!** All links on github.com now open in new tabs
-6. **To remove**: Click the extension icon again and click the red "Remove" button
+6. **To remove**: Click the extension icon again and click the "Remove" button
 
 You can also manually add domains by typing them in the input field (e.g., `stackoverflow.com`, `reddit.com`) and clicking "Add".
 

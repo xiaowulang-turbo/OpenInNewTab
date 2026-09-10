@@ -12,7 +12,8 @@
         "extension/**/*.js",
         "userscript/**/*.js",
         "website/**/*.js",
-        "scripts/**/*.mjs"
+        "scripts/**/*.mjs",
+        "tests/**/*.mjs"
     ],
     "exclude": ["node_modules", "release"]
 }
