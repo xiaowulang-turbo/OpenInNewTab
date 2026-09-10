@@ -21,6 +21,13 @@
         }
     ],
 
+    "web_accessible_resources": [
+        {
+            "resources": ["link-policy.js"],
+            "matches": ["*://*/*"]
+        }
+    ],
+
     "action": {
         "default_popup": "popup.html",
         "default_title": "__MSG_actionTitle__"
@@ -34,12 +41,5 @@
         "32": "icons/icon32.png",
         "64": "icons/icon64.png",
         "128": "icons/icon128.png"
-    },
-
-    "web_accessible_resources": [
-        {
-            "resources": ["popup.html", "popup.js", "popup.css"],
-            "matches": ["*://*/*"]
-        }
-    ]
+    }
 }

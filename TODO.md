@@ -29,6 +29,10 @@
   - 白名单变更免刷新生效（同 tab + 跨 tab）
   - 菜单项 toggle：当前域名"加入"↔ "移出"动态切换，老管理器自动降级
 
+- 扩展拦截生命周期：同步点击（缓存偏好 + `tabs.create`）、白名单热挂载、`tel:` 跳过、href 观察 + idle 批处理、去掉 popup WAR、域名列表改 DOM 渲染
+- 官网去掉 Google Fonts Inter，改用系统字体栈
+- 文档确认双轨 SemVer：不锁版本、不强制递增；后续以扩展为主
+
 ## 🎯 P1（通用，仍待办）
 
 - 插件更新横幅
@@ -37,11 +41,10 @@
 
 ## 🧱 P2（工程化，下一个大版本）
 
-- 抽 `shared/core/`：白名单匹配 / 跳过规则 / 链接 patch（统一脚本与扩展的同构核心）
+- 抽 `shared/core/` 并 inline 进油猴脚本（扩展已有 `extension/link-policy.js`；油猴端仍单文件，等有构建步骤再抽）
 - `scripts/build-userscript.mjs`：把 `shared/core` inline 进 `.user.js`，发布前自动跑
 - `shared/STYLE_TOKENS.md` 机械翻译为 `shared/core/style-tokens.{json,css,js}`，由扩展 CSS 与脚本 build 各自消费（命名已 1:1，迁移成本机械）
 - 域名规范化：去 `www.` / 小写 / IDN（`new URL(...).hostname`）
-- `extension/web_accessible_resources` 收紧：popup 资源不需要暴露给 `*://*/*`
 
 ## 🧊 Backlog（暂不做，等用户反馈再启动）
 

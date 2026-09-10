@@ -6,6 +6,6 @@ alwaysApply: true
 -   readme 使用英文编写
 -   代码注释使用英文编写
 -   代码尽可能优雅简洁
--   插件和脚本的版本号始终一致；发布号以 extension/manifest.json 为准，勿手改 userscript 的 // @version 或官网 app-version meta，用 npm run version:sync / 提交钩子同步
+-   扩展与油猴脚本是独立产品、独立 SemVer，互不绑定、不必同步递增；后续以扩展为主。发布扩展时以 extension/manifest.json 为准，官网 app-version meta 跟随扩展；油猴脚本以 // @version 与 SCRIPT_VERSION 自洽为准。用 npm run version:verify 校验，需要升号时用 version:bump:ext 或 version:bump:us
 -   同步更新各个 readme
 -   使用英文编写commit信息

@@ -562,6 +562,7 @@ select,
 
 /* Setting row with toggle (popup modal) */
 .setting-item-row {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -569,24 +570,65 @@ select,
 }
 
 .setting-copy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     flex: 1;
     min-width: 0;
 }
 
 .setting-label-inline {
-    margin-bottom: 4px;
+    margin-bottom: 0;
     text-transform: none;
     letter-spacing: normal;
 }
 
-.setting-description {
-    display: block;
+/* Setting hint — a "?" affordance that reveals the description on hover.
+   The tooltip is anchored to the row (position: relative above) so it can
+   never be clipped by the modal's overflow: hidden. */
+.setting-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Stretch to the label's line box instead of sitting in its own 14px box,
+       so the icon and the text are laid out in boxes of identical height and
+       cannot drift apart. */
+    align-self: stretch;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    cursor: help;
+}
+
+.setting-hint .icon {
+    /* Lucide glyphs only fill 20/24 of the viewBox, so a 16px box draws a
+       ~13px circle — the same optical height as the 13px label text. */
+    width: 16px;
+    height: 16px;
+}
+
+.setting-hint-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 10;
+    width: max-content;
+    max-width: 100%;
+    padding: 8px 10px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-secondary);
     font-size: 12px;
     font-weight: 400;
-    color: var(--text-secondary);
-    text-transform: none;
-    letter-spacing: normal;
     line-height: 1.4;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.setting-hint:hover .setting-hint-tooltip {
+    opacity: 1;
 }
 
 /* Toggle switch */

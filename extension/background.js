@@ -1,14 +1,12 @@
 /**
  * Background Script - Open In New Tabs Extension
- * Service worker for the extension
+ * Service worker: install defaults, welcome page, tab creation.
  */
 
 const MSG_OPEN_TAB = "OPEN_TAB"
 
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        console.log("Open In New Tabs extension installed")
-
         chrome.storage.sync.get(
             ["userWhitelist", "openInBackground"],
             (result) => {
@@ -43,11 +41,9 @@ chrome.runtime.onMessage.addListener((message, sender) => {
         createProperties.index = sender.tab.index + 1
     }
 
-    chrome.tabs.create(createProperties)
-})
-
-chrome.storage.onChanged.addListener((changes, namespace) => {
-    if (namespace === "sync" && changes.userWhitelist) {
-        console.log("Whitelist updated:", changes.userWhitelist.newValue)
-    }
+    chrome.tabs.create(createProperties).catch((error) => {
+        // e.g. a URL the extension is not allowed to open — keep the service
+        // worker from throwing an uncaught rejection.
+        console.error("Error creating tab:", error)
+    })
 })

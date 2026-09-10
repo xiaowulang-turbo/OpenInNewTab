@@ -23,6 +23,7 @@ parent `color` and adapts to theme automatically.
 | `external-link.svg`       | `external-link`       | Welcome: open in new tab / site  |
 | `check.svg`               | `check`               | Welcome: success / done marker   |
 | `chevron-right.svg`       | `chevron-right`       | Popup: drill into full settings  |
+| `circle-help.svg`         | `circle-help`         | Popup: hover hint for a setting  |
 
 ## Conventions
 
