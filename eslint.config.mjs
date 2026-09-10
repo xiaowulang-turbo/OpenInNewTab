@@ -23,7 +23,18 @@ export default [
         },
     },
     {
-        files: ["extension/content.js", "extension/link-policy.js"],
+        // content.js is injected as a classic script; parsing it as "script"
+        // turns any stray static import/export into a lint error instead of a
+        // runtime "Cannot use import statement outside a module".
+        files: ["extension/content.js"],
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "script",
+            globals: { ...globals.browser, ...globals.webextensions },
+        },
+    },
+    {
+        files: ["extension/link-policy.js"],
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "module",
