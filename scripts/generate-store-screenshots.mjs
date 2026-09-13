@@ -10,7 +10,6 @@
 
 import { spawn } from "node:child_process"
 import {
-    existsSync,
     mkdtempSync,
     mkdirSync,
     readFileSync,
@@ -21,6 +20,7 @@ import net from "node:net"
 import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { findChrome } from "./find-browser.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, "..")
@@ -38,16 +38,6 @@ const domains = [
     "wikipedia.org",
     "stackoverflow.com",
 ]
-
-const CHROME_CANDIDATES = [
-    process.env.CHROME_PATH,
-    "/tmp/chrome-for-testing/chrome-linux64/chrome",
-    "/usr/bin/chromium",
-    "/usr/bin/chromium-browser",
-    "/usr/bin/google-chrome",
-    "/usr/bin/google-chrome-stable",
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-].filter(Boolean)
 
 class CdpConnection {
     constructor(url) {
@@ -88,16 +78,19 @@ class CdpConnection {
     }
 }
 
-function findChrome() {
-    const chrome = CHROME_CANDIDATES.find((candidate) =>
-        existsSync(candidate)
-    )
-    if (!chrome) {
-        throw new Error(
-            "Chrome for Testing/Chromium not found. Set CHROME_PATH to a compatible binary."
+/**
+ * The manifest refers to its name as `__MSG_extName__`, so the literal name
+ * lives in the default locale bundle. Read it from source instead of asking
+ * the service worker, which is not answerable on every Chromium build.
+ */
+function readManifestName() {
+    const messages = JSON.parse(
+        readFileSync(
+            path.join(extensionDir, "_locales", "en", "messages.json"),
+            "utf8"
         )
-    }
-    return chrome
+    )
+    return messages.extName.message
 }
 
 function sleep(ms) {
@@ -315,23 +308,18 @@ async function main() {
                 target.url.endsWith("/background.js")
         )
         console.log(`loaded ${background.url}`)
-        const backgroundPage = new CdpConnection(
-            background.webSocketDebuggerUrl
-        )
-        await backgroundPage.command("Runtime.enable")
-        const extensionId = await evaluate(
-            backgroundPage,
-            "chrome.runtime.id"
-        )
-        const manifestName = await evaluate(
-            backgroundPage,
-            "chrome.runtime.getManifest().name"
-        )
+
+        // The extension id is the host of the service worker URL
+        // (`chrome-extension://<id>/background.js`). Never evaluate
+        // `chrome.runtime.*` inside that worker: on some Chromium builds (Edge)
+        // `chrome.runtime` is undefined there and the script dies on a TypeError
+        // before capturing anything.
+        const extensionId = new URL(background.url).host
+        const manifestName = readManifestName()
         console.log(`extension ${extensionId}: ${manifestName}`)
-        backgroundPage.close()
 
         if (manifestName !== "Open In New Tab") {
-            throw new Error(`Unexpected extension loaded: ${manifestName}`)
+            throw new Error(`Unexpected extension name: ${manifestName}`)
         }
 
         const activeSite = await createTarget(
@@ -438,7 +426,12 @@ async function main() {
         }
         process.kill("SIGTERM")
         await sleep(300)
-        rmSync(profile, { recursive: true, force: true })
+        try {
+            rmSync(profile, { recursive: true, force: true })
+        } catch {
+            // Windows can keep the profile directory locked for a moment after
+            // the browser exits; a leftover temp dir must not fail the run.
+        }
     }
 }
 
