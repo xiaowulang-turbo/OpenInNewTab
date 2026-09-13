@@ -18,6 +18,15 @@
 The screenshots use the current extension HTML, CSS, JavaScript, storage schema,
 and localization strings. No marketing-only mock UI is used.
 
+> **Promo tiles** (small 440×280 and marquee 1400×560) are separate marketing
+> art, not captures. See [`promo/README.md`](./promo/README.md) for the files,
+> the committed templates in `_mock/`, and the render command.
+>
+> **Composed screenshots** (1280×800, one set per store language slot) are
+> brand stages built around the same real extension UI. See
+> [`screenshots/marketing/README.md`](./screenshots/marketing/README.md);
+> regenerate them with `npm run store:shots`.
+
 ## Regenerate
 
 ```bash
