@@ -11,7 +11,8 @@
         "version:bump:us": "node scripts/bump-userscript.mjs",
         "pack:extension": "node scripts/pack-extension.mjs",
         "i18n:sync": "node scripts/sync-locales.mjs",
-        "store:screenshots": "node scripts/generate-store-screenshots.mjs"
+        "store:screenshots": "node scripts/generate-store-screenshots.mjs",
+        "store:shots": "node scripts/generate-store-shots.mjs"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
